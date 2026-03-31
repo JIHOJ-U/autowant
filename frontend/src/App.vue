@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- 네비게이션 -->
-    <v-app-bar flat class="main-navbar" height="64">
+    <v-app-bar flat :class="['main-navbar', { 'navbar-transparent': isAboutPage && !navScrolled, 'navbar-blur': isAboutPage && navScrolled }]" height="64">
       <v-container class="d-flex align-center" style="max-width: 1200px;">
         <router-link to="/" class="brand-link">
           <span class="brand-text">AUTO</span><span class="brand-accent">WANT</span>
@@ -11,9 +11,10 @@
 
         <!-- 데스크톱 메뉴 -->
         <nav class="d-none d-md-flex align-center ga-1">
-          <router-link to="/" class="nav-link" exact-active-class="nav-active">홈</router-link>
+          <router-link to="/" class="nav-link" exact-active-class="nav-active">차량 검색</router-link>
           <router-link to="/monthly-special" class="nav-link" active-class="nav-active">이달의 특가</router-link>
           <router-link to="/immediate-stock" class="nav-link" active-class="nav-active">즉시 출고</router-link>
+          <router-link to="/about" class="nav-link" active-class="nav-active">회사소개</router-link>
           <router-link to="/managers" class="nav-link" active-class="nav-active">매니저 소개</router-link>
           <router-link to="/contact" class="nav-link" active-class="nav-active">문의하기</router-link>
         </nav>
@@ -49,9 +50,10 @@
           <span class="brand-text">AUTO</span><span class="brand-accent">WANT</span>
         </v-list-item>
         <v-divider class="mb-1" />
-        <v-list-item to="/" title="홈" @click="mobileMenu = false" />
+        <v-list-item to="/" title="차량 검색" @click="mobileMenu = false" />
         <v-list-item to="/monthly-special" title="이달의 특가" @click="mobileMenu = false" />
         <v-list-item to="/immediate-stock" title="즉시 출고" @click="mobileMenu = false" />
+        <v-list-item to="/about" title="회사소개" @click="mobileMenu = false" />
         <v-list-item to="/managers" title="매니저 소개" @click="mobileMenu = false" />
         <v-list-item to="/contact" title="문의하기" @click="mobileMenu = false" />
         <v-divider class="my-1" />
@@ -63,7 +65,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-main style="padding-top: 64px;">
+    <v-main :style="{ paddingTop: isAboutPage ? '0' : '64px' }">
       <router-view />
     </v-main>
 
@@ -206,7 +208,7 @@
     </div>
 
     <!-- 푸터 -->
-    <footer class="app-footer">
+    <footer :class="['app-footer', { 'app-footer-grey': isAboutPage }]">
       <div class="footer-inner">
         <!-- 상단: 로고 + 네비 + SNS -->
         <div class="ft-top">
@@ -253,18 +255,24 @@
 
 <script setup>
 import { ref, computed, provide, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from './stores/auth'
 import { useCompare } from './stores/compare'
 
 const router = useRouter()
+const route = useRoute()
 const { isAdmin, logout } = useAuth()
 const mobileMenu = ref(false)
+
+// 회사소개 페이지 투명 네비게이션
+const isAboutPage = computed(() => route.path === '/about')
+const navScrolled = ref(false)
 
 // 사이드바 스크롤 표시
 const showSidebar = ref(false)
 function onScroll() {
   showSidebar.value = window.scrollY > 200
+  navScrolled.value = window.scrollY > 60
 }
 onMounted(() => window.addEventListener('scroll', onScroll))
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
@@ -336,6 +344,7 @@ function handleLogout() {
 * { box-sizing: border-box; margin: 0; }
 body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
 
+
 /* 네비게이션 */
 .main-navbar {
   background: white !important;
@@ -343,10 +352,35 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
   position: fixed !important;
   top: 0 !important;
   z-index: 1900 !important;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s !important;
 }
+.main-navbar.navbar-transparent {
+  background: transparent !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
+}
+.main-navbar.navbar-blur {
+  background: rgba(13, 13, 13, 0.65) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom-color: rgba(255,255,255,0.07) !important;
+  box-shadow: none !important;
+}
+.main-navbar.navbar-transparent .brand-text,
+.main-navbar.navbar-blur .brand-text { color: #fff; }
+.main-navbar.navbar-transparent .brand-accent,
+.main-navbar.navbar-blur .brand-accent { color: rgba(255,255,255,0.75); }
+.main-navbar.navbar-transparent .nav-link,
+.main-navbar.navbar-blur .nav-link { color: rgba(255,255,255,0.65); }
+.main-navbar.navbar-transparent .nav-link:hover,
+.main-navbar.navbar-blur .nav-link:hover { color: #fff; }
+.main-navbar.navbar-transparent .nav-active,
+.main-navbar.navbar-blur .nav-active { color: #fff !important; }
+.main-navbar.navbar-transparent .nav-cta,
+.main-navbar.navbar-blur .nav-cta { background: rgba(255,255,255,0.15) !important; color: #fff !important; border: 1px solid rgba(255,255,255,0.3) !important; }
 .brand-link { text-decoration: none; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; }
-.brand-text { color: #111; }
-.brand-accent { color: #2563eb; }
+.brand-text { color: #111; transition: color 0.3s; }
+.brand-accent { color: #4d8ef7; transition: color 0.3s; }
 .nav-link {
   text-decoration: none;
   color: #888;
@@ -369,11 +403,14 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
 
 /* 푸터 */
 .app-footer { background: #fff; color: #888; padding: 0; border-top: 1px solid #f0f0f0; }
+.app-footer-grey { background: #1a1a1a !important; border-top-color: #2a2a2a !important; }
 .footer-inner { max-width: 1200px; margin: 0 auto; padding: 36px 24px 28px; }
 
 .ft-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 .ft-logo { font-size: 1.1rem; font-weight: 800; color: #111; letter-spacing: -0.5px; }
 .ft-logo span { color: #4d8ef7; }
+.app-footer-grey .ft-logo { color: #fff; }
+.app-footer-grey .ft-logo span { color: rgba(255,255,255,0.75); }
 .ft-nav { display: flex; gap: 20px; flex-wrap: wrap; }
 .ft-nav a { text-decoration: none; color: #888; font-size: 12.5px; font-weight: 500; transition: color 0.15s; }
 .ft-nav a:hover { color: #111; }

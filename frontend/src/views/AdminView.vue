@@ -69,7 +69,11 @@
         <h2 class="page-title tab-solo">문의 관리</h2>
         <div class="panel">
           <div v-for="item in inquiries" :key="item.id" class="list-row">
-            <div><p class="row-title">{{ item.name }} <span class="row-phone">{{ item.phone }}</span></p><p class="row-sub">{{ item.vehicle }} · {{ item.message || '내용 없음' }}</p></div>
+            <div>
+              <p class="row-title">{{ item.name }} <span class="row-phone">{{ item.phone }}</span><span v-if="item.source" class="row-source">{{ item.source }}</span></p>
+              <p class="row-sub">{{ item.vehicle }}{{ item.carColor ? ' · ' + item.carColor : '' }}{{ item.email ? ' · ' + item.email : '' }}{{ item.availableTime ? ' · ' + item.availableTime : '' }}</p>
+              <p class="row-sub">{{ item.message || '내용 없음' }}</p>
+            </div>
             <div class="row-right">
               <span class="status-tag" :class="item.status === '대기' ? 'pending' : 'done'">{{ item.status }}</span>
               <span class="row-date">{{ item.date }}</span>
@@ -327,6 +331,7 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '../stores/auth'
 import { useVehicles } from '../stores/vehicles'
 import { useReviews } from '../stores/reviews'
+import { inquiries } from '../stores/inquiries'
 
 const router = useRouter()
 const { logout } = useAuth()
@@ -352,13 +357,6 @@ const dashStats = computed(() => [
   { label: '이달의 특가', value: specialList.value.length + '대' },
 ])
 
-const inquiries = ref([
-  { id: 1, name: '김철수', phone: '010-1234-5678', vehicle: '싼타페 하이브리드', message: '리스 조건 알고 싶습니다', date: '2026-03-28', status: '대기' },
-  { id: 2, name: '이영희', phone: '010-9876-5432', vehicle: 'GV70', message: '48개월 렌트 견적 부탁드립니다', date: '2026-03-27', status: '대기' },
-  { id: 3, name: '박민수', phone: '010-5555-1234', vehicle: '카니발 하이브리드', message: '', date: '2026-03-26', status: '완료' },
-  { id: 4, name: '정소영', phone: '010-3333-7777', vehicle: '캐스퍼', message: '즉시출고 가능한가요?', date: '2026-03-25', status: '대기' },
-  { id: 5, name: '홍길동', phone: '010-1111-2222', vehicle: '팰리세이드', message: '법인 리스 문의합니다', date: '2026-03-24', status: '완료' },
-])
 
 const managerList = ref([
   { id: 1, name: '김오토', role: '수석 매니저', experience: '10년', tags: ['국산차', 'SUV', '리스'] },
@@ -537,6 +535,7 @@ function handleLogout() { logout(); router.push('/') }
 .list-row:last-child { border-bottom: none; }
 .row-title { font-size: 13px; font-weight: 600; color: #111; margin: 0 0 2px; }
 .row-phone { font-weight: 400; color: #999; margin-left: 8px; }
+.row-source { font-size: 10px; font-weight: 600; background: #e8f0fe; color: #2563eb; border-radius: 4px; padding: 2px 6px; margin-left: 8px; }
 .row-sub { font-size: 11px; color: #999; margin: 0; }
 .row-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .row-date { font-size: 11px; color: #ccc; }
