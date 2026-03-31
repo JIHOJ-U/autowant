@@ -368,28 +368,28 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
 }
 
 /* 푸터 */
-.app-footer { background: #111; color: #999; padding: 0; }
+.app-footer { background: #fff; color: #888; padding: 0; border-top: 1px solid #f0f0f0; }
 .footer-inner { max-width: 1200px; margin: 0 auto; padding: 36px 24px 28px; }
 
 .ft-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-.ft-logo { font-size: 1.1rem; font-weight: 800; color: white; letter-spacing: -0.5px; }
+.ft-logo { font-size: 1.1rem; font-weight: 800; color: #111; letter-spacing: -0.5px; }
 .ft-logo span { color: #4d8ef7; }
 .ft-nav { display: flex; gap: 20px; flex-wrap: wrap; }
-.ft-nav a { text-decoration: none; color: #777; font-size: 12.5px; font-weight: 500; transition: color 0.15s; }
-.ft-nav a:hover { color: white; }
+.ft-nav a { text-decoration: none; color: #888; font-size: 12.5px; font-weight: 500; transition: color 0.15s; }
+.ft-nav a:hover { color: #111; }
 .ft-social { display: flex; gap: 8px; }
 .ft-social a {
-  width: 32px; height: 32px; border-radius: 50%; border: 1px solid #333;
+  width: 32px; height: 32px; border-radius: 50%; border: 1px solid #e5e5e5;
   display: flex; align-items: center; justify-content: center;
-  color: #888; text-decoration: none; transition: all 0.15s;
+  color: #aaa; text-decoration: none; transition: all 0.15s;
 }
-.ft-social a:hover { border-color: #666; color: white; }
+.ft-social a:hover { border-color: #111; color: #111; }
 
-.ft-divider { height: 1px; background: #222; margin: 24px 0; }
+.ft-divider { height: 1px; background: #f0f0f0; margin: 24px 0; }
 
 .ft-bottom { }
-.ft-info p { font-size: 12px; color: #666; margin: 0 0 4px; line-height: 1.7; }
-.ft-copy { font-size: 11px; color: #444; margin: 12px 0 0; }
+.ft-info p { font-size: 12px; color: #aaa; margin: 0 0 4px; line-height: 1.7; }
+.ft-copy { font-size: 11px; color: #bbb; margin: 12px 0 0; }
 
 @media (max-width: 768px) {
   .ft-top { flex-direction: column; align-items: flex-start; }
