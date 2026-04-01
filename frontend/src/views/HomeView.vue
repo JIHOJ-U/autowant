@@ -8,7 +8,7 @@
         <div v-reveal class="special-banner">
           <div class="special-banner-left">
             <span class="special-event-tag">LIMITED EVENT</span>
-            <h2 class="special-title">4월 특가 이벤트</h2>
+            <h2 class="special-title">{{ currentMonth }}월 특가 이벤트</h2>
             <p class="special-desc">이달에만 만나볼 수 있는 파격 할인! 지금 바로 상담받으세요</p>
           </div>
           <div class="countdown-wrap">
@@ -44,7 +44,7 @@
     </section>
 
     <!-- 이달의 우수사원 -->
-    <section v-if="mvpManagers.length" class="mvp-section">
+    <section v-if="mvpManagers.length || isAdmin" class="mvp-section">
       <div class="container">
         <div v-reveal class="section-head" style="text-align: center;">
           <h2 class="section-title">이달의 우수사원</h2>
@@ -52,6 +52,8 @@
         </div>
         <div class="mvp-grid">
           <div v-for="(m, i) in mvpManagers" :key="m.id" v-reveal="{ delay: i * 100, dir: 'scale' }" class="mvp-card">
+            <!-- 관리자: 삭제 버튼 -->
+            <button v-if="isAdmin" class="mvp-remove" @click="setMVP(m.id)" title="우수사원 해제">✕</button>
             <div class="mvp-photo">
               <img v-if="m.image" :src="m.image" :alt="m.name" />
               <div v-else class="mvp-placeholder"><span>{{ m.name.charAt(0) }}</span></div>
@@ -67,6 +69,32 @@
                 <span v-for="t in m.tags" :key="t">{{ t }}</span>
               </div>
               <button class="mvp-btn" @click="openVehicle(m)">상담받기 ›</button>
+            </div>
+          </div>
+          <!-- 관리자: 추가 버튼 -->
+          <div v-if="isAdmin" class="mvp-card mvp-add-card" @click="mvpAddOpen = true">
+            <div class="mvp-add-icon">+</div>
+            <p class="mvp-add-text">우수사원 추가</p>
+          </div>
+        </div>
+        <!-- 관리자: 추가 모달 -->
+        <div v-if="mvpAddOpen" class="mvp-modal-overlay" @click.self="mvpAddOpen = false">
+          <div class="mvp-modal">
+            <div class="mvp-modal-head">
+              <h3>우수사원 추가</h3>
+              <button @click="mvpAddOpen = false">&times;</button>
+            </div>
+            <div class="mvp-modal-body">
+              <p class="mvp-modal-sub">등록된 매니저 중 우수사원으로 지정할 매니저를 선택하세요</p>
+              <div v-for="m in nonMvpManagers" :key="m.id" class="mvp-pick-row" @click="addMvpManager(m.id)">
+                <div class="mvp-pick-avatar">{{ m.name.charAt(0) }}</div>
+                <div class="mvp-pick-info">
+                  <p class="mvp-pick-name">{{ m.name }}</p>
+                  <p class="mvp-pick-role">{{ m.role }} · {{ m.experience }}</p>
+                </div>
+                <span class="mvp-pick-btn">선택</span>
+              </div>
+              <p v-if="!nonMvpManagers.length" class="mvp-pick-empty">모든 매니저가 이미 우수사원입니다</p>
             </div>
           </div>
         </div>
@@ -167,12 +195,6 @@
               </div>
             </div>
           </div>
-          <button class="car-arrow car-prev" @click="prevFeature">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 19l-7-7 7-7"/></svg>
-          </button>
-          <button class="car-arrow car-next" @click="nextFeature">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>
-          </button>
           <div class="car-dots">
             <button v-for="(_, i) in features" :key="i" class="car-dot" :class="{ active: featureIdx === i }" @click="featureIdx = i; resetAutoSlide()"></button>
           </div>
@@ -299,13 +321,23 @@ import { useVehicles } from '../stores/vehicles'
 import { useCompare } from '../stores/compare'
 import { useReviews } from '../stores/reviews'
 import { useManagers } from '../stores/managers'
+import { useAuth } from '../stores/auth'
 
 const openInquiryModal = inject('openInquiryModal')
 const openCalcModal = inject('openCalcModal')
 const { vehicleList, specialList: specialVehicles } = useVehicles()
 const { toggleCompare, isInCompare } = useCompare()
 const { reviewList: reviews } = useReviews()
-const { mvpManagers } = useManagers()
+const { mvpManagers, managerList, setMVP } = useManagers()
+const mvpAddOpen = ref(false)
+const nonMvpManagers = computed(() => managerList.value.filter(m => !m.isMVP))
+
+function addMvpManager(id) {
+  const m = managerList.value.find(x => x.id === id)
+  if (m) m.isMVP = true
+  mvpAddOpen.value = false
+}
+const { isAdmin } = useAuth()
 
 const searchQuery = ref('')
 const selectedBrand = ref('전체')
@@ -501,6 +533,8 @@ function initParticles() {
   draw()
   window.addEventListener('resize', () => { resize(); createParticles() })
 }
+
+const currentMonth = computed(() => new Date().getMonth() + 1)
 
 function fmt(p) { return p.toLocaleString('ko-KR') }
 function openVehicle(vehicle) { openInquiryModal(vehicle) }
@@ -719,6 +753,69 @@ onUnmounted(() => {
   transition: all 0.2s;
 }
 .mvp-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(77,142,247,0.3); }
+
+/* 관리자: 삭제 버튼 */
+.mvp-remove {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(0,0,0,0.5); color: white; border: none;
+  font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+}
+.mvp-card:hover .mvp-remove { opacity: 1; }
+.mvp-remove:hover { background: #e53935; }
+.mvp-card { position: relative; }
+
+/* 관리자: 추가 카드 */
+.mvp-add-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 2px dashed #d0d9f0; background: rgba(240,244,255,0.5);
+  cursor: pointer; transition: all 0.2s; min-height: 200px;
+}
+.mvp-add-card:hover { border-color: #4d8ef7; background: rgba(240,244,255,0.8); transform: translateY(-4px); }
+.mvp-add-icon { font-size: 36px; font-weight: 300; color: #4d8ef7; line-height: 1; }
+.mvp-add-text { font-size: 13px; font-weight: 600; color: #4d8ef7; margin-top: 8px; }
+
+/* 관리자: 추가 모달 */
+.mvp-modal-overlay {
+  position: fixed; inset: 0; z-index: 2100;
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+}
+.mvp-modal {
+  width: 400px; max-width: 90vw; max-height: 70vh;
+  background: white; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+}
+.mvp-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px; border-bottom: 1px solid #f0f0f0;
+}
+.mvp-modal-head h3 { font-size: 16px; font-weight: 800; color: #2d2d2d; margin: 0; }
+.mvp-modal-head button { background: none; border: none; font-size: 22px; color: #ccc; cursor: pointer; }
+.mvp-modal-head button:hover { color: #2d2d2d; }
+.mvp-modal-body { padding: 16px 22px 22px; overflow-y: auto; max-height: 50vh; }
+.mvp-modal-sub { font-size: 13px; color: #999; margin: 0 0 14px; }
+.mvp-pick-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 10px; cursor: pointer;
+  transition: background 0.15s;
+}
+.mvp-pick-row:hover { background: #f5f7ff; }
+.mvp-pick-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, #222, #444); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; flex-shrink: 0;
+}
+.mvp-pick-info { flex: 1; }
+.mvp-pick-name { font-size: 14px; font-weight: 700; color: #2d2d2d; margin: 0; }
+.mvp-pick-role { font-size: 12px; color: #999; margin: 2px 0 0; }
+.mvp-pick-btn {
+  padding: 5px 14px; background: linear-gradient(135deg, #4d8ef7, #6c5ce7);
+  color: white; border-radius: 6px; font-size: 12px; font-weight: 700;
+}
+.mvp-pick-empty { text-align: center; color: #ccc; padding: 20px 0; font-size: 13px; }
 @media (max-width: 768px) {
   .mvp-grid { gap: 12px; }
   .mvp-card { min-width: 180px; padding: 20px 16px; }
@@ -785,20 +882,6 @@ onUnmounted(() => {
 .carousel-body h4 { font-size: 1.4rem; font-weight: 900; color: #2d2d2d; margin: 0 0 14px; }
 .carousel-body p { font-size: 15px; color: #777; line-height: 1.8; margin: 0; }
 
-/* 화살표 */
-.car-arrow {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 44px; height: 44px; border-radius: 50%;
-  background: white; border: 1px solid #e0e7ff;
-  color: #4d8ef7; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s; z-index: 2;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-.car-arrow:hover { background: #4d8ef7; color: white; border-color: #4d8ef7; box-shadow: 0 4px 16px rgba(77,142,247,0.3); }
-.car-prev { left: 16px; }
-.car-next { right: 16px; }
-
 /* 도트 인디케이터 */
 .car-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
 .car-dot {
@@ -814,9 +897,6 @@ onUnmounted(() => {
   .carousel-body { padding: 24px 20px; }
   .carousel-body h4 { font-size: 1.1rem; }
   .carousel-body p { font-size: 13px; }
-  .car-arrow { width: 36px; height: 36px; }
-  .car-prev { left: 8px; }
-  .car-next { right: 8px; }
 }
 /* 고객 후기 */
 .review-section { padding: 48px 0; background: linear-gradient(180deg, #f0f4ff, #f5f7ff); }

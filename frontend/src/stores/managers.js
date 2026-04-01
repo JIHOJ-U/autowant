@@ -49,7 +49,8 @@ export function useManagers() {
   }
   function removeManager(id) { managerList.value = managerList.value.filter(m => m.id !== id) }
   function setMVP(id) {
-    managerList.value.forEach(m => { m.isMVP = m.id === id })
+    const m = managerList.value.find(x => x.id === id)
+    if (m) m.isMVP = !m.isMVP
   }
   return { managerList, mvpManagers, addManager, updateManager, removeManager, setMVP }
 }
