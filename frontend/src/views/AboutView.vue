@@ -29,12 +29,10 @@
 
         <div class="hero-bottom">
           <p class="hero-sub">합리적인 가격 · 투명한 견적 · 전문 상담</p>
-          <router-link to="/contact" class="hero-cta">견적 상담 →</router-link>
         </div>
       </div>
     </section>
 
-    <!-- ② Quick Menu -->
     <!-- ③ About 본문 -->
     <section class="about-section">
       <div class="ab-container">
@@ -46,24 +44,104 @@
         </div>
         <div class="ab-right">
           <p class="ab-body">
-            오토원트는 차량 렌트·리스 시장에서 고객이 진짜 원하는 가치를 제공하기 위해 만들어졌습니다.
-            복잡한 절차, 불투명한 비용, 강요되는 옵션 없이 — 오직 고객에게 최적화된 차량과 조건으로 연결합니다.
+            저희 오토원트는 고객님의 부담을 덜어드리기 위해 상황에 맞는 (카카오톡, 문자, 전화) 상담이 가능합니다.
           </p>
           <p class="ab-body">
-            20개 이상의 파트너사 네트워크를 바탕으로 최저가를 보장하며,
-            전문 매니저가 상담부터 출고까지 1:1로 함께합니다.
+            국내 전체 렌터사의 제휴 체결을 통해 장기렌트 / 리스사별 비교견적이 가능하며
+            자동차 종합 플랫폼 구축으로 합리적인 견적과
+            빠르게 변화하는 자동차 금융 시장에서 다년간의 상담 노하우로 고객님께 다가가고자 합니다.
           </p>
-          <div class="ab-stats">
-            <div class="ab-stat" v-for="s in stats" :key="s.label">
-              <span class="ab-stat-num">{{ s.num }}</span>
-              <span class="ab-stat-label">{{ s.label }}</span>
+          <div class="ab-contact">
+            <div class="ab-contact-item">
+              <div>
+                <p class="ab-contact-label">전화 상담</p>
+                <p class="ab-contact-main">0507-1344-7898</p>
+                <p class="ab-contact-sub">평일 09:00 ~ 18:00</p>
+              </div>
+            </div>
+            <div class="ab-contact-item">
+              <div>
+                <p class="ab-contact-label">카카오톡</p>
+                <p class="ab-contact-main">카카오톡id</p>
+                <p class="ab-contact-sub">24시간 상담</p>
+              </div>
+            </div>
+            <div class="ab-contact-item">
+              <div>
+                <p class="ab-contact-label">이메일</p>
+                <p class="ab-contact-main">autowant@naver.com</p>
+                <p class="ab-contact-sub">24시간 내 답변</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ④ 핵심 가치 -->
+    <!-- ④ 상담 신청 폼 -->
+    <section class="search-banner">
+      <div class="sb-container">
+        <div class="sb-left">
+          <p class="section-tag light">차량 찾기</p>
+          <h2 class="sb-headline">원하는 차량을<br>찾아드립니다</h2>
+          <p class="sb-desc">차량 정보와 연락처를 남겨주시면<br>전문 매니저가 빠르게 연락드립니다.</p>
+        </div>
+        <div class="sb-right">
+          <form class="sb-form" @submit.prevent="submitForm">
+            <div class="sb-form-group">
+              <p class="sb-form-label">차량 정보</p>
+              <div class="sb-row">
+                <div class="sb-field">
+                  <label>차량 종류</label>
+                  <input type="text" v-model="form.carType" placeholder="예) GV80, 아반떼, 카니발" />
+                </div>
+                <div class="sb-field">
+                  <label>차량 색상</label>
+                  <input type="text" v-model="form.carColor" placeholder="예) 흰색, 검정, 실버" />
+                </div>
+              </div>
+            </div>
+            <div class="sb-form-group">
+              <p class="sb-form-label">고객 정보</p>
+              <div class="sb-row">
+                <div class="sb-field">
+                  <label>성함</label>
+                  <input type="text" v-model="form.name" placeholder="이름을 입력하세요" />
+                </div>
+                <div class="sb-field">
+                  <label>연락처</label>
+                  <input type="tel" v-model="form.phone" placeholder="010-0000-0000" />
+                </div>
+              </div>
+              <div class="sb-row">
+                <div class="sb-field">
+                  <label>이메일</label>
+                  <input type="email" v-model="form.email" placeholder="example@email.com" />
+                </div>
+                <div class="sb-field">
+                  <label>상담 가능 시간</label>
+                  <input type="text" v-model="form.availableTime" placeholder="예) 평일 오후 2~6시" />
+                </div>
+              </div>
+              <div class="sb-field sb-field-full">
+                <label>내용</label>
+                <textarea v-model="form.message" placeholder="문의하실 내용을 자유롭게 적어주세요." rows="4"></textarea>
+              </div>
+            </div>
+            <label class="sb-agree">
+              <input type="checkbox" v-model="form.agree" />
+              <span class="sb-agree-box">
+                <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4L4 7.5L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="sb-agree-text">개인정보 수집·이용에 동의합니다 <span class="sb-agree-required">(필수)</span></span>
+            </label>
+            <button type="submit" class="sb-submit">상담 신청하기 →</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑤ 핵심 가치 -->
     <section class="values-section">
       <div class="vl-container">
         <div class="vl-head">
@@ -180,7 +258,7 @@ function onWheel(e) {
   if (isSnapping) return
 
   const heroSection = document.querySelector('.hero-section')
-  const nextSection = document.querySelector('.search-banner')
+  const nextSection = document.querySelector('.about-section')
   if (!heroSection || !nextSection) return
 
   const heroHeight = heroSection.offsetHeight
@@ -220,12 +298,6 @@ function submitForm() {
 }
 
 
-const stats = [
-  { num: '20+', label: '파트너 업체' },
-  { num: '1,200+', label: '누적 출고' },
-  { num: '98%', label: '고객 만족도' },
-  { num: '3일', label: '평균 출고' },
-]
 
 const values = [
   { title: '합리적인 가격', desc: '20개 이상 파트너 업체를 실시간 비교하여 항상 최저가를 제공합니다. 숨겨진 비용은 없습니다.' },
@@ -306,12 +378,14 @@ const services = [
 .hero-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 .hero-sub { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 1px; margin: 0; }
 .hero-cta {
-  display: inline-block; padding: 12px 28px;
-  background: #fff; color: #111;
-  font-size: 13px; font-weight: 700; text-decoration: none;
-  border-radius: 4px; transition: background 0.2s, transform 0.2s;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 28px;
+  background: transparent; color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-decoration: none; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 100px;
+  transition: background 0.25s, border-color 0.25s, gap 0.25s;
 }
-.hero-cta:hover { background: #e8e8e8; transform: translateX(2px); }
+.hero-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.7); gap: 16px; }
 
 /* ── ② Quick Menu ── */
 .quick-section { background: #141414; border-top: 1px solid rgba(255,255,255,0.06); }
@@ -336,18 +410,26 @@ const services = [
 .qk-item:hover .qk-arrow { color: #fff; transform: translateX(3px); }
 
 /* ── ③ About 본문 ── */
-.about-section { background: #0d0d0d; padding: 100px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+.about-section { background: #0d0d0d; padding: 100px 0 140px; clip-path: polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% calc(100% - 70px), 0 calc(100% - 70px)); margin-bottom: -70px; position: relative; z-index: 5; }
 .ab-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: start; }
 @media (max-width: 768px) { .ab-container { grid-template-columns: 1fr; gap: 40px; } }
-.ab-headline { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 900; color: #fff; line-height: 1.2; letter-spacing: -1px; margin: 0; }
+.ab-headline { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: #fff; line-height: 1.2; letter-spacing: -1px; margin: 0; }
 .ab-body { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.85; margin: 0 0 18px; }
+.ab-contact { display: flex; gap: 0; margin-top: 48px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.08); }
+@media (max-width: 768px) { .ab-contact { flex-direction: column; } }
+.ab-contact-item { flex: 1; padding: 0 28px 0 0; }
+.ab-contact-item + .ab-contact-item { padding-left: 28px; border-left: 1px solid rgba(255,255,255,0.08); }
+@media (max-width: 768px) { .ab-contact-item { padding: 20px 0; border-left: none !important; border-top: 1px solid rgba(255,255,255,0.08); } }
+.ab-contact-label { font-size: 9px; font-weight: 700; letter-spacing: 2.5px; color: rgba(255,255,255,0.25); margin: 0 0 10px; text-transform: uppercase; }
+.ab-contact-main { font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 6px; letter-spacing: -0.3px; }
+.ab-contact-sub { font-size: 11px; color: rgba(255,255,255,0.3); margin: 0; }
 .ab-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 32px; }
 .ab-stat { }
 .ab-stat-num { display: block; font-size: 1.6rem; font-weight: 900; color: #fff; letter-spacing: -1px; line-height: 1; margin-bottom: 6px; }
 .ab-stat-label { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 1px; }
 
 /* ── ④ 상담 폼 ── */
-.search-banner { background: #141414; border-top: 1px solid rgba(255,255,255,0.06); padding: 80px 0; }
+.search-banner { background: #141414; padding: 100px 0 140px; clip-path: polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% calc(100% - 70px), 0 calc(100% - 70px)); margin-bottom: -70px; position: relative; z-index: 4; }
 .sb-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
 @media (max-width: 900px) { .sb-container { grid-template-columns: 1fr; gap: 40px; } }
 .sb-headline { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: #fff; line-height: 1.2; letter-spacing: -1px; margin: 0 0 16px; }
@@ -393,19 +475,22 @@ const services = [
 .sb-agree-text { font-size: 12px; color: rgba(255,255,255,0.45); }
 .sb-agree-required { color: rgba(255,255,255,0.25); }
 .sb-submit {
-  align-self: flex-start; padding: 13px 32px;
-  background: #fff; color: #111;
-  font-size: 13px; font-weight: 700;
-  border: none; border-radius: 4px; cursor: pointer;
-  transition: background 0.2s, transform 0.2s; letter-spacing: 0.5px;
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 28px;
+  background: transparent; color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 100px; cursor: pointer;
+  font-family: inherit;
+  transition: background 0.25s, border-color 0.25s, gap 0.25s;
 }
-.sb-submit:hover { background: #e8e8e8; transform: translateX(2px); }
+.sb-submit:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.7); gap: 16px; }
 
 /* ── ⑤ 핵심 가치 ── */
-.values-section { background: #0d0d0d; padding: 100px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+.values-section { background: #0d0d0d; padding: 100px 0 140px; clip-path: polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% calc(100% - 70px), 0 calc(100% - 70px)); margin-bottom: -70px; position: relative; z-index: 3; }
 .vl-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
 .vl-head { margin-bottom: 56px; }
-.vl-headline { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 900; color: #fff; margin: 0; letter-spacing: -0.5px; }
+.vl-headline { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: #fff; margin: 0; letter-spacing: -1px; }
 .vl-list { display: flex; flex-direction: column; }
 .vl-row {
   display: grid; grid-template-columns: 72px 1fr;
@@ -418,9 +503,9 @@ const services = [
 .vl-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; margin: 0; }
 
 /* ── ⑥ 서비스 ── */
-.service-section { background: #141414; padding: 100px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+.service-section { background: #141414; padding: 100px 0 140px; clip-path: polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% calc(100% - 70px), 0 calc(100% - 70px)); margin-bottom: -70px; position: relative; z-index: 2; }
 .sv-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
-.sv-headline { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 900; color: #fff; margin: 0 0 56px; letter-spacing: -0.5px; }
+.sv-headline { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: #fff; margin: 0 0 56px; letter-spacing: -1px; }
 .sv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.06); }
 @media (max-width: 1024px) { .sv-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .sv-grid { grid-template-columns: 1fr; } }
@@ -439,15 +524,17 @@ const services = [
 .sv-card:hover .sv-card-footer svg { color: #fff; transform: translateX(3px); }
 
 /* ── ⑦ 매니저 CTA ── */
-.manager-section { background: #0d0d0d; padding: 100px 0; border-top: 1px solid rgba(255,255,255,0.06); }
-.mg-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; max-width: 600px; }
-.mg-headline { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 900; color: #fff; line-height: 1.2; letter-spacing: -1.5px; margin: 0 0 20px; }
+.manager-section { background: #0d0d0d; padding: 100px 0; position: relative; z-index: 1; }
+.mg-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+.mg-headline { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: #fff; line-height: 1.2; letter-spacing: -1px; margin: 0 0 20px; }
 .mg-sub { font-size: 14px; color: rgba(255,255,255,0.4); line-height: 1.8; margin: 0 0 40px; }
 .mg-btn {
-  display: inline-block; padding: 14px 36px;
-  background: #fff; color: #111;
-  font-size: 13px; font-weight: 700; text-decoration: none;
-  border-radius: 4px; transition: background 0.2s, transform 0.2s;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 28px;
+  background: transparent; color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-decoration: none; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 100px;
+  transition: background 0.25s, border-color 0.25s, gap 0.25s;
 }
-.mg-btn:hover { background: #e8e8e8; transform: translateX(2px); }
+.mg-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.7); gap: 16px; }
 </style>
