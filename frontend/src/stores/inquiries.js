@@ -1,6 +1,13 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
-export const inquiries = ref([])
+// localStorage에서 불러오기
+const saved = JSON.parse(localStorage.getItem('autowant_inquiries') || '[]')
+export const inquiries = ref(saved)
+
+// 변경될 때마다 localStorage에 저장
+watch(inquiries, (val) => {
+  localStorage.setItem('autowant_inquiries', JSON.stringify(val))
+}, { deep: true })
 
 // 알림 리스트
 export const notifications = ref([])

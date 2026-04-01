@@ -197,10 +197,10 @@ function addNew() {
 /* 버튼 */
 .leader-actions { display: flex; gap: 8px; }
 .consult-btn {
-  padding: 10px 28px; background: #111; color: white; border: none;
-  border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+  padding: 10px 28px; background: linear-gradient(135deg, #4d8ef7, #6c5ce7); color: white; border: none;
+  border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
 }
-.consult-btn:hover { background: #333; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+.consult-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(77,142,247,0.3); }
 .edit-inline-btn {
   padding: 10px 20px; background: white; color: #888; border: 1px solid #eee;
   border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;

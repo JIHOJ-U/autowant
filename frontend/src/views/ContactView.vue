@@ -120,10 +120,10 @@ function resetForm() {
 @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
 
 .submit-btn {
-  width: 100%; padding: 12px; background: #111; color: white; border: none; border-radius: 4px;
-  font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+  width: 100%; padding: 12px; background: linear-gradient(135deg, #4d8ef7, #6c5ce7); color: white; border: none; border-radius: 6px;
+  font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
 }
-.submit-btn:hover { background: #333; }
+.submit-btn:hover { box-shadow: 0 4px 16px rgba(77,142,247,0.3); transform: translateY(-1px); }
 
 /* 접수 완료 화면 */
 .success-screen {

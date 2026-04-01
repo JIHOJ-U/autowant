@@ -48,7 +48,7 @@ function fmt(p) { return p.toLocaleString('ko-KR') }
 .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
 .card-img { position: relative; background: #f5f5f5; aspect-ratio: 16/10; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .card-img img { width: 90%; height: auto; object-fit: contain; mix-blend-mode: multiply; }
-.badge { position: absolute; top: 8px; left: 8px; background: #111; color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+.badge { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
 .card-body { padding: 12px; }
 .sub { font-size: 11px; color: #aaa; margin: 0 0 2px; }
 .card-body h3 { font-size: 14px; font-weight: 700; color: #111; margin: 0 0 8px; }

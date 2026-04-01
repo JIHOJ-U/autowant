@@ -595,7 +595,7 @@ function managerInquiries(managerName) {
 
 <style scoped>
 /* 탭바 */
-.admin-topbar { position: sticky; top: 64px; z-index: 100; background: white; border-bottom: 1px solid #eee; }
+.admin-topbar { position: sticky; top: 72px; z-index: 100; background: white; border-bottom: 1px solid #eee; }
 .admin-topbar-inner { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; height: 52px; gap: 24px; }
 .admin-title { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .admin-title h1 { font-size: 15px; font-weight: 800; color: #111; margin: 0; }

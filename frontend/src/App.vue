@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- 네비게이션 -->
-    <v-app-bar flat :class="['main-navbar', { 'navbar-transparent': isAboutPage && !navScrolled, 'navbar-blur': isAboutPage && navScrolled }]" height="64">
+    <v-app-bar flat :class="['main-navbar', { 'navbar-transparent': isAboutPage && !navScrolled, 'navbar-blur': isAboutPage && navScrolled }]" height="72">
       <v-container class="d-flex align-center" style="max-width: 1200px;">
         <router-link to="/" class="brand-link">
           <span class="brand-text">AUTO</span><span class="brand-accent">WANT</span>
@@ -65,68 +65,86 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-main :style="{ paddingTop: isAboutPage ? '0' : '64px' }">
+    <v-main :style="{ paddingTop: isAboutPage ? '0' : '72px' }">
       <router-view />
     </v-main>
 
-    <!-- 플로팅 사이드바 (데스크톱) -->
-    <aside class="floating-sidebar" :class="{ visible: showSidebar && !isAboutPage }">
-      <a href="tel:0507-1344-7898" class="sb-item sb-phone">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        <span>전화상담</span>
-      </a>
-      <a href="https://pf.kakao.com/_example" target="_blank" class="sb-item sb-kakao">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.53-.96 3.4-.99 3.63 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.42 4.28-2.84.56.08 1.14.13 1.72.13 5.52 0 10-3.58 10-7.94S17.52 3 12 3z"/></svg>
-        <span>카카오톡</span>
-      </a>
-      <a href="https://instagram.com/autowant" target="_blank" class="sb-item">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
-        <span>인스타</span>
-      </a>
-      <a href="https://facebook.com/autowant" target="_blank" class="sb-item">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        <span>페이스북</span>
-      </a>
-      <a href="https://blog.naver.com/autowant" target="_blank" class="sb-item sb-naver">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
-        <span>네이버</span>
-      </a>
-    </aside>
-
-    <!-- 오른쪽 빠른 견적 문의 -->
-    <button class="quick-inquiry-btn" :class="{ visible: showSidebar && !isAboutPage }" @click="quickOpen = !quickOpen">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-      <span>빠른 견적</span>
-    </button>
-
-    <transition name="quick-panel">
-      <div v-if="quickOpen" class="quick-panel">
-        <div class="quick-head">
-          <h4>빠른 견적 문의</h4>
-          <button class="quick-close" @click="quickOpen = false">&times;</button>
-        </div>
-        <div v-if="!quickSubmitted" class="quick-body">
-          <v-form ref="quickForm" @submit.prevent="submitQuick">
-            <v-text-field v-model="quickData.name" label="이름" variant="outlined" density="compact" rounded="0" :rules="nameRules" @input="quickData.name = quickData.name.replace(/[^a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣\s]/g, '')" class="mb-1" />
-            <v-text-field v-model="quickData.phone" label="연락처" placeholder="010-0000-0000" variant="outlined" density="compact" rounded="0" :rules="phoneRules" @input="formatQuickPhone" maxlength="13" class="mb-1" />
-            <v-select v-model="quickData.interest" :items="['장기렌트', '리스', '즉시출고', '이달의 특가', '기타']" label="상담 유형" variant="outlined" density="compact" rounded="0" class="mb-1" />
-            <v-text-field v-model="quickData.vehicle" label="관심 차량 (선택)" variant="outlined" density="compact" rounded="0" class="mb-1" />
-            <v-textarea v-model="quickData.message" label="문의 내용 (선택)" variant="outlined" density="compact" rounded="0" rows="2" class="mb-1" />
-            <v-checkbox v-model="quickData.agree" label="[필수] 개인정보 수집 및 이용 동의" :rules="[v => !!v || '동의 필요']" density="compact" class="mb-2" />
-            <button type="submit" class="quick-submit">견적 문의하기</button>
-          </v-form>
-        </div>
-        <div v-else class="quick-success">
-          <svg class="quick-check" viewBox="0 0 52 52">
-            <circle cx="26" cy="26" r="24" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="151" stroke-dashoffset="151" style="animation: qCircle 0.5s ease 0.1s forwards;" />
-            <path fill="none" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14 27l8 8 16-16" stroke-dasharray="40" stroke-dashoffset="40" style="animation: qCheck 0.35s ease 0.5s forwards;" />
-          </svg>
-          <p class="quick-done-title">문의가 접수되었습니다!</p>
-          <p class="quick-done-sub">매니저가 빠르게 연락드리겠습니다</p>
-          <button class="quick-submit" style="margin-top: 16px;" @click="resetQuick">새로운 문의</button>
+    <!-- 왼쪽 연락처 사이드바 -->
+    <aside class="floating-sidebar" :class="{ visible: !hideSidebars }" :style="{ top: sidebarY + 'px' }">
+      <div class="left-sb-head">
+        <h4>오토원트</h4>
+        <p>언제든 편하게 연락주세요</p>
+      </div>
+      <div class="left-sb-body">
+        <a href="tel:0507-1344-7898" class="left-sb-row">
+          <div class="left-sb-icon sb-phone-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="left-sb-info">
+            <span class="left-sb-label">전화상담</span>
+            <span class="left-sb-value">0507-1344-7898</span>
+          </div>
+        </a>
+        <a href="mailto:autowant@naver.com" class="left-sb-row">
+          <div class="left-sb-icon sb-email-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>
+          </div>
+          <div class="left-sb-info">
+            <span class="left-sb-label">이메일</span>
+            <span class="left-sb-value">autowant@naver.com</span>
+          </div>
+        </a>
+        <a href="https://pf.kakao.com/_example" target="_blank" class="left-sb-row">
+          <div class="left-sb-icon sb-kakao-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.53-.96 3.4-.99 3.63 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.42 4.28-2.84.56.08 1.14.13 1.72.13 5.52 0 10-3.58 10-7.94S17.52 3 12 3z"/></svg>
+          </div>
+          <div class="left-sb-info">
+            <span class="left-sb-label">카카오톡</span>
+            <span class="left-sb-value">24시간 상담</span>
+          </div>
+        </a>
+        <div class="left-sb-divider"></div>
+        <p class="left-sb-time">평일 09:00 ~ 18:00</p>
+        <div class="left-sb-socials">
+          <a href="https://instagram.com/autowant" target="_blank" class="left-sb-social">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://facebook.com/autowant" target="_blank" class="left-sb-social">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://blog.naver.com/autowant" target="_blank" class="left-sb-social sb-naver-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
+          </a>
         </div>
       </div>
-    </transition>
+    </aside>
+
+    <!-- 오른쪽 빠른 견적 사이드바 -->
+    <aside class="quick-sidebar" :class="{ visible: !hideSidebars }" :style="{ top: sidebarY + 'px' }">
+      <div class="quick-head">
+        <h4>빠른 견적 문의</h4>
+      </div>
+      <div v-if="!quickSubmitted" class="quick-body">
+        <v-form ref="quickForm" @submit.prevent="submitQuick">
+          <v-text-field v-model="quickData.name" label="이름" variant="outlined" density="compact" rounded="0" :rules="nameRules" @input="quickData.name = quickData.name.replace(/[^a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣\s]/g, '')" class="mb-1" />
+          <v-text-field v-model="quickData.phone" label="연락처" placeholder="010-0000-0000" variant="outlined" density="compact" rounded="0" :rules="phoneRules" @input="formatQuickPhone" maxlength="13" class="mb-1" />
+          <v-select v-model="quickData.interest" :items="['장기렌트', '리스', '즉시출고', '이달의 특가', '기타']" label="상담 유형" variant="outlined" density="compact" rounded="0" class="mb-1" />
+          <v-text-field v-model="quickData.vehicle" label="관심 차량 (선택)" variant="outlined" density="compact" rounded="0" class="mb-1" />
+          <v-textarea v-model="quickData.message" label="문의 내용 (선택)" variant="outlined" density="compact" rounded="0" rows="2" class="mb-1" />
+          <v-checkbox v-model="quickData.agree" label="[필수] 개인정보 수집 및 이용 동의" :rules="[v => !!v || '동의 필요']" density="compact" class="mb-2" />
+          <button type="submit" class="quick-submit">견적 문의하기</button>
+        </v-form>
+      </div>
+      <div v-else class="quick-success">
+        <svg class="quick-check" viewBox="0 0 52 52">
+          <circle cx="26" cy="26" r="24" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="151" stroke-dashoffset="151" style="animation: qCircle 0.5s ease 0.1s forwards;" />
+          <path fill="none" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14 27l8 8 16-16" stroke-dasharray="40" stroke-dashoffset="40" style="animation: qCheck 0.35s ease 0.5s forwards;" />
+        </svg>
+        <p class="quick-done-title">문의가 접수되었습니다!</p>
+        <p class="quick-done-sub">매니저가 빠르게 연락드리겠습니다</p>
+        <button class="quick-submit" style="margin-top: 16px;" @click="resetQuick">새로운 문의</button>
+      </div>
+    </aside>
 
     <!-- 차량 문의 모달 -->
     <v-dialog v-model="inquiryModal" max-width="480" class="inquiry-dialog">
@@ -320,16 +338,35 @@ const mobileMenu = ref(false)
 
 // 회사소개 페이지 투명 네비게이션
 const isAboutPage = computed(() => route.path === '/about')
+const hideSidebars = computed(() => isAboutPage.value || route.path === '/admin')
 const navScrolled = ref(false)
 
-// 사이드바 스크롤 표시
-const showSidebar = ref(false)
+// 사이드바 스크롤 따라오기
+const showSidebar = ref(true)
+const sidebarY = ref(0)
+let targetY = 0
+let animFrame = null
+
 function onScroll() {
-  showSidebar.value = window.scrollY > 200
   navScrolled.value = window.scrollY > 60
 }
-onMounted(() => window.addEventListener('scroll', onScroll))
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+
+function updateSidebarPos() {
+  const viewH = window.innerHeight
+  targetY = window.scrollY + viewH / 2
+  sidebarY.value += (targetY - sidebarY.value) * 0.08
+  animFrame = requestAnimationFrame(updateSidebarPos)
+}
+
+onMounted(() => {
+  sidebarY.value = window.scrollY + window.innerHeight / 2
+  window.addEventListener('scroll', onScroll)
+  updateSidebarPos()
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+  cancelAnimationFrame(animFrame)
+})
 
 // 차량 문의 모달
 const inquiryModal = ref(false)
@@ -461,10 +498,10 @@ function handleLogout() {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
 * { box-sizing: border-box; margin: 0; }
-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #2d2d2d; background: #fefefe; -webkit-font-smoothing: antialiased; }
 
 
 /* 네비게이션 */
@@ -500,28 +537,31 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
 .main-navbar.navbar-blur .nav-active { color: #fff !important; }
 .main-navbar.navbar-transparent .nav-cta,
 .main-navbar.navbar-blur .nav-cta { background: rgba(255,255,255,0.15) !important; color: #fff !important; border: 1px solid rgba(255,255,255,0.3) !important; }
-.brand-link { text-decoration: none; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; }
-.brand-text { color: #111; transition: color 0.3s; }
+.brand-link { text-decoration: none; font-size: 1.4rem; font-weight: 900; letter-spacing: -0.5px; }
+.brand-text { color: #2d2d2d; transition: color 0.3s; }
 .brand-accent { color: #4d8ef7; transition: color 0.3s; }
 .nav-link {
   text-decoration: none;
   color: #888;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 6px;
-  transition: color 0.15s;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.15s;
 }
-.nav-link:hover { color: #111; }
-.nav-active { color: #111 !important; }
+.nav-link:hover { color: #2d2d2d; background: #f5f5f5; }
+.nav-active { color: #2d2d2d !important; background: #f0f4ff !important; }
 .nav-cta {
-  background: #111 !important;
+  background: linear-gradient(135deg, #4d8ef7, #6c5ce7) !important;
   color: white !important;
   font-weight: 700 !important;
   font-size: 12.5px !important;
   letter-spacing: -0.2px;
   padding: 0 20px !important;
+  border: none !important;
+  transition: all 0.2s !important;
 }
+.nav-cta:hover { box-shadow: 0 4px 12px rgba(77,142,247,0.3) !important; transform: translateY(-1px) !important; }
 
 /* 푸터 */
 .app-footer { background: #fff; color: #888; padding: 0; border-top: 1px solid #f0f0f0; }
@@ -556,120 +596,111 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
   .ft-info p { word-break: keep-all; }
 }
 
-/* 플로팅 사이드바 */
+/* 왼쪽 연락처 사이드바 */
 .floating-sidebar {
-  position: fixed;
+  position: absolute;
   left: 20px;
-  top: 50%;
-  transform: translateY(-50%) translateX(-100px);
+  transform: translateY(-50%);
   z-index: 1800;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  opacity: 0;
-  transition: all 0.3s ease;
+  width: 240px;
+  background: white; border: 1px solid #eee; border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  overflow: hidden;
 }
-.floating-sidebar.visible {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
+.floating-sidebar.visible { opacity: 1; pointer-events: auto; }
+
+.left-sb-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid #f0f0f0;
 }
-.sb-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 68px;
-  height: 68px;
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 14px;
-  text-decoration: none;
-  color: #666;
-  font-size: 10px;
-  font-weight: 600;
-  gap: 4px;
-  transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+.left-sb-head h4 { font-size: 15px; font-weight: 800; color: #2d2d2d; margin: 0 0 2px; }
+.left-sb-head p { font-size: 11px; color: #aaa; margin: 0; }
+
+.left-sb-body { padding: 12px 14px 16px; }
+
+.left-sb-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px; border-radius: 8px;
+  text-decoration: none; color: inherit;
+  transition: background 0.15s;
 }
-.sb-item:hover {
-  border-color: #ddd;
-  color: #111;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+.left-sb-row:hover { background: #f5f7ff; }
+
+.left-sb-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.sb-item svg { flex-shrink: 0; }
-.sb-phone { color: #111; }
-.sb-kakao { color: #391b1b; }
-.sb-naver { color: #03c75a; }
+.sb-phone-icon { background: #eef4ff; color: #4d8ef7; }
+.sb-email-icon { background: #fff3e0; color: #f57c00; }
+.sb-kakao-icon { background: #fef5d4; color: #3c1e1e; }
+
+.left-sb-info { display: flex; flex-direction: column; min-width: 0; }
+.left-sb-label { font-size: 10px; font-weight: 600; color: #aaa; }
+.left-sb-value { font-size: 13px; font-weight: 700; color: #2d2d2d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.left-sb-divider { height: 1px; background: #f0f0f0; margin: 10px 0; }
+
+.left-sb-time { font-size: 11px; color: #bbb; text-align: center; margin: 0 0 10px; }
+
+.left-sb-socials { display: flex; justify-content: center; gap: 8px; }
+.left-sb-social {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid #eee; background: white;
+  display: flex; align-items: center; justify-content: center;
+  color: #aaa; text-decoration: none; transition: all 0.15s;
+}
+.left-sb-social:hover { border-color: #ddd; color: #555; background: #f9f9f9; }
+.sb-naver-icon:hover { color: #03c75a; }
 
 @media (max-width: 1400px) {
-  .floating-sidebar { left: 8px; }
-  .sb-item { width: 56px; height: 56px; font-size: 9px; }
-  .sb-item svg { width: 18px; height: 18px; }
+  .floating-sidebar { left: 8px; width: 220px; }
 }
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .floating-sidebar { display: none; }
 }
 
-/* 오른쪽 빠른 견적 버튼 */
-.quick-inquiry-btn {
-  position: fixed; right: 20px; top: 50%; z-index: 1800;
-  transform: translateY(-50%) translateX(100px);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  width: 68px; height: 68px; gap: 4px;
-  background: #111; color: white; border: none; border-radius: 14px;
-  font-size: 10px; font-weight: 600; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  opacity: 0; transition: all 0.3s ease;
+/* 오른쪽 빠른 견적 사이드바 */
+.quick-sidebar {
+  position: absolute; right: 20px; z-index: 1800;
+  transform: translateY(-50%);
+  width: 280px;
+  background: white; border: 1px solid #eee; border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  max-height: calc(100vh - 100px); overflow-y: auto;
+  scrollbar-width: thin;
 }
-.quick-inquiry-btn.visible { opacity: 1; transform: translateY(-50%) translateX(0); }
-.quick-inquiry-btn:hover { transform: translateY(-50%) translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-@media (max-width: 1400px) {
-  .quick-inquiry-btn { right: 8px; width: 56px; height: 56px; font-size: 9px; }
-  .quick-inquiry-btn svg { width: 18px; height: 18px; }
-}
-@media (max-width: 768px) { .quick-inquiry-btn { display: none; } }
-
-/* 빠른 견적 패널 */
-.quick-panel {
-  position: fixed; right: 20px; top: 50%; z-index: 1900;
-  transform: translateY(-50%); width: 360px; max-height: 80vh;
-  background: white; border-radius: 12px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.15); border: 1px solid #eee;
-  display: flex; flex-direction: column; overflow: hidden;
-}
+.quick-sidebar.visible { opacity: 1; pointer-events: auto; }
 .quick-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px; border-bottom: 1px solid #f0f0f0;
+  padding: 14px 16px; border-bottom: 1px solid #f0f0f0;
 }
-.quick-head h4 { font-size: 15px; font-weight: 800; color: #111; margin: 0; }
-.quick-close { background: none; border: none; font-size: 20px; color: #ccc; cursor: pointer; }
-.quick-close:hover { color: #111; }
-.quick-body { padding: 16px 20px; overflow-y: auto; }
+.quick-head h4 { font-size: 14px; font-weight: 800; color: #111; margin: 0; }
+.quick-body { padding: 14px 16px; }
 .quick-submit {
-  width: 100%; padding: 11px; background: #111; color: white; border: none;
-  border-radius: 4px; font-size: 13px; font-weight: 700; cursor: pointer;
+  width: 100%; padding: 10px; background: linear-gradient(135deg, #4d8ef7, #6c5ce7); color: #fff !important; border: none;
+  border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer;
+  -webkit-text-fill-color: #fff; transition: all 0.2s;
 }
-.quick-submit:hover { background: #333; }
+.quick-submit:hover { box-shadow: 0 4px 12px rgba(77,142,247,0.3); transform: translateY(-1px); }
 .quick-success {
   display: flex; flex-direction: column; align-items: center;
-  padding: 40px 20px; text-align: center;
+  padding: 32px 16px; text-align: center;
 }
-.quick-check { width: 56px; height: 56px; margin-bottom: 16px; }
+.quick-check { width: 48px; height: 48px; margin-bottom: 14px; }
 @keyframes qCircle { to { stroke-dashoffset: 0; } }
 @keyframes qCheck { to { stroke-dashoffset: 0; } }
-.quick-done-title { font-size: 16px; font-weight: 800; color: #111; margin: 0 0 4px; }
+.quick-done-title { font-size: 15px; font-weight: 800; color: #111; margin: 0 0 4px; }
 .quick-done-sub { font-size: 12px; color: #999; margin: 0; }
-.quick-panel-enter-active { animation: qPanelIn 0.25s ease; }
-.quick-panel-leave-active { animation: qPanelOut 0.2s ease; }
-@keyframes qPanelIn { from { opacity: 0; transform: translateY(-50%) translateX(20px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
-@keyframes qPanelOut { from { opacity: 1; transform: translateY(-50%) translateX(0); } to { opacity: 0; transform: translateY(-50%) translateX(20px); } }
-@media (max-width: 768px) {
-  .quick-panel { right: 12px; left: 12px; width: auto; top: auto; bottom: 20px; transform: none; max-height: 70vh; }
-  .quick-panel-enter-active { animation: qPanelInM 0.25s ease; }
-  .quick-panel-leave-active { animation: qPanelOutM 0.2s ease; }
-  @keyframes qPanelInM { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes qPanelOutM { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+@media (max-width: 1400px) {
+  .quick-sidebar { right: 8px; width: 260px; }
+}
+@media (max-width: 1200px) {
+  .quick-sidebar { display: none; }
 }
 
 /* 문의 모달 */
@@ -688,11 +719,11 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
 .modal-close:hover { color: #111; }
 .modal-body { padding: 20px 24px 24px; }
 .modal-submit {
-  width: 100%; padding: 12px; background: #111; color: #fff !important; border: none; border-radius: 8px;
-  font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+  width: 100%; padding: 12px; background: linear-gradient(135deg, #4d8ef7, #6c5ce7); color: #fff !important; border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
   -webkit-text-fill-color: #fff;
 }
-.modal-submit:hover { background: #333; }
+.modal-submit:hover { box-shadow: 0 4px 16px rgba(77,142,247,0.3); transform: translateY(-1px); }
 
 /* 알림 토스트 */
 .noti-wrap {
