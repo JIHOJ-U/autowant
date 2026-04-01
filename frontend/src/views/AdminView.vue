@@ -19,14 +19,14 @@
       <!-- 대시보드 -->
       <div v-if="currentTab === 'dashboard'">
         <div class="stats-grid">
-          <div v-for="s in dashStats" :key="s.label" class="stat-card">
+          <div v-for="(s, i) in dashStats" :key="s.label" v-reveal="{ delay: i * 80, dir: 'scale' }" class="stat-card hvr-grow">
             <p class="stat-label">{{ s.label }}</p>
             <p class="stat-value">{{ s.value }}</p>
           </div>
         </div>
         <div class="panel">
           <div class="panel-head"><h3>최근 문의</h3><button class="link-btn" @click="currentTab = 'inquiries'">전체보기 →</button></div>
-          <div v-for="item in inquiries.slice(0, 3)" :key="item.id" class="list-row">
+          <div v-for="item in inquiries.slice(0, 3)" :key="item.id" class="list-row clickable" :class="{ unread: !item.read }" @click="openInquiryDetail(item)">
             <div><p class="row-title">{{ item.name }}</p><p class="row-sub">{{ item.vehicle }} · {{ item.phone }}</p></div>
             <div class="row-right">
               <span class="status-tag" :class="item.status === '대기' ? 'pending' : 'done'">{{ item.status }}</span>
@@ -40,7 +40,7 @@
       <div v-if="currentTab === 'vehicles'">
         <div class="tab-header"><h2 class="page-title">차량 관리</h2><button class="add-btn" @click="openAdd()">+ 차량 추가</button></div>
         <div class="v-grid">
-          <div v-for="v in vehicleList" :key="v.id" class="v-item">
+          <div v-for="(v, i) in vehicleList" :key="v.id" v-reveal="{ delay: i * 50 }" class="v-item hvr-float">
             <div class="v-img"><img :src="v.image" :alt="v.name" />
               <div class="v-badges">
                 <span v-if="v.isSpecial" class="tag-s">특가</span>
@@ -68,7 +68,7 @@
       <div v-if="currentTab === 'inquiries'">
         <h2 class="page-title tab-solo">문의 관리</h2>
         <div class="panel">
-          <div v-for="item in inquiries" :key="item.id" class="list-row">
+          <div v-for="item in inquiries" :key="item.id" class="list-row clickable" :class="{ unread: !item.read }" @click="openInquiryDetail(item)">
             <div>
               <p class="row-title">{{ item.name }} <span class="row-phone">{{ item.phone }}</span><span v-if="item.source" class="row-source">{{ item.source }}</span></p>
               <p class="row-sub">{{ item.vehicle }}{{ item.carColor ? ' · ' + item.carColor : '' }}{{ item.email ? ' · ' + item.email : '' }}{{ item.availableTime ? ' · ' + item.availableTime : '' }}</p>
@@ -77,7 +77,8 @@
             <div class="row-right">
               <span class="status-tag" :class="item.status === '대기' ? 'pending' : 'done'">{{ item.status }}</span>
               <span class="row-date">{{ item.date }}</span>
-              <button v-if="item.status === '대기'" class="btn-edit sm" @click="item.status = '완료'">완료</button>
+              <button v-if="item.status === '대기'" class="btn-edit sm" @click.stop="item.status = '완료'">완료</button>
+              <button class="btn-del sm" @click.stop="delInquiry(item.id)">삭제</button>
             </div>
           </div>
           <p v-if="!inquiries.length" class="empty">문의가 없습니다</p>
@@ -99,13 +100,34 @@
             </tbody>
           </table>
         </div>
+
+        <!-- 매니저별 문의 현황 -->
+        <div v-for="m in managerList" :key="'inq-' + m.id" class="mgr-inq-section">
+          <div class="mgr-inq-head">
+            <h3>{{ m.name }} <span class="mgr-role">{{ m.role }}</span></h3>
+            <span class="mgr-inq-count" :class="{ 'has-inq': managerInquiries(m.name).length > 0 }">문의 {{ managerInquiries(m.name).length }}건</span>
+          </div>
+          <div v-if="managerInquiries(m.name).length" class="panel">
+            <div v-for="item in managerInquiries(m.name)" :key="item.id" class="list-row clickable" :class="{ unread: !item.read }" @click="openInquiryDetail(item)">
+              <div>
+                <p class="row-title">{{ item.name }} <span class="row-phone">{{ item.phone }}</span></p>
+                <p class="row-sub">{{ item.message || '내용 없음' }}</p>
+              </div>
+              <div class="row-right">
+                <span class="status-tag" :class="item.status === '대기' ? 'pending' : 'done'">{{ item.status }}</span>
+                <span class="row-date">{{ item.date }}</span>
+              </div>
+            </div>
+          </div>
+          <p v-else class="mgr-inq-empty">접수된 문의가 없습니다</p>
+        </div>
       </div>
 
       <!-- 특가 관리 -->
       <div v-if="currentTab === 'specials'">
         <div class="tab-header"><h2 class="page-title">이달의 특가 관리</h2><button class="add-btn" @click="openAdd(true)">+ 특가 추가</button></div>
         <div class="v-grid">
-          <div v-for="v in specialList" :key="v.id" class="v-item">
+          <div v-for="(v, i) in specialList" :key="v.id" v-reveal="{ delay: i * 50 }" class="v-item hvr-float">
             <div class="v-img"><img :src="v.image" :alt="v.name" /><span class="discount-tag">{{ v.discount }}% OFF</span></div>
             <div class="v-body">
               <p class="v-sub">{{ v.brand }} · {{ v.year }}</p>
@@ -130,7 +152,7 @@
       <div v-if="currentTab === 'immediate'">
         <div class="tab-header"><h2 class="page-title">즉시출고 관리</h2><button class="add-btn" @click="openAdd(false, true)">+ 즉시출고 추가</button></div>
         <div class="v-grid">
-          <div v-for="v in immediateList" :key="v.id" class="v-item">
+          <div v-for="(v, i) in immediateList" :key="v.id" v-reveal="{ delay: i * 50 }" class="v-item hvr-float">
             <div class="v-img"><img :src="v.image" :alt="v.name" /><span class="imm-tag">즉시출고</span></div>
             <div class="v-body">
               <p class="v-sub">{{ v.brand }} · {{ v.year }} · {{ v.fuel }}</p>
@@ -154,7 +176,7 @@
       <div v-if="currentTab === 'reviews'">
         <div class="tab-header"><h2 class="page-title">후기 관리</h2><button class="add-btn" @click="openAddReview">+ 후기 작성</button></div>
         <div class="rv-grid">
-          <div v-for="r in reviewList" :key="r.id" class="rv-card">
+          <div v-for="(r, i) in reviewList" :key="r.id" v-reveal="{ delay: i * 60 }" class="rv-card hvr-float">
             <div class="rv-img" v-if="r.image"><img :src="r.image" /></div>
             <div class="rv-body">
               <div class="rv-stars"><span v-for="n in 5" :key="n" :class="n <= r.rating ? 'sf' : 'se'">★</span></div>
@@ -307,6 +329,80 @@
       </div>
     </div>
 
+    <!-- 문의 상세 모달 -->
+    <div v-if="inquiryDetailModal" class="overlay" @click.self="inquiryDetailModal = false">
+      <div class="modal modal-sm">
+        <div class="modal-top">
+          <h3>문의 상세</h3>
+          <button class="modal-x" @click="inquiryDetailModal = false">&times;</button>
+        </div>
+        <div class="inq-detail" v-if="inquiryDetail">
+          <div class="inq-detail-row">
+            <span class="inq-label">이름</span>
+            <span class="inq-value">{{ inquiryDetail.name }}</span>
+          </div>
+          <div class="inq-detail-row">
+            <span class="inq-label">연락처</span>
+            <a :href="'tel:' + inquiryDetail.phone" class="inq-value inq-phone">{{ inquiryDetail.phone }}</a>
+          </div>
+          <div class="inq-detail-row" v-if="inquiryDetail.vehicle">
+            <span class="inq-label">관심 차량</span>
+            <span class="inq-value">{{ inquiryDetail.vehicle }}{{ inquiryDetail.carColor ? ' · ' + inquiryDetail.carColor : '' }}</span>
+          </div>
+          <div class="inq-detail-row" v-if="inquiryDetail.email">
+            <span class="inq-label">이메일</span>
+            <span class="inq-value">{{ inquiryDetail.email }}</span>
+          </div>
+          <div class="inq-detail-row" v-if="inquiryDetail.availableTime">
+            <span class="inq-label">연락 가능 시간</span>
+            <span class="inq-value">{{ inquiryDetail.availableTime }}</span>
+          </div>
+          <div class="inq-detail-msg">
+            <span class="inq-label">문의 내용</span>
+            <p class="inq-msg">{{ inquiryDetail.message || '내용 없음' }}</p>
+          </div>
+          <div class="inq-detail-footer">
+            <span class="inq-detail-date">{{ inquiryDetail.date }}{{ inquiryDetail.time ? ' ' + inquiryDetail.time : '' }}</span>
+            <span class="inq-detail-source" v-if="inquiryDetail.source">{{ inquiryDetail.source }}</span>
+          </div>
+          <div class="inq-detail-actions">
+            <button v-if="inquiryDetail.status === '대기'" class="save-btn" @click="inquiryDetail.status = '완료'; inquiryDetailModal = false">완료 처리</button>
+            <button class="cancel-btn" @click="inquiryDetailModal = false">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 문의 알림 패널 (오른쪽 하단) -->
+    <div class="noti-bell" :class="{ 'has-unread': unreadCount > 0 }" @click="notiOpen = !notiOpen">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      <span v-if="unreadCount > 0" class="noti-badge">{{ unreadCount }}</span>
+    </div>
+
+    <transition name="noti-panel">
+      <div v-if="notiOpen" class="noti-panel">
+        <div class="noti-panel-head">
+          <h4>문의 알림</h4>
+          <div class="noti-panel-actions">
+            <button v-if="unreadCount > 0" class="noti-readall" @click="doMarkAllRead">모두 읽음</button>
+            <button class="noti-panel-close" @click="notiOpen = false">&times;</button>
+          </div>
+        </div>
+        <div class="noti-panel-body">
+          <div v-for="item in recentInquiries" :key="item.id" class="noti-item" :class="{ unread: !item.read }" @click="handleNotiClick(item)">
+            <div class="noti-dot" v-if="!item.read"></div>
+            <div class="noti-item-body">
+              <p class="noti-item-title">{{ item.name }} <span>{{ item.phone }}</span></p>
+              <p class="noti-item-desc">{{ item.vehicle || '차량 미정' }}{{ item.message ? ' · ' + item.message : '' }}</p>
+              <p class="noti-item-time">{{ item.date }}{{ item.time ? ' ' + item.time : '' }}</p>
+            </div>
+            <span class="noti-item-status" :class="item.status === '대기' ? 'pending' : 'done'">{{ item.status }}</span>
+          </div>
+          <p v-if="!recentInquiries.length" class="noti-empty">문의가 없습니다</p>
+        </div>
+      </div>
+    </transition>
+
     <!-- ===== 삭제 확인 모달 ===== -->
     <div v-if="delModal" class="overlay" @click.self="delModal = false">
       <div class="modal modal-sm">
@@ -331,7 +427,8 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '../stores/auth'
 import { useVehicles } from '../stores/vehicles'
 import { useReviews } from '../stores/reviews'
-import { inquiries } from '../stores/inquiries'
+import { inquiries, removeInquiry, unreadCount, markAsRead, markAllAsRead } from '../stores/inquiries'
+import { useManagers } from '../stores/managers'
 
 const router = useRouter()
 const { logout } = useAuth()
@@ -358,12 +455,7 @@ const dashStats = computed(() => [
 ])
 
 
-const managerList = ref([
-  { id: 1, name: '김오토', role: '수석 매니저', experience: '10년', tags: ['국산차', 'SUV', '리스'] },
-  { id: 2, name: '이원트', role: '매니저', experience: '7년', tags: ['수입차', '세단', '렌트'] },
-  { id: 3, name: '박딜러', role: '매니저', experience: '5년', tags: ['경차', '화물차'] },
-  { id: 4, name: '최상담', role: '매니저', experience: '3년', tags: ['전기차', '하이브리드'] },
-])
+const { managerList } = useManagers()
 
 const siteSettings = ref({ company: '오토원트', ceo: '신선호', tel: '0507-1344-7898', email: 'autowant@naver.com', address: '경기도 광명시 일직로 72 에이동 14층 1420호', bizNum: '609-88-02424' })
 const settingFields = [
@@ -456,6 +548,10 @@ const rvDelTarget = ref(null)
 function confirmDelReview(r) { rvDelTarget.value = r; rvDelModal.value = true }
 function doDelReview() { removeReview(rvDelTarget.value.id); rvDelModal.value = false }
 
+function delInquiry(id) {
+  if (confirm('이 문의를 삭제하시겠습니까?')) removeInquiry(id)
+}
+
 function fileToData(e, setter) {
   const file = e.target.files[0]
   if (!file) return
@@ -466,6 +562,35 @@ function fileToData(e, setter) {
 
 function fmt(p) { return p.toLocaleString('ko-KR') }
 function handleLogout() { logout(); router.push('/') }
+
+// 문의 상세 모달
+const inquiryDetailModal = ref(false)
+const inquiryDetail = ref(null)
+
+function openInquiryDetail(item) {
+  inquiryDetail.value = item
+  inquiryDetailModal.value = true
+  markAsRead(item.id)
+}
+
+// 알림 패널
+const notiOpen = ref(false)
+const recentInquiries = computed(() => inquiries.value.slice(0, 20))
+
+function handleNotiClick(item) {
+  markAsRead(item.id)
+  currentTab.value = 'inquiries'
+  notiOpen.value = false
+}
+
+function doMarkAllRead() {
+  markAllAsRead()
+}
+
+// 매니저별 문의
+function managerInquiries(managerName) {
+  return inquiries.value.filter(i => i.manager === managerName)
+}
 </script>
 
 <style scoped>
@@ -497,8 +622,8 @@ function handleLogout() { logout(); router.push('/') }
 /* 차량 카드 그리드 */
 .v-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .v-item { border: 1px solid #f0f0f0; border-radius: 10px; overflow: hidden; background: white; }
-.v-img { position: relative; aspect-ratio: 16/10; background: #f5f5f5; overflow: hidden; }
-.v-img img { width: 100%; height: 100%; object-fit: cover; }
+.v-img { position: relative; aspect-ratio: 16/10; background: #f5f5f5; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.v-img img { width: 85%; height: auto; object-fit: contain; mix-blend-mode: multiply; }
 .v-badges { position: absolute; top: 6px; left: 6px; display: flex; gap: 4px; }
 .tag-s { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; background: #111; color: white; }
 .tag-i { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: transparent; color: #888; border: 1px solid #ddd; margin-right: 4px; }
@@ -656,5 +781,122 @@ function handleLogout() { logout(); router.push('/') }
   .row2, .row3 { grid-template-columns: 1fr; }
   .setting-row { flex-direction: column; align-items: flex-start; gap: 4px; }
   .setting-row label { width: auto; }
+  .noti-panel { right: 12px; left: 12px; width: auto; }
 }
+
+/* 매니저별 문의 */
+.mgr-inq-section { margin-top: 24px; }
+.mgr-inq-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.mgr-inq-head h3 { font-size: 15px; font-weight: 700; color: #111; margin: 0; }
+.mgr-role { font-size: 12px; font-weight: 500; color: #999; margin-left: 4px; }
+.mgr-inq-count { font-size: 12px; font-weight: 700; color: #999; padding: 3px 10px; background: #f5f5f5; border-radius: 100px; }
+.mgr-inq-count.has-inq { color: #2979ff; background: #f0f5ff; }
+.mgr-inq-empty { font-size: 12px; color: #ccc; padding: 12px 0; }
+
+/* 문의 행 클릭 & 읽지않음 */
+.list-row.clickable { cursor: pointer; transition: background 0.15s; }
+.list-row.clickable:hover { background: #fafafa; }
+.list-row.unread { background: #f6f9ff; border-left: 3px solid #2979ff; }
+.list-row.unread:hover { background: #edf2ff; }
+
+/* 문의 상세 모달 */
+.inq-detail { padding: 20px 24px; }
+.inq-detail-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+.inq-label { font-size: 12px; font-weight: 600; color: #999; width: 100px; flex-shrink: 0; }
+.inq-value { font-size: 14px; font-weight: 600; color: #111; }
+.inq-phone { color: #2979ff; text-decoration: none; }
+.inq-phone:hover { text-decoration: underline; }
+.inq-detail-msg { padding: 14px 0; border-bottom: 1px solid #f5f5f5; }
+.inq-detail-msg .inq-label { display: block; margin-bottom: 6px; }
+.inq-msg { font-size: 13px; color: #555; line-height: 1.6; margin: 0; padding: 10px 14px; background: #f9f9f9; border-radius: 6px; }
+.inq-detail-footer { display: flex; align-items: center; gap: 8px; padding: 12px 0; }
+.inq-detail-date { font-size: 11px; color: #bbb; }
+.inq-detail-source { font-size: 10px; font-weight: 600; color: #2979ff; background: #f0f5ff; padding: 2px 8px; border-radius: 4px; }
+.inq-detail-actions { display: flex; gap: 8px; padding-top: 4px; }
+.inq-detail-actions .save-btn, .inq-detail-actions .cancel-btn { flex: 1; }
+
+/* 알림 벨 버튼 */
+.noti-bell {
+  position: fixed; bottom: 28px; right: 28px; z-index: 1100;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: #111; color: white; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  transition: all 0.2s;
+}
+.noti-bell:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+.noti-bell.has-unread { animation: bellPulse 2s ease infinite; }
+@keyframes bellPulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+  50% { box-shadow: 0 4px 20px rgba(0,0,0,0.15), 0 0 0 8px rgba(17,17,17,0.08); }
+}
+.noti-badge {
+  position: absolute; top: -4px; right: -4px;
+  min-width: 20px; height: 20px; padding: 0 6px;
+  background: #e53935; color: white; border-radius: 10px;
+  font-size: 11px; font-weight: 700; line-height: 20px; text-align: center;
+}
+
+/* 알림 패널 */
+.noti-panel {
+  position: fixed; bottom: 92px; right: 28px; z-index: 1100;
+  width: 380px; max-height: 480px;
+  background: white; border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12); border: 1px solid #eee;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.noti-panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px; border-bottom: 1px solid #f0f0f0;
+}
+.noti-panel-head h4 { font-size: 15px; font-weight: 800; color: #111; margin: 0; }
+.noti-panel-actions { display: flex; align-items: center; gap: 8px; }
+.noti-readall {
+  font-size: 11px; font-weight: 600; color: #2979ff; background: none;
+  border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px;
+}
+.noti-readall:hover { background: #f0f5ff; }
+.noti-panel-close {
+  background: none; border: none; font-size: 20px; color: #ccc;
+  cursor: pointer; line-height: 1; padding: 0;
+}
+.noti-panel-close:hover { color: #111; }
+
+.noti-panel-body { overflow-y: auto; flex: 1; scrollbar-width: thin; }
+
+.noti-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 14px 18px; cursor: pointer; transition: background 0.15s;
+  border-bottom: 1px solid #f8f8f8; position: relative;
+}
+.noti-item:hover { background: #fafafa; }
+.noti-item.unread { background: #f6f9ff; }
+.noti-item.unread:hover { background: #edf2ff; }
+
+.noti-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #2979ff; flex-shrink: 0; margin-top: 6px;
+}
+.noti-item-body { flex: 1; min-width: 0; }
+.noti-item-title { font-size: 13px; font-weight: 700; color: #111; margin: 0 0 2px; }
+.noti-item-title span { font-weight: 500; color: #999; margin-left: 6px; }
+.noti-item-desc {
+  font-size: 12px; color: #777; margin: 0 0 4px; line-height: 1.4;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.noti-item-time { font-size: 10px; color: #ccc; margin: 0; }
+.noti-item-status {
+  font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: 4px; flex-shrink: 0; margin-top: 2px;
+}
+.noti-item-status.pending { background: #fff3e0; color: #e65100; }
+.noti-item-status.done { background: #e8f5e9; color: #2e7d32; }
+
+.noti-empty { text-align: center; color: #ccc; padding: 40px 0; font-size: 13px; }
+
+/* 패널 트랜지션 */
+.noti-panel-enter-active { animation: panelIn 0.25s ease; }
+.noti-panel-leave-active { animation: panelOut 0.2s ease; }
+@keyframes panelIn { from { opacity: 0; transform: translateY(12px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes panelOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(12px) scale(0.96); } }
 </style>

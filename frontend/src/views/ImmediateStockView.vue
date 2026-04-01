@@ -1,12 +1,12 @@
 <template>
   <div class="page">
     <div class="container">
-      <div class="page-head">
+      <div v-reveal class="page-head">
         <h1>즉시 출고</h1>
         <p>기다림 없이 바로 출고 가능한 차량</p>
       </div>
       <div class="grid">
-        <div v-for="v in immediateList" :key="v.id" class="card" @click="openInquiryModal(v)">
+        <div v-for="(v, i) in immediateList" :key="v.id" v-reveal="{ delay: i * 60 }" class="card hvr-float" @click="openInquiryModal(v)">
           <div class="card-img">
             <img :src="v.image" :alt="v.name" />
             <span class="badge">즉시출고</span>
@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-      <p v-if="!immediateList.length" class="empty">현재 즉시출고 차량이 없습니다</p>
+      <p v-if="!immediateList.length" v-reveal class="empty">현재 즉시출고 차량이 없습니다</p>
     </div>
   </div>
 </template>
@@ -45,8 +45,8 @@ function fmt(p) { return p.toLocaleString('ko-KR') }
 @media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 .card { background: white; border: 1px solid #f0f0f0; border-radius: 12px; overflow: hidden; cursor: pointer; transition: box-shadow 0.2s, transform 0.2s; }
 .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
-.card-img { position: relative; background: #fafafa; aspect-ratio: 16/10; overflow: hidden; }
-.card-img img { width: 100%; height: 100%; object-fit: cover; }
+.card-img { position: relative; background: #f5f5f5; aspect-ratio: 16/10; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.card-img img { width: 90%; height: auto; object-fit: contain; mix-blend-mode: multiply; }
 .badge { position: absolute; top: 8px; left: 8px; background: #111; color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
 .card-body { padding: 12px; }
 .sub { font-size: 11px; color: #aaa; margin: 0 0 2px; }

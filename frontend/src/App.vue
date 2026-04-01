@@ -71,42 +71,78 @@
 
     <!-- 플로팅 사이드바 (데스크톱) -->
     <aside class="floating-sidebar" :class="{ visible: showSidebar && !isAboutPage }">
-      <a href="tel:010-0000-0000" class="sb-item sb-phone">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      <a href="tel:0507-1344-7898" class="sb-item sb-phone">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
         <span>전화상담</span>
       </a>
       <a href="https://pf.kakao.com/_example" target="_blank" class="sb-item sb-kakao">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.53-.96 3.4-.99 3.63 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.42 4.28-2.84.56.08 1.14.13 1.72.13 5.52 0 10-3.58 10-7.94S17.52 3 12 3z"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.53-.96 3.4-.99 3.63 0 0-.02.17.09.24.11.06.24.01.24.01.32-.04 3.7-2.42 4.28-2.84.56.08 1.14.13 1.72.13 5.52 0 10-3.58 10-7.94S17.52 3 12 3z"/></svg>
         <span>카카오톡</span>
       </a>
       <a href="https://instagram.com/autowant" target="_blank" class="sb-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
         <span>인스타</span>
       </a>
       <a href="https://facebook.com/autowant" target="_blank" class="sb-item">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         <span>페이스북</span>
       </a>
       <a href="https://blog.naver.com/autowant" target="_blank" class="sb-item sb-naver">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z"/></svg>
         <span>네이버</span>
       </a>
     </aside>
+
+    <!-- 오른쪽 빠른 견적 문의 -->
+    <button class="quick-inquiry-btn" :class="{ visible: showSidebar && !isAboutPage }" @click="quickOpen = !quickOpen">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span>빠른 견적</span>
+    </button>
+
+    <transition name="quick-panel">
+      <div v-if="quickOpen" class="quick-panel">
+        <div class="quick-head">
+          <h4>빠른 견적 문의</h4>
+          <button class="quick-close" @click="quickOpen = false">&times;</button>
+        </div>
+        <div v-if="!quickSubmitted" class="quick-body">
+          <v-form ref="quickForm" @submit.prevent="submitQuick">
+            <v-text-field v-model="quickData.name" label="이름" variant="outlined" density="compact" rounded="0" :rules="nameRules" @input="quickData.name = quickData.name.replace(/[^a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣\s]/g, '')" class="mb-1" />
+            <v-text-field v-model="quickData.phone" label="연락처" placeholder="010-0000-0000" variant="outlined" density="compact" rounded="0" :rules="phoneRules" @input="formatQuickPhone" maxlength="13" class="mb-1" />
+            <v-select v-model="quickData.interest" :items="['장기렌트', '리스', '즉시출고', '이달의 특가', '기타']" label="상담 유형" variant="outlined" density="compact" rounded="0" class="mb-1" />
+            <v-text-field v-model="quickData.vehicle" label="관심 차량 (선택)" variant="outlined" density="compact" rounded="0" class="mb-1" />
+            <v-textarea v-model="quickData.message" label="문의 내용 (선택)" variant="outlined" density="compact" rounded="0" rows="2" class="mb-1" />
+            <v-checkbox v-model="quickData.agree" label="[필수] 개인정보 수집 및 이용 동의" :rules="[v => !!v || '동의 필요']" density="compact" class="mb-2" />
+            <button type="submit" class="quick-submit">견적 문의하기</button>
+          </v-form>
+        </div>
+        <div v-else class="quick-success">
+          <svg class="quick-check" viewBox="0 0 52 52">
+            <circle cx="26" cy="26" r="24" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="151" stroke-dashoffset="151" style="animation: qCircle 0.5s ease 0.1s forwards;" />
+            <path fill="none" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14 27l8 8 16-16" stroke-dasharray="40" stroke-dashoffset="40" style="animation: qCheck 0.35s ease 0.5s forwards;" />
+          </svg>
+          <p class="quick-done-title">문의가 접수되었습니다!</p>
+          <p class="quick-done-sub">매니저가 빠르게 연락드리겠습니다</p>
+          <button class="quick-submit" style="margin-top: 16px;" @click="resetQuick">새로운 문의</button>
+        </div>
+      </div>
+    </transition>
 
     <!-- 차량 문의 모달 -->
     <v-dialog v-model="inquiryModal" max-width="480" class="inquiry-dialog">
       <v-card rounded="xl" class="pa-0" style="overflow: hidden;">
         <div class="modal-header">
           <div>
-            <h3>차량 문의</h3>
-            <p v-if="inquiryVehicle">{{ inquiryVehicle.brand }} {{ inquiryVehicle.name }}</p>
+            <h3>{{ inquiryVehicle?.role ? '매니저 상담 문의' : '차량 문의' }}</h3>
+            <p v-if="inquiryVehicle?.role">{{ inquiryVehicle.name }} {{ inquiryVehicle.role }}</p>
+            <p v-else-if="inquiryVehicle">{{ inquiryVehicle.brand }} {{ inquiryVehicle.name }}</p>
           </div>
           <button class="modal-close" @click="inquiryModal = false">&times;</button>
         </div>
         <div class="modal-body">
           <v-form ref="inquiryForm" @submit.prevent="submitInquiry">
-            <v-text-field v-model="inquiry.name" label="이름" variant="outlined" density="compact" rounded="lg" :rules="[v => !!v || '필수']" class="mb-1" />
-            <v-text-field v-model="inquiry.phone" label="연락처" placeholder="010-0000-0000" variant="outlined" density="compact" rounded="lg" :rules="[v => !!v || '필수']" class="mb-1" />
+            <v-text-field v-model="inquiry.name" label="이름" variant="outlined" density="compact" rounded="lg" :rules="nameRules" @input="inquiry.name = inquiry.name.replace(/[^a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣\s]/g, '')" class="mb-1" />
+            <v-text-field v-model="inquiry.phone" label="연락처" placeholder="010-0000-0000" variant="outlined" density="compact" rounded="lg" :rules="phoneRules" @input="formatInquiryPhone" maxlength="13" class="mb-1" />
             <v-textarea v-model="inquiry.message" label="문의 내용 (선택)" variant="outlined" density="compact" rounded="lg" rows="3" class="mb-1" />
             <v-checkbox v-model="inquiry.agree" label="[필수] 개인정보 수집 및 이용 동의" :rules="[v => !!v || '동의 필요']" density="compact" class="mb-2" />
             <button type="submit" class="modal-submit">문의하기</button>
@@ -193,18 +229,35 @@
             <img :src="v.image" class="compare-col-img" />
             <h4>{{ v.brand }} {{ v.name }}</h4>
             <table class="compare-specs">
-              <tr><td>차량가</td><td class="spec-val">{{ fmt(v.price) }}원</td></tr>
-              <tr><td>월 렌트료</td><td class="spec-val bold">{{ fmt(v.monthlyRent) }}원</td></tr>
-              <tr><td>계약기간</td><td class="spec-val">{{ v.rentMonths }}개월</td></tr>
-              <tr><td>보증금</td><td class="spec-val">{{ v.deposit ? fmt(v.deposit) + '원' : '없음' }}</td></tr>
-              <tr><td>연식</td><td class="spec-val">{{ v.year }}년</td></tr>
-              <tr><td>차종</td><td class="spec-val">{{ v.type }}</td></tr>
-              <tr><td>연료</td><td class="spec-val">{{ v.fuel }}</td></tr>
+              <tbody>
+                <tr><td>차량가</td><td class="spec-val">{{ fmt(v.price) }}원</td></tr>
+                <tr><td>월 렌트료</td><td class="spec-val bold">{{ fmt(v.monthlyRent) }}원</td></tr>
+                <tr><td>계약기간</td><td class="spec-val">{{ v.rentMonths }}개월</td></tr>
+                <tr><td>보증금</td><td class="spec-val">{{ v.deposit ? fmt(v.deposit) + '원' : '없음' }}</td></tr>
+                <tr><td>연식</td><td class="spec-val">{{ v.year }}년</td></tr>
+                <tr><td>차종</td><td class="spec-val">{{ v.type }}</td></tr>
+                <tr><td>연료</td><td class="spec-val">{{ v.fuel }}</td></tr>
+              </tbody>
             </table>
             <button class="compare-col-btn" @click="compareModal = false; openInquiryModal(v)">상담 신청</button>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- 문의 알림 토스트 -->
+    <div class="noti-wrap">
+      <transition-group name="noti">
+        <div v-for="n in notifications" :key="n.id" class="noti-toast">
+          <div class="noti-icon">!</div>
+          <div class="noti-body">
+            <p class="noti-title">{{ n.title }}</p>
+            <p class="noti-desc">{{ n.desc }}</p>
+            <p class="noti-time">{{ n.time }}</p>
+          </div>
+          <button class="noti-close" @click="dismissNoti(n.id)">&times;</button>
+        </div>
+      </transition-group>
     </div>
 
     <!-- 푸터 -->
@@ -258,6 +311,7 @@ import { ref, computed, provide, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from './stores/auth'
 import { useCompare } from './stores/compare'
+import { notifications, addInquiry } from './stores/inquiries'
 
 const router = useRouter()
 const route = useRoute()
@@ -317,6 +371,23 @@ provide('isInCompare', isInCompare)
 
 function fmt(p) { return (p || 0).toLocaleString('ko-KR') }
 
+// 공통 유효성 규칙
+const nameRules = [
+  v => !!v || '필수',
+  v => /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣\s]*$/.test(v) || '한글 또는 영어만 입력 가능합니다',
+]
+const phoneRules = [
+  v => !!v || '필수',
+  v => /^\d{3}-\d{4}-\d{4}$/.test(v) || '010-0000-0000 형식으로 입력해주세요',
+]
+
+function formatInquiryPhone() {
+  const nums = inquiry.value.phone.replace(/\D/g, '').slice(0, 11)
+  if (nums.length <= 3) inquiry.value.phone = nums
+  else if (nums.length <= 7) inquiry.value.phone = `${nums.slice(0, 3)}-${nums.slice(3)}`
+  else inquiry.value.phone = `${nums.slice(0, 3)}-${nums.slice(3, 7)}-${nums.slice(7)}`
+}
+
 function openInquiryModal(vehicle) {
   inquiryVehicle.value = vehicle
   inquiry.value = { name: '', phone: '', message: '', agree: false }
@@ -326,9 +397,60 @@ function openInquiryModal(vehicle) {
 async function submitInquiry() {
   const { valid } = await inquiryForm.value.validate()
   if (valid) {
+    const v = inquiryVehicle.value
+    const isManager = !!v?.role
+    addInquiry({
+      carType: isManager ? '' : (v ? `${v.brand} ${v.name}` : ''),
+      carColor: '',
+      name: inquiry.value.name,
+      phone: inquiry.value.phone,
+      email: '',
+      availableTime: '',
+      message: inquiry.value.message,
+      manager: isManager ? v.name : '',
+      source: isManager ? `매니저 상담 (${v.name})` : '차량 문의',
+    })
     inquiryModal.value = false
-    alert(`${inquiryVehicle.value?.name} 문의가 접수되었습니다.\n전문 매니저가 곧 연락드리겠습니다.`)
   }
+}
+
+// 빠른 견적
+const quickOpen = ref(false)
+const quickSubmitted = ref(false)
+const quickForm = ref(null)
+const quickData = ref({ name: '', phone: '', interest: '', vehicle: '', message: '', agree: false })
+
+function formatQuickPhone() {
+  const nums = quickData.value.phone.replace(/\D/g, '').slice(0, 11)
+  if (nums.length <= 3) quickData.value.phone = nums
+  else if (nums.length <= 7) quickData.value.phone = `${nums.slice(0, 3)}-${nums.slice(3)}`
+  else quickData.value.phone = `${nums.slice(0, 3)}-${nums.slice(3, 7)}-${nums.slice(7)}`
+}
+
+async function submitQuick() {
+  const { valid } = await quickForm.value.validate()
+  if (valid) {
+    addInquiry({
+      carType: quickData.value.vehicle,
+      carColor: '',
+      name: quickData.value.name,
+      phone: quickData.value.phone,
+      email: '',
+      availableTime: '',
+      message: quickData.value.message || quickData.value.interest || '',
+      source: '빠른 견적',
+    })
+    quickSubmitted.value = true
+  }
+}
+
+function resetQuick() {
+  quickSubmitted.value = false
+  quickData.value = { name: '', phone: '', interest: '', vehicle: '', message: '', agree: false }
+}
+
+function dismissNoti(id) {
+  notifications.value = notifications.value.filter(n => n.id !== id)
 }
 
 function handleLogout() {
@@ -437,13 +559,13 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
 /* 플로팅 사이드바 */
 .floating-sidebar {
   position: fixed;
-  right: 20px;
+  left: 20px;
   top: 50%;
-  transform: translateY(-50%) translateX(80px);
+  transform: translateY(-50%) translateX(-100px);
   z-index: 1800;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   opacity: 0;
   transition: all 0.3s ease;
 }
@@ -456,22 +578,24 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 68px;
+  height: 68px;
   background: white;
   border: 1px solid #eee;
-  border-radius: 12px;
+  border-radius: 14px;
   text-decoration: none;
   color: #666;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 600;
-  gap: 3px;
-  transition: all 0.15s;
+  gap: 4px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .sb-item:hover {
   border-color: #ddd;
   color: #111;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 .sb-item svg { flex-shrink: 0; }
 .sb-phone { color: #111; }
@@ -479,12 +603,73 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
 .sb-naver { color: #03c75a; }
 
 @media (max-width: 1400px) {
-  .floating-sidebar { right: 8px; }
-  .sb-item { width: 48px; height: 48px; font-size: 8px; }
-  .sb-item svg { width: 16px; height: 16px; }
+  .floating-sidebar { left: 8px; }
+  .sb-item { width: 56px; height: 56px; font-size: 9px; }
+  .sb-item svg { width: 18px; height: 18px; }
 }
 @media (max-width: 768px) {
   .floating-sidebar { display: none; }
+}
+
+/* 오른쪽 빠른 견적 버튼 */
+.quick-inquiry-btn {
+  position: fixed; right: 20px; top: 50%; z-index: 1800;
+  transform: translateY(-50%) translateX(100px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 68px; height: 68px; gap: 4px;
+  background: #111; color: white; border: none; border-radius: 14px;
+  font-size: 10px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  opacity: 0; transition: all 0.3s ease;
+}
+.quick-inquiry-btn.visible { opacity: 1; transform: translateY(-50%) translateX(0); }
+.quick-inquiry-btn:hover { transform: translateY(-50%) translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+@media (max-width: 1400px) {
+  .quick-inquiry-btn { right: 8px; width: 56px; height: 56px; font-size: 9px; }
+  .quick-inquiry-btn svg { width: 18px; height: 18px; }
+}
+@media (max-width: 768px) { .quick-inquiry-btn { display: none; } }
+
+/* 빠른 견적 패널 */
+.quick-panel {
+  position: fixed; right: 20px; top: 50%; z-index: 1900;
+  transform: translateY(-50%); width: 360px; max-height: 80vh;
+  background: white; border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15); border: 1px solid #eee;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.quick-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid #f0f0f0;
+}
+.quick-head h4 { font-size: 15px; font-weight: 800; color: #111; margin: 0; }
+.quick-close { background: none; border: none; font-size: 20px; color: #ccc; cursor: pointer; }
+.quick-close:hover { color: #111; }
+.quick-body { padding: 16px 20px; overflow-y: auto; }
+.quick-submit {
+  width: 100%; padding: 11px; background: #111; color: white; border: none;
+  border-radius: 4px; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.quick-submit:hover { background: #333; }
+.quick-success {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 20px; text-align: center;
+}
+.quick-check { width: 56px; height: 56px; margin-bottom: 16px; }
+@keyframes qCircle { to { stroke-dashoffset: 0; } }
+@keyframes qCheck { to { stroke-dashoffset: 0; } }
+.quick-done-title { font-size: 16px; font-weight: 800; color: #111; margin: 0 0 4px; }
+.quick-done-sub { font-size: 12px; color: #999; margin: 0; }
+.quick-panel-enter-active { animation: qPanelIn 0.25s ease; }
+.quick-panel-leave-active { animation: qPanelOut 0.2s ease; }
+@keyframes qPanelIn { from { opacity: 0; transform: translateY(-50%) translateX(20px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
+@keyframes qPanelOut { from { opacity: 1; transform: translateY(-50%) translateX(0); } to { opacity: 0; transform: translateY(-50%) translateX(20px); } }
+@media (max-width: 768px) {
+  .quick-panel { right: 12px; left: 12px; width: auto; top: auto; bottom: 20px; transform: none; max-height: 70vh; }
+  .quick-panel-enter-active { animation: qPanelInM 0.25s ease; }
+  .quick-panel-leave-active { animation: qPanelOutM 0.2s ease; }
+  @keyframes qPanelInM { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes qPanelOutM { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
 }
 
 /* 문의 모달 */
@@ -503,10 +688,94 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans
 .modal-close:hover { color: #111; }
 .modal-body { padding: 20px 24px 24px; }
 .modal-submit {
-  width: 100%; padding: 12px; background: #111; color: white; border: none; border-radius: 8px;
+  width: 100%; padding: 12px; background: #111; color: #fff !important; border: none; border-radius: 8px;
   font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+  -webkit-text-fill-color: #fff;
 }
 .modal-submit:hover { background: #333; }
+
+/* 알림 토스트 */
+.noti-wrap {
+  position: fixed; bottom: 24px; right: 24px; z-index: 2200;
+  display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+}
+.noti-toast {
+  pointer-events: auto;
+  display: flex; align-items: flex-start; gap: 12px;
+  background: white; border: 1px solid #eee; border-radius: 12px;
+  padding: 14px 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  min-width: 300px; max-width: 380px;
+}
+.noti-icon {
+  width: 32px; height: 32px; border-radius: 50%; background: #111; color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; flex-shrink: 0;
+}
+.noti-body { flex: 1; }
+.noti-title { font-size: 13px; font-weight: 700; color: #111; margin: 0 0 2px; }
+.noti-desc { font-size: 12px; color: #888; margin: 0; }
+.noti-time { font-size: 10px; color: #ccc; margin: 4px 0 0; }
+.noti-close { background: none; border: none; font-size: 18px; color: #ccc; cursor: pointer; line-height: 1; padding: 0; flex-shrink: 0; }
+.noti-close:hover { color: #111; }
+
+/* 알림 애니메이션 */
+.noti-enter-active { animation: notiIn 0.3s ease; }
+.noti-leave-active { animation: notiOut 0.25s ease; }
+@keyframes notiIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes notiOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(40px); } }
+
+@media (max-width: 768px) {
+  .noti-wrap { right: 12px; bottom: 12px; left: 12px; }
+  .noti-toast { min-width: auto; }
+}
+
+/* 스크롤 리빌은 v-reveal 디렉티브에서 inline style로 처리 */
+
+/* ===== 호버 이펙트 ===== */
+/* 카드 float 효과 */
+.hvr-float { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.hvr-float:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+
+/* 카드 grow 효과 */
+.hvr-grow { transition: transform 0.25s ease; }
+.hvr-grow:hover { transform: scale(1.03); }
+
+/* 버튼 sweep 효과 */
+.hvr-sweep {
+  position: relative; overflow: hidden; z-index: 1;
+  transition: color 0.3s ease;
+}
+.hvr-sweep::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: #111; z-index: -1; transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.hvr-sweep:hover::before { transform: scaleX(1); }
+.hvr-sweep:hover { color: white; }
+
+/* 버튼 pulse 효과 */
+.hvr-pulse:hover { animation: hvr-pulse 0.6s ease; }
+@keyframes hvr-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* 밑줄 등장 효과 */
+.hvr-underline { position: relative; }
+.hvr-underline::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px;
+  background: #111; transition: width 0.3s ease;
+}
+.hvr-underline:hover::after { width: 100%; }
+
+/* 아이콘 bounce */
+.hvr-icon-bounce:hover .bounce-icon { animation: iconBounce 0.4s ease; }
+@keyframes iconBounce {
+  0%,100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+  60% { transform: translateY(-3px); }
+}
 
 /* 공통 오버레이/모달 */
 .g-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 2100; display: flex; align-items: center; justify-content: center; padding: 20px; }

@@ -8,8 +8,13 @@ export function useAuth() {
 
   function login(id, password) {
     // 간단한 하드코딩 인증 (추후 백엔드 연동)
-    if (id === 'wnwlgh' && password === 'wnwlgh') {
-      const user = { id: 'admin', name: '관리자' }
+    const accounts = [
+      { id: 'wnwlgh', pw: 'wnwlgh', name: '관리자' },
+      { id: 'tlstjsgh', pw: 'tlstjsgh', name: '신선호' },
+    ]
+    const match = accounts.find(a => a.id === id && a.pw === password)
+    if (match) {
+      const user = { id: match.id, name: match.name }
       isLoggedIn.value = true
       adminUser.value = user
       localStorage.setItem('autowant_token', 'admin-token')

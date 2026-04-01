@@ -3,13 +3,26 @@
     <!-- 차량 검색 -->
     <section class="vehicle-section">
       <div class="container">
-        <div class="section-head">
+        <div v-reveal class="section-head">
           <h2 class="section-title">차량 검색</h2>
           <p class="section-sub">{{ filteredVehicles.length }}대의 차량</p>
         </div>
 
-        <div class="brand-row">
-          <button v-for="brand in brands" :key="brand" class="brand-chip" :class="{ active: selectedBrand === brand }" @click="selectedBrand = brand">{{ brand }}</button>
+        <div v-reveal="{ delay: 100 }" class="brand-row-wrap">
+          <transition name="brand-switch" mode="out-in">
+            <div :key="brandMode" class="brand-row">
+              <button v-for="b in visibleBrands" :key="b.name" class="brand-circle" :class="{ active: selectedBrand === b.name }" @click="selectBrand(b)">
+                <div class="brand-logo-wrap">
+                  <img v-if="b.logo" :src="b.logo" :alt="b.name" />
+                  <svg v-else-if="b.icon === 'grid'" viewBox="0 0 24 24" class="brand-svg" fill="currentColor"><rect x="2" y="2" width="4" height="4" rx="1"/><rect x="10" y="2" width="4" height="4" rx="1"/><rect x="18" y="2" width="4" height="4" rx="1"/><rect x="2" y="10" width="4" height="4" rx="1"/><rect x="10" y="10" width="4" height="4" rx="1"/><rect x="18" y="10" width="4" height="4" rx="1"/><rect x="2" y="18" width="4" height="4" rx="1"/><rect x="10" y="18" width="4" height="4" rx="1"/><rect x="18" y="18" width="4" height="4" rx="1"/></svg>
+                  <svg v-else-if="b.icon === 'globe'" viewBox="0 0 24 24" class="brand-svg" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+                  <svg v-else-if="b.icon === 'back'" viewBox="0 0 24 24" class="brand-svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+                  <span v-else class="brand-fallback">{{ b.name.charAt(0) }}</span>
+                </div>
+                <span class="brand-name">{{ b.name }}</span>
+              </button>
+            </div>
+          </transition>
         </div>
 
         <div class="filter-bar">
@@ -20,7 +33,7 @@
         </div>
 
         <div class="vehicle-grid">
-          <div v-for="vehicle in filteredVehicles" :key="vehicle.id" class="vehicle-card" @click="openVehicle(vehicle)">
+          <div v-for="(vehicle, i) in filteredVehicles" :key="vehicle.id" v-reveal="{ delay: i * 60 }" class="vehicle-card hvr-float" @click="openVehicle(vehicle)">
             <div class="card-img">
               <img :src="vehicle.image" :alt="vehicle.name" />
               <span v-if="vehicle.isSpecial" class="badge badge-special">특가</span>
@@ -53,12 +66,12 @@
     <!-- 이달의 특가 -->
     <section class="special-section">
       <div class="container">
-        <div class="section-head">
+        <div v-reveal class="section-head">
           <h2 class="section-title">이달의 특가</h2>
           <p class="section-sub">엄선된 최저가 차량</p>
         </div>
         <div class="special-scroll">
-          <div v-for="v in specialVehicles" :key="v.id" class="special-card" @click="openVehicle(v)">
+          <div v-for="(v, i) in specialVehicles" :key="v.id" v-reveal="{ delay: i * 80, dir: 'right' }" class="special-card hvr-float" @click="openVehicle(v)">
             <div class="card-img">
               <img :src="v.image" :alt="v.name" />
               <span class="badge badge-special">{{ v.discount }}% OFF</span>
@@ -78,11 +91,11 @@
     <!-- 장점 -->
     <section class="feature-section">
       <div class="container">
-        <div class="section-head">
+        <div v-reveal class="section-head">
           <h2 class="section-title">왜 오토원트인가요</h2>
         </div>
         <div class="feature-grid">
-          <div v-for="item in features" :key="item.title" class="feature-item">
+          <div v-for="(item, i) in features" :key="item.title" v-reveal="{ delay: i * 100, dir: 'scale' }" class="feature-item hvr-grow">
             <div class="feature-num">{{ item.num }}</div>
             <h4>{{ item.title }}</h4>
             <p>{{ item.desc }}</p>
@@ -102,7 +115,7 @@
           <router-link to="/reviews/write" class="write-review-btn">후기 작성하기</router-link>
         </div>
         <div class="review-grid">
-          <router-link v-for="r in reviews" :key="r.id" :to="'/reviews/' + r.id" class="review-card">
+          <router-link v-for="(r, i) in reviews" :key="r.id" :to="'/reviews/' + r.id" v-reveal="{ delay: i * 80 }" class="review-card hvr-float">
             <div class="review-img" v-if="r.thumbnail">
               <img :src="r.thumbnail" :alt="r.title" />
             </div>
@@ -130,7 +143,7 @@
 
     <!-- CTA -->
     <section class="cta-section">
-      <div class="container cta-inner">
+      <div v-reveal="{ dir: 'scale' }" class="container cta-inner">
         <div>
           <h2>견적이 궁금하신가요?</h2>
           <p>전문 매니저가 최적의 조건을 찾아드립니다</p>
@@ -158,18 +171,75 @@ const selectedBrand = ref('전체')
 const selectedType = ref(null)
 const selectedFuel = ref(null)
 const sortBy = ref('최신순')
+const brandMode = ref('domestic')
 
-const brands = ['전체', '현대', '기아', '제네시스', '쉐보레', 'KGM', '르노', '수입차']
+const domesticBrandNames = ['현대', '기아', '제네시스', '쉐보레', 'KGM', '르노']
+
+const domesticBrands = [
+  { name: '전체', logo: null, icon: 'grid' },
+  { name: '현대', logo: '/images/brand/1.png' },
+  { name: '기아', logo: '/images/brand/tab1_2.png' },
+  { name: '제네시스', logo: '/images/brand/genesis-logo.png' },
+  { name: '쉐보레', logo: '/images/brand/tab1_3.png' },
+  { name: 'KGM', logo: '/images/brand/tab1_5.png' },
+  { name: '르노', logo: '/images/brand/tab1_4.png' },
+  { name: '수입차', logo: null, icon: 'globe' },
+]
+
+const importedBrands = [
+  { name: '국산차', logo: null, icon: 'back' },
+  { name: '전체', logo: null, icon: 'grid' },
+  { name: '벤츠', logo: '/images/brand/tab2_1.png' },
+  { name: 'BMW', logo: '/images/brand/tab2_2.png' },
+  { name: 'MINI', logo: '/images/brand/tab2_3.png' },
+  { name: '아우디', logo: '/images/brand/tab2_4.png' },
+  { name: '폭스바겐', logo: '/images/brand/tab2_5.png' },
+  { name: '포르쉐', logo: '/images/brand/tab2_6.png' },
+  { name: '재규어', logo: '/images/brand/tab2_7.png' },
+  { name: '랜드로버', logo: '/images/brand/tab2_8.png' },
+  { name: '푸조', logo: '/images/brand/tab2_9.png' },
+  { name: '시트로엥', logo: '/images/brand/tab2_10.png' },
+  { name: '마세라티', logo: '/images/brand/tab2_11.png' },
+  { name: '볼보', logo: '/images/brand/tab2_12.png' },
+  { name: '렉서스', logo: '/images/brand/tab2_13.png' },
+  { name: '토요타', logo: '/images/brand/tab2_14.png' },
+  { name: '혼다', logo: '/images/brand/tab2_15.png' },
+  { name: '캐딜락', logo: '/images/brand/tab2_16.png' },
+  { name: '포드', logo: '/images/brand/tab2_17.png' },
+  { name: '링컨', logo: '/images/brand/tab2_18.png' },
+  { name: '지프', logo: '/images/brand/tab2_19.png' },
+  { name: '테슬라', logo: '/images/brand/tab2_20.png' },
+]
+
+const visibleBrands = computed(() => brandMode.value === 'domestic' ? domesticBrands : importedBrands)
+
+function selectBrand(b) {
+  if (b.name === '수입차') {
+    brandMode.value = 'imported'
+    selectedBrand.value = '전체'
+    return
+  }
+  if (b.name === '국산차') {
+    brandMode.value = 'domestic'
+    selectedBrand.value = '전체'
+    return
+  }
+  selectedBrand.value = b.name
+}
+
 const vehicleTypes = ['세단', 'SUV', '경차', 'RV/MPV']
 const fuelTypes = ['가솔린', '디젤', '전기', '하이브리드']
 const sortOptions = ['최신순', '가격 낮은순', '가격 높은순', '이름순']
 
 const filteredVehicles = computed(() => {
   let list = [...vehicleList.value]
-  if (selectedBrand.value !== '전체') {
-    if (selectedBrand.value === '수입차') {
-      list = list.filter(v => !['현대','기아','제네시스','쉐보레','KGM','르노'].includes(v.brand))
-    } else {
+  if (brandMode.value === 'imported') {
+    list = list.filter(v => !domesticBrandNames.includes(v.brand))
+    if (selectedBrand.value !== '전체') {
+      list = list.filter(v => v.brand === selectedBrand.value)
+    }
+  } else {
+    if (selectedBrand.value !== '전체') {
       list = list.filter(v => v.brand === selectedBrand.value)
     }
   }
@@ -202,10 +272,36 @@ function openVehicle(vehicle) { openInquiryModal(vehicle) }
 .section-title { font-size: 1.4rem; font-weight: 800; color: #111; letter-spacing: -0.5px; }
 .section-sub { font-size: 13px; color: #999; margin-top: 2px; }
 .vehicle-section { padding: 36px 0 24px; }
-.brand-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-.brand-chip { padding: 6px 16px; border: 1px solid #e5e5e5; border-radius: 100px; background: white; font-size: 12.5px; font-weight: 600; color: #888; cursor: pointer; transition: all 0.15s; }
-.brand-chip:hover { border-color: #ccc; color: #555; }
-.brand-chip.active { background: #111; color: white; border-color: #111; }
+.brand-row-wrap { margin-bottom: 20px; overflow: hidden; }
+.brand-row { display: flex; gap: 12px; overflow-x: auto; padding: 8px 4px 12px; scrollbar-width: none; }
+.brand-row::-webkit-scrollbar { display: none; }
+.brand-circle { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; flex-shrink: 0; }
+.brand-logo-wrap {
+  width: 64px; height: 64px; border-radius: 50%; background: white;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07); border: 2px solid transparent;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s ease; overflow: hidden;
+}
+.brand-circle:hover .brand-logo-wrap { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.brand-circle.active .brand-logo-wrap { border-color: #2979ff; box-shadow: 0 4px 16px rgba(41,121,255,0.2); }
+.brand-logo-wrap img { width: 38px; height: 38px; object-fit: contain; }
+.brand-svg { width: 24px; height: 24px; color: #888; }
+.brand-circle.active .brand-svg { color: #2979ff; }
+.brand-fallback { font-size: 16px; font-weight: 800; color: #888; }
+.brand-circle.active .brand-fallback { color: #2979ff; }
+.brand-name { font-size: 11px; font-weight: 600; color: #888; white-space: nowrap; transition: color 0.2s; }
+.brand-circle:hover .brand-name { color: #555; }
+.brand-circle.active .brand-name { color: #2979ff; }
+/* brand switch transition */
+.brand-switch-enter-active { animation: brandIn 0.3s ease; }
+.brand-switch-leave-active { animation: brandOut 0.2s ease; }
+@keyframes brandIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes brandOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-30px); } }
+@media (max-width: 768px) {
+  .brand-logo-wrap { width: 52px; height: 52px; }
+  .brand-logo-wrap img { width: 30px; height: 30px; }
+  .brand-row { gap: 8px; }
+}
 .filter-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
 .filter-input { max-width: 280px; }
 .filter-select { max-width: 140px; }
@@ -215,9 +311,9 @@ function openVehicle(vehicle) { openInquiryModal(vehicle) }
 @media (max-width: 768px) { .vehicle-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
 .vehicle-card { background: white; border: 1px solid #f0f0f0; border-radius: 12px; overflow: hidden; cursor: pointer; transition: box-shadow 0.2s, transform 0.2s; }
 .vehicle-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
-.card-img { position: relative; background: #fafafa; aspect-ratio: 16/10; overflow: hidden; }
-.card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-.vehicle-card:hover .card-img img { transform: scale(1.03); }
+.card-img { position: relative; background: #f5f5f5; aspect-ratio: 16/10; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.card-img img { width: 90%; height: auto; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.3s; }
+.vehicle-card:hover .card-img img { transform: scale(1.05); }
 .badge { position: absolute; top: 8px; left: 8px; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
 .badge-special { background: #111; color: white; }
 .badge-immediate { background: white; color: #111; border: 1px solid #e5e5e5; left: auto; right: 8px; }
@@ -229,6 +325,7 @@ function openVehicle(vehicle) { openInquiryModal(vehicle) }
 .won { font-size: 11px; font-weight: 500; color: #888; }
 .card-monthly { font-size: 12px; color: #555; margin: 4px 0 0; }
 .card-monthly strong { color: #111; }
+.special-card .card-monthly strong { color: #e53935; }
 .card-months { font-size: 11px; color: #aaa; }
 .card-deposit { font-size: 11px; color: #bbb; margin: 2px 0 0; }
 .card-btns { display: flex; gap: 6px; margin-top: 10px; }
@@ -236,10 +333,10 @@ function openVehicle(vehicle) { openInquiryModal(vehicle) }
   flex: 1; padding: 7px 0; border-radius: 6px; font-size: 11.5px; font-weight: 600;
   cursor: pointer; transition: all 0.15s; text-align: center;
 }
-.card-btn.calc { background: #f5f5f5; color: #555; border: none; }
-.card-btn.calc:hover { background: #eee; color: #111; }
-.card-btn.compare { background: white; color: #888; border: 1px solid #e5e5e5; }
-.card-btn.compare:hover { border-color: #111; color: #111; }
+.card-btn.calc { background: #f5f5f5; color: #555; border: none; transition: all 0.2s; }
+.card-btn.calc:hover { background: #eee; color: #111; transform: scale(1.04); }
+.card-btn.compare { background: white; color: #888; border: 1px solid #e5e5e5; transition: all 0.2s; }
+.card-btn.compare:hover { border-color: #111; color: #111; transform: scale(1.04); }
 .card-btn.compare.active { background: #111; color: white; border-color: #111; }
 .special-section { padding: 36px 0; background: #fafafa; }
 .special-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
@@ -289,6 +386,6 @@ function openVehicle(vehicle) { openInquiryModal(vehicle) }
 .cta-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
 .cta-inner h2 { font-size: 1.3rem; font-weight: 800; color: white; }
 .cta-inner p { font-size: 13px; color: #888; margin-top: 4px; }
-.cta-btn { display: inline-block; padding: 12px 32px; background: white; color: #111; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 8px; transition: background 0.15s; }
-.cta-btn:hover { background: #f5f5f5; }
+.cta-btn { display: inline-block; padding: 12px 32px; background: white; color: #111; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 8px; transition: all 0.25s ease; }
+.cta-btn:hover { background: #f0f0f0; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,255,255,0.15); }
 </style>

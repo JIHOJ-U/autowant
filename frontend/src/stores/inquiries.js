@@ -1,27 +1,59 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-export const inquiries = ref([
-  { id: 1, name: '김철수', phone: '010-1234-5678', vehicle: '싼타페 하이브리드', carColor: '', email: '', availableTime: '', message: '리스 조건 알고 싶습니다', date: '2026-03-28', status: '대기', source: '문의하기' },
-  { id: 2, name: '이영희', phone: '010-9876-5432', vehicle: 'GV70', carColor: '', email: '', availableTime: '', message: '48개월 렌트 견적 부탁드립니다', date: '2026-03-27', status: '대기', source: '문의하기' },
-  { id: 3, name: '박민수', phone: '010-5555-1234', vehicle: '카니발 하이브리드', carColor: '', email: '', availableTime: '', message: '', date: '2026-03-26', status: '완료', source: '문의하기' },
-  { id: 4, name: '정소영', phone: '010-3333-7777', vehicle: '캐스퍼', carColor: '', email: '', availableTime: '', message: '즉시출고 가능한가요?', date: '2026-03-25', status: '대기', source: '문의하기' },
-  { id: 5, name: '홍길동', phone: '010-1111-2222', vehicle: '팰리세이드', carColor: '', email: '', availableTime: '', message: '법인 리스 문의합니다', date: '2026-03-24', status: '완료', source: '문의하기' },
-])
+export const inquiries = ref([])
 
-export function addInquiry({ carType, carColor, name, phone, email, availableTime, message }) {
+// 알림 리스트
+export const notifications = ref([])
+
+// 읽지 않은 문의 수
+export const unreadCount = computed(() => inquiries.value.filter(i => !i.read).length)
+
+export function addInquiry({ carType, carColor, name, phone, email, availableTime, message, manager, source }) {
   const today = new Date().toISOString().slice(0, 10)
+  const now = new Date()
+  const timeStr = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
   const newId = inquiries.value.length ? Math.max(...inquiries.value.map(i => i.id)) + 1 : 1
   inquiries.value.unshift({
     id: newId,
     name,
     phone,
-    vehicle: carType,
+    vehicle: carType || '',
     carColor,
     email,
     availableTime,
     message,
+    manager: manager || '',
     date: today,
     status: '대기',
-    source: '회사소개',
+    source: source || '문의하기',
+    read: false,
+    time: timeStr,
   })
+
+  // 알림 추가
+  const notiId = Date.now()
+  notifications.value.push({
+    id: notiId,
+    title: '새 문의가 접수되었습니다',
+    desc: `${name}님 - ${carType || '차량 미정'}`,
+    time: timeStr,
+  })
+
+  // 5초 후 자동 제거
+  setTimeout(() => {
+    notifications.value = notifications.value.filter(n => n.id !== notiId)
+  }, 5000)
+}
+
+export function markAsRead(id) {
+  const item = inquiries.value.find(i => i.id === id)
+  if (item) item.read = true
+}
+
+export function markAllAsRead() {
+  inquiries.value.forEach(i => { i.read = true })
+}
+
+export function removeInquiry(id) {
+  inquiries.value = inquiries.value.filter(i => i.id !== id)
 }
