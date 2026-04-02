@@ -22,6 +22,14 @@
               <span class="cd-sep">:</span>
               <div class="cd-block"><span class="cd-num">{{ countdown.seconds }}</span><span class="cd-unit">초</span></div>
             </div>
+            <div v-if="isAdmin" class="event-date-edit">
+              <button v-if="!editingEventDate" class="event-edit-btn" @click="editingEventDate = true">종료일 변경</button>
+              <div v-else class="event-date-form">
+                <input type="datetime-local" v-model="eventDateInput" class="event-date-input" />
+                <button class="event-save-btn" @click="saveEventDate">저장</button>
+                <button class="event-cancel-btn" @click="editingEventDate = false">취소</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="special-scroll">
@@ -47,6 +55,21 @@
     <section v-if="mvpManagers.length || isAdmin" class="mvp-section">
       <div class="container">
         <div v-reveal class="section-head" style="text-align: center;">
+          <svg class="mvp-crown" viewBox="0 0 64 52" fill="none">
+            <path d="M8 40L14 18l10 9 8-19 8 19 10-9 6 22H8z" fill="url(#cg1)"/>
+            <path d="M8 40L14 18l10 9 8-19 8 19 10-9 6 22H8z" fill="url(#cg2)" opacity="0.4"/>
+            <rect x="6" y="38" width="52" height="8" rx="3" fill="url(#cg1)"/>
+            <circle cx="20" cy="42" r="2" fill="#fff" opacity="0.5"/>
+            <circle cx="32" cy="42" r="2.5" fill="#fff" opacity="0.6"/>
+            <circle cx="44" cy="42" r="2" fill="#fff" opacity="0.5"/>
+            <circle cx="14" cy="18" r="2.5" fill="#fff" opacity="0.4"/>
+            <circle cx="32" cy="8" r="3" fill="#fff" opacity="0.5"/>
+            <circle cx="50" cy="18" r="2.5" fill="#fff" opacity="0.4"/>
+            <defs>
+              <linearGradient id="cg1" x1="8" y1="4" x2="56" y2="48"><stop stop-color="#FFD54F"/><stop offset="0.5" stop-color="#FFB300"/><stop offset="1" stop-color="#FF8F00"/></linearGradient>
+              <linearGradient id="cg2" x1="32" y1="0" x2="32" y2="48"><stop stop-color="#fff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+            </defs>
+          </svg>
           <h2 class="section-title">이달의 우수사원</h2>
           <p class="section-sub">최고의 서비스를 제공한 매니저를 소개합니다</p>
         </div>
@@ -105,9 +128,10 @@
     <section class="feature-section">
       <div class="container">
         <div v-reveal class="section-head" style="text-align: center;">
-          <span class="feature-badge">WHY AUTOWANT</span>
-          <h2 class="feature-title">왜 오토원트인가요?</h2>
+          <p class="feature-eyebrow">WHY AUTOWANT</p>
+          <h2 class="feature-title">왜 <span class="feature-highlight">오토원트</span>인가요?</h2>
           <p class="feature-sub">고객 만족을 위한 오토원트만의 특별한 약속</p>
+          <div class="feature-divider"></div>
         </div>
         <div class="carousel-wrap" v-reveal="{ delay: 100 }">
           <div class="carousel-track" :style="{ transform: `translateX(-${featureIdx * 100}%)` }">
@@ -304,12 +328,29 @@
 
     <!-- CTA -->
     <section class="cta-section">
+      <div class="cta-bg-shapes">
+        <div class="cta-shape cta-s1"></div>
+        <div class="cta-shape cta-s2"></div>
+        <div class="cta-shape cta-s3"></div>
+      </div>
       <div v-reveal="{ dir: 'scale' }" class="container cta-inner">
-        <div>
+        <div class="cta-text">
+          <p class="cta-eyebrow">CONTACT US</p>
           <h2>견적이 궁금하신가요?</h2>
-          <p>전문 매니저가 최적의 조건을 찾아드립니다</p>
+          <p class="cta-desc">전문 매니저가 최적의 조건을 찾아드립니다</p>
+          <div class="cta-features">
+            <span>무료 상담</span>
+            <span>빠른 회신</span>
+            <span>맞춤 견적</span>
+          </div>
         </div>
-        <router-link to="/contact" class="cta-btn">견적 상담 →</router-link>
+        <div class="cta-action">
+          <router-link to="/contact" class="cta-btn">견적 상담 →</router-link>
+          <a href="tel:0507-1344-7898" class="cta-phone">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            0507-1344-7898
+          </a>
+        </div>
       </div>
     </section>
   </div>
@@ -438,14 +479,6 @@ const features = [
 const featureIdx = ref(0)
 let autoSlideTimer = null
 
-function nextFeature() {
-  featureIdx.value = (featureIdx.value + 1) % features.length
-  resetAutoSlide()
-}
-function prevFeature() {
-  featureIdx.value = (featureIdx.value - 1 + features.length) % features.length
-  resetAutoSlide()
-}
 function resetAutoSlide() {
   clearInterval(autoSlideTimer)
   autoSlideTimer = setInterval(() => {
@@ -470,6 +503,8 @@ function initParticles() {
   const ctx = canvas.getContext('2d')
   const section = canvas.parentElement
   let w, h, particles
+  const mouse = { x: -9999, y: -9999 }
+  const mouseRadius = 150
 
   function resize() {
     w = section.offsetWidth
@@ -492,12 +527,46 @@ function initParticles() {
     }
   }
 
+  section.addEventListener('mousemove', (e) => {
+    const rect = section.getBoundingClientRect()
+    mouse.x = e.clientX - rect.left
+    mouse.y = e.clientY - rect.top
+  })
+  section.addEventListener('mouseleave', () => {
+    mouse.x = -9999
+    mouse.y = -9999
+  })
+
   function draw() {
     ctx.clearRect(0, 0, w, h)
     const maxDist = 120
 
+    // 마우스 글로우
+    if (mouse.x > 0 && mouse.y > 0) {
+      const grd = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouseRadius)
+      grd.addColorStop(0, 'rgba(77,142,247,0.06)')
+      grd.addColorStop(1, 'transparent')
+      ctx.fillStyle = grd
+      ctx.fillRect(mouse.x - mouseRadius, mouse.y - mouseRadius, mouseRadius * 2, mouseRadius * 2)
+    }
+
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i]
+
+      // 마우스 인터랙션: 가까우면 끌려옴
+      const mdx = mouse.x - p.x
+      const mdy = mouse.y - p.y
+      const mDist = Math.sqrt(mdx * mdx + mdy * mdy)
+      if (mDist < mouseRadius && mDist > 0) {
+        const force = (mouseRadius - mDist) / mouseRadius * 0.02
+        p.vx += mdx * force
+        p.vy += mdy * force
+      }
+
+      // 속도 감쇠
+      p.vx *= 0.99
+      p.vy *= 0.99
+
       p.x += p.vx
       p.y += p.vy
       if (p.x < 0) p.x = w
@@ -505,10 +574,24 @@ function initParticles() {
       if (p.y < 0) p.y = h
       if (p.y > h) p.y = 0
 
+      // 마우스 근처 별 더 밝게
+      const brightness = mDist < mouseRadius ? 0.7 + 0.3 * (1 - mDist / mouseRadius) : 0.7
+      const size = mDist < mouseRadius ? p.r + 1.5 * (1 - mDist / mouseRadius) : p.r
+
       ctx.beginPath()
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-      ctx.fillStyle = 'rgba(255,255,255,0.7)'
+      ctx.arc(p.x, p.y, size, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255,255,255,${brightness})`
       ctx.fill()
+
+      // 마우스와 별 연결
+      if (mDist < mouseRadius) {
+        ctx.beginPath()
+        ctx.moveTo(p.x, p.y)
+        ctx.lineTo(mouse.x, mouse.y)
+        ctx.strokeStyle = `rgba(77,142,247,${0.2 * (1 - mDist / mouseRadius)})`
+        ctx.lineWidth = 0.8
+        ctx.stroke()
+      }
 
       for (let j = i + 1; j < particles.length; j++) {
         const q = particles[j]
@@ -543,10 +626,26 @@ function openVehicle(vehicle) { openInquiryModal(vehicle) }
 const countdown = reactive({ days: '00', hours: '00', minutes: '00', seconds: '00' })
 let cdTimer = null
 
+const editingEventDate = ref(false)
+const eventDateInput = ref('')
+
+function getEventEndDate() {
+  const saved = localStorage.getItem('autowant_event_end')
+  if (saved) return new Date(saved)
+  return new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59)
+}
+
+function saveEventDate() {
+  if (!eventDateInput.value) return
+  localStorage.setItem('autowant_event_end', new Date(eventDateInput.value).toISOString())
+  editingEventDate.value = false
+  updateCountdown()
+}
+
 function updateCountdown() {
   const now = new Date()
-  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
-  const diff = endOfMonth - now
+  const endDate = getEventEndDate()
+  const diff = endDate - now
   if (diff <= 0) {
     countdown.days = '00'; countdown.hours = '00'; countdown.minutes = '00'; countdown.seconds = '00'
     return
@@ -670,6 +769,33 @@ onUnmounted(() => {
   100% { opacity: 1; transform: scale(1.1) translate(20px, -10px); }
 }
 
+/* 관리자 이벤트 날짜 수정 */
+.event-date-edit { margin-top: 8px; text-align: right; }
+.event-edit-btn {
+  padding: 4px 12px; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 4px;
+  font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+}
+.event-edit-btn:hover { background: rgba(255,255,255,0.25); color: white; }
+.event-date-form { display: flex; gap: 6px; align-items: center; }
+.event-date-input {
+  padding: 5px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1); color: white; font-size: 12px;
+  font-family: inherit; outline: none;
+}
+.event-date-input::-webkit-calendar-picker-indicator { filter: invert(1); }
+.event-save-btn {
+  padding: 5px 12px; background: #4d8ef7; color: white; border: none;
+  border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;
+}
+.event-save-btn:hover { background: #3a7be0; }
+.event-cancel-btn {
+  padding: 5px 10px; background: none; color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 4px;
+  font-size: 11px; font-weight: 600; cursor: pointer;
+}
+.event-cancel-btn:hover { color: white; }
+
 /* 파티클 캔버스 */
 .particle-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .special-banner {
@@ -703,6 +829,7 @@ onUnmounted(() => {
 
 /* 이달의 우수사원 */
 .mvp-section { padding: 48px 0; }
+.mvp-crown { width: 44px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 3px 8px rgba(255,143,0,0.35)); }
 .mvp-grid { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
 .mvp-grid::-webkit-scrollbar { height: 4px; }
 .mvp-grid::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
@@ -712,6 +839,7 @@ onUnmounted(() => {
   background: white; border: 1px solid #f0f0f0; border-radius: 16px;
   padding: 28px 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.04);
   transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 380px;
 }
 .mvp-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
 .mvp-photo { position: relative; margin-bottom: 16px; }
@@ -734,13 +862,14 @@ onUnmounted(() => {
   border-radius: 100px; box-shadow: 0 2px 8px rgba(255,179,0,0.3);
   letter-spacing: 1px;
 }
-.mvp-info { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.mvp-info { flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
 .mvp-name { font-size: 1.1rem; font-weight: 800; color: #111; margin: 0 0 2px; }
 .mvp-role { font-size: 12px; color: #999; margin: 0 0 10px; }
 .mvp-intro {
-  font-size: 13px; color: #555; line-height: 1.6; margin: 0 0 12px;
+  font-size: 13px; color: #555; line-height: 1.6; margin: 0 0 auto;
   word-break: keep-all; display: -webkit-box; -webkit-line-clamp: 3;
   -webkit-box-orient: vertical; overflow: hidden;
+  padding-bottom: 12px;
 }
 .mvp-tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; }
 .mvp-tags span {
@@ -849,14 +978,15 @@ onUnmounted(() => {
   .cd-block { min-width: 44px; padding: 6px 10px; }
   .cd-num { font-size: 18px; }
 }
-.feature-section { padding: 56px 0; background: linear-gradient(180deg, #f8faff, #f0f4ff); }
-.feature-badge {
-  display: inline-block; padding: 4px 14px; margin-bottom: 12px;
-  background: linear-gradient(135deg, #4d8ef7, #6c5ce7); color: white;
-  font-size: 11px; font-weight: 800; border-radius: 100px; letter-spacing: 1.5px;
+.feature-section { padding: 64px 0; background: #fff; }
+.feature-eyebrow {
+  font-size: 12px; font-weight: 700; letter-spacing: 3px;
+  color: #4d8ef7; margin: 0 0 12px; text-transform: uppercase;
 }
-.feature-title { font-size: 1.6rem; font-weight: 900; color: #2d2d2d; margin: 0 0 6px; }
-.feature-sub { font-size: 14px; color: #999; margin: 0 0 32px; }
+.feature-title { font-size: 2rem; font-weight: 900; color: #1a1a1a; margin: 0 0 10px; letter-spacing: -0.5px; }
+.feature-highlight { color: #4d8ef7; }
+.feature-sub { font-size: 15px; color: #aaa; margin: 0 0 12px; font-weight: 400; }
+.feature-divider { width: 40px; height: 3px; background: linear-gradient(90deg, #4d8ef7, #6c5ce7); border-radius: 2px; margin: 0 auto 36px; }
 
 /* 캐러셀 */
 .carousel-wrap { position: relative; overflow: hidden; border-radius: 20px; }
@@ -883,13 +1013,13 @@ onUnmounted(() => {
 .carousel-body p { font-size: 15px; color: #777; line-height: 1.8; margin: 0; }
 
 /* 도트 인디케이터 */
-.car-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+.car-dots { display: flex; justify-content: center; gap: 6px; margin-top: 24px; }
 .car-dot {
-  width: 10px; height: 10px; border-radius: 50%;
+  width: 6px; height: 6px; border-radius: 3px;
   border: none; background: #d0d9f0; cursor: pointer;
-  transition: all 0.25s;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); padding: 0;
 }
-.car-dot.active { background: #4d8ef7; width: 28px; border-radius: 5px; }
+.car-dot.active { background: #4d8ef7; width: 24px; }
 
 @media (max-width: 768px) {
   .carousel-card { flex-direction: column; }
@@ -929,10 +1059,50 @@ onUnmounted(() => {
 .review-name { font-size: 12px; font-weight: 700; color: #111; margin: 0; }
 .review-meta { font-size: 10px; color: #bbb; margin: 1px 0 0; }
 
-.cta-section { padding: 48px 0; background: linear-gradient(135deg, #4d8ef7, #6c5ce7); }
-.cta-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
-.cta-inner h2 { font-size: 1.3rem; font-weight: 800; color: white; }
-.cta-inner p { font-size: 13px; color: #888; margin-top: 4px; }
-.cta-btn { display: inline-block; padding: 12px 32px; background: white; color: #4d8ef7; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 8px; transition: all 0.25s ease; }
-.cta-btn:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.15); }
+.cta-section {
+  padding: 100px 0; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+}
+.cta-bg-shapes { position: absolute; inset: 0; pointer-events: none; }
+.cta-shape {
+  position: absolute; border-radius: 50%; opacity: 0.08;
+  background: white;
+}
+.cta-s1 { width: 300px; height: 300px; top: -100px; right: -80px; }
+.cta-s2 { width: 200px; height: 200px; bottom: -60px; left: -40px; }
+.cta-s3 { width: 120px; height: 120px; top: 20px; left: 30%; background: #4d8ef7; opacity: 0.1; }
+.cta-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 28px; position: relative; z-index: 1;
+}
+.cta-text {}
+.cta-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #4d8ef7; margin: 0 0 8px; }
+.cta-inner h2 { font-size: 1.6rem; font-weight: 900; color: white; margin: 0 0 6px; }
+.cta-desc { font-size: 14px; color: rgba(255,255,255,0.5); margin: 0 0 16px; }
+.cta-features { display: flex; gap: 8px; }
+.cta-features span {
+  padding: 4px 12px; border-radius: 100px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600;
+}
+.cta-action { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.cta-btn {
+  display: inline-block; padding: 14px 36px;
+  background: linear-gradient(135deg, #4d8ef7, #6c5ce7); color: white;
+  font-size: 15px; font-weight: 700; text-decoration: none; border-radius: 10px;
+  transition: all 0.25s; box-shadow: 0 4px 16px rgba(77,142,247,0.3);
+}
+.cta-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(77,142,247,0.4); }
+.cta-phone {
+  display: flex; align-items: center; gap: 6px;
+  color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 600;
+  text-decoration: none; transition: color 0.15s;
+}
+.cta-phone:hover { color: white; }
+@media (max-width: 600px) {
+  .cta-inner { flex-direction: column; text-align: center; }
+  .cta-features { justify-content: center; }
+  .cta-action { width: 100%; }
+  .cta-btn { width: 100%; text-align: center; }
+}
 </style>

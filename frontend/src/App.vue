@@ -499,9 +499,10 @@ function handleLogout() {
 
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
 
 * { box-sizing: border-box; margin: 0; }
-body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #2d2d2d; background: #fefefe; -webkit-font-smoothing: antialiased; }
+body { font-family: 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #2d2d2d; background: #fefefe; -webkit-font-smoothing: antialiased; }
 
 
 /* 네비게이션 */

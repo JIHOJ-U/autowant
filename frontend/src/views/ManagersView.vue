@@ -1,31 +1,25 @@
 <template>
   <div class="page">
-    <div class="container">
-      <div class="page-head">
-        <h1>오토원트를 이끌어가는 사람들</h1>
-        <p>클릭하시면 매니저에게 바로 상담받으실 수 있습니다</p>
-      </div>
-
-      <!-- 매니저 리스트 -->
-      <div v-for="(m, idx) in managerList" :key="m.id" v-reveal="{ delay: 100, dir: idx % 2 === 0 ? 'left' : 'right' }" class="leader-section" :class="{ reverse: idx % 2 === 1 }">
-        <div class="leader-photo">
+    <!-- 매니저 리스트 (풀 섹션) -->
+    <div v-for="(m, idx) in managerList" :key="m.id" class="leader-full" :class="'theme-' + (idx % 4)">
+      <div class="leader-full-bg"></div>
+      <div class="container leader-section" :class="{ reverse: idx % 2 === 1 }">
+        <div v-reveal="{ delay: 100, dir: idx % 2 === 0 ? 'left' : 'right' }" class="leader-photo">
           <img v-if="m.image" :src="m.image" :alt="m.name" />
           <div v-else class="leader-placeholder"><span>{{ m.name.charAt(0) }}</span></div>
-          <!-- 관리자: 사진 변경 -->
           <label v-if="isAdmin" class="photo-edit-btn">
             사진 변경
             <input type="file" accept="image/*" hidden @change="e => changePhoto(e, m)" />
           </label>
         </div>
 
-        <div class="leader-info">
-          <!-- 보기 모드 -->
+        <div v-reveal="{ delay: 200, dir: idx % 2 === 0 ? 'right' : 'left' }" class="leader-info">
           <template v-if="editingId !== m.id">
+            <p class="leader-num">{{ String(idx + 1).padStart(2, '0') }}</p>
             <h2>{{ m.name }}</h2>
-            <h3>{{ m.role }}</h3>
+            <h3>{{ m.role }} · {{ m.experience }}</h3>
             <p class="leader-intro">{{ m.intro }}</p>
 
-            <!-- 자세히 보기 -->
             <div v-if="m.detail" class="toggle-section">
               <button class="toggle-btn" @click="toggleDetail(m.id)">
                 {{ openIds.has(m.id) ? '접기' : '자세히 보기' }}
@@ -68,9 +62,11 @@
           </template>
         </div>
       </div>
+    </div>
 
-      <!-- 관리자: 매니저 추가 -->
-      <div v-if="isAdmin" class="add-leader">
+    <!-- 관리자: 매니저 추가 -->
+    <div v-if="isAdmin" class="add-leader">
+      <div class="container">
         <button class="add-leader-btn" @click="addNew">+ 새 매니저 추가</button>
       </div>
     </div>
@@ -124,37 +120,79 @@ function changePhoto(e, m) {
 function addNew() {
   addManager({
     name: '새 매니저', role: '매니저', experience: '', phone: '',
-    intro: '소개를 입력해주세요.', detail: '', image: '', tags: [],
+    intro: '소개를 입력해주세요.', detail: '', image: '', tags: [], isMVP: false,
   })
 }
+
 </script>
 
 <style scoped>
 .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-.page { padding: 48px 0 60px; }
-.page-head { text-align: center; margin-bottom: 48px; }
-.page-head h1 { font-size: 1.6rem; font-weight: 800; color: #111; }
-.page-head p { font-size: 14px; color: #999; margin-top: 6px; }
+.page { padding: 0; }
+
+/* 풀 섹션 배경 */
+.leader-full { position: relative; overflow: hidden; }
+.leader-full-bg { position: absolute; inset: 0; opacity: 0.06; }
+
+.theme-0 { background: #f0f5ff; }
+.theme-0 .leader-full-bg { background: radial-gradient(ellipse at 30% 50%, rgba(77,142,247,0.08), transparent 70%); }
+.theme-0 .leader-num { color: #4d8ef7; }
+.theme-0 .leader-info h3 { color: #4d8ef7; }
+.theme-0 .leader-tags span { background: rgba(77,142,247,0.1); color: #4d8ef7; }
+.theme-0 .consult-btn { background: linear-gradient(135deg, #4d8ef7, #3a6fd8); }
+.theme-0 .toggle-btn { border-color: #c8daff; color: #4d8ef7; }
+.theme-0 .toggle-btn:hover { background: rgba(77,142,247,0.06); }
+
+.theme-1 { background: #f5f0ff; }
+.theme-1 .leader-full-bg { background: radial-gradient(ellipse at 70% 50%, rgba(139,92,246,0.08), transparent 70%); }
+.theme-1 .leader-num { color: #8b5cf6; }
+.theme-1 .leader-info h3 { color: #8b5cf6; }
+.theme-1 .leader-tags span { background: rgba(139,92,246,0.1); color: #8b5cf6; }
+.theme-1 .consult-btn { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.theme-1 .toggle-btn { border-color: #ddd0ff; color: #8b5cf6; }
+.theme-1 .toggle-btn:hover { background: rgba(139,92,246,0.06); }
+
+.theme-2 { background: #ecfdf5; }
+.theme-2 .leader-full-bg { background: radial-gradient(ellipse at 30% 50%, rgba(16,185,129,0.08), transparent 70%); }
+.theme-2 .leader-num { color: #10b981; }
+.theme-2 .leader-info h3 { color: #10b981; }
+.theme-2 .leader-tags span { background: rgba(16,185,129,0.1); color: #10b981; }
+.theme-2 .consult-btn { background: linear-gradient(135deg, #10b981, #059669); }
+.theme-2 .toggle-btn { border-color: #a7f3d0; color: #10b981; }
+.theme-2 .toggle-btn:hover { background: rgba(16,185,129,0.06); }
+
+.theme-3 { background: #fff8eb; }
+.theme-3 .leader-full-bg { background: radial-gradient(ellipse at 70% 50%, rgba(245,158,11,0.08), transparent 70%); }
+.theme-3 .leader-num { color: #f59e0b; }
+.theme-3 .leader-info h3 { color: #d97706; }
+.theme-3 .leader-tags span { background: rgba(245,158,11,0.1); color: #d97706; }
+.theme-3 .consult-btn { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.theme-3 .toggle-btn { border-color: #fde68a; color: #d97706; }
+.theme-3 .toggle-btn:hover { background: rgba(245,158,11,0.06); }
 
 /* 리더 섹션 */
 .leader-section {
-  display: flex; gap: 40px; align-items: flex-start;
-  padding: 48px 0; border-bottom: 1px solid #f0f0f0;
+  display: flex; gap: 48px; align-items: center;
+  padding: 72px 0; position: relative; z-index: 1;
 }
-.leader-section:last-of-type { border-bottom: none; }
 .leader-section.reverse { flex-direction: row-reverse; }
 
+/* 넘버 */
+.leader-num { font-size: 48px; font-weight: 900; opacity: 0.3; margin: 0 0 4px; line-height: 1; }
+
 /* 사진 */
-.leader-photo { width: 280px; flex-shrink: 0; position: relative; }
+.leader-photo { width: 300px; flex-shrink: 0; position: relative; }
 .leader-photo img {
-  width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 12px;
+  width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
 }
 .leader-placeholder {
-  width: 100%; aspect-ratio: 3/4; border-radius: 12px;
-  background: linear-gradient(135deg, #e8e8e8, #d0d0d0);
+  width: 100%; aspect-ratio: 3/4; border-radius: 16px;
+  background: white; border: 1px solid #eee;
   display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.06);
 }
-.leader-placeholder span { font-size: 64px; font-weight: 800; color: white; }
+.leader-placeholder span { font-size: 72px; font-weight: 900; color: #ddd; }
 .photo-edit-btn {
   position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
   padding: 6px 16px; background: rgba(0,0,0,0.6); color: white; border-radius: 6px;
@@ -164,18 +202,18 @@ function addNew() {
 
 /* 정보 */
 .leader-info { flex: 1; }
-.leader-info h2 { font-size: 1.5rem; font-weight: 800; color: #111; margin: 0; }
-.leader-info h3 { font-size: 15px; font-weight: 600; color: #999; margin: 4px 0 16px; }
-.leader-intro { font-size: 15px; color: #444; line-height: 1.75; margin: 0 0 16px; word-break: keep-all; }
+.leader-info h2 { font-size: 1.6rem; font-weight: 900; color: #1a1a1a; margin: 0; }
+.leader-info h3 { font-size: 14px; font-weight: 600; margin: 4px 0 18px; letter-spacing: 0.5px; }
+.leader-intro { font-size: 15px; color: #666; line-height: 1.8; margin: 0 0 16px; word-break: keep-all; }
 
 /* 자세히 보기 */
 .toggle-section { margin-bottom: 16px; }
 .toggle-btn {
-  background: none; border: 1px solid #eee; border-radius: 6px;
-  padding: 8px 18px; font-size: 13px; font-weight: 600; color: #666;
+  background: none; border: 1px solid #e0e7ff; border-radius: 6px;
+  padding: 8px 18px; font-size: 13px; font-weight: 600; color: #4d8ef7;
   cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.15s;
 }
-.toggle-btn:hover { border-color: #ccc; color: #111; }
+.toggle-btn:hover { border-color: #4d8ef7; background: #f0f4ff; }
 .toggle-btn span { transition: transform 0.25s; font-size: 16px; }
 .toggle-btn span.open { transform: rotate(90deg); }
 .toggle-content {
@@ -183,15 +221,15 @@ function addNew() {
 }
 .toggle-content.show { max-height: 600px; }
 .toggle-content p {
-  font-size: 14px; color: #666; line-height: 1.8; margin: 14px 0 0;
+  font-size: 14px; color: #888; line-height: 1.8; margin: 14px 0 0;
   white-space: pre-line; word-break: keep-all;
 }
 
 /* 태그 */
 .leader-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
 .leader-tags span {
-  font-size: 12px; font-weight: 600; padding: 5px 14px;
-  background: #f5f5f5; border-radius: 100px; color: #888;
+  font-size: 11px; font-weight: 600; padding: 5px 14px;
+  background: #f0f4ff; border-radius: 100px; color: #4d8ef7;
 }
 
 /* 버튼 */
@@ -200,12 +238,12 @@ function addNew() {
   padding: 10px 28px; background: linear-gradient(135deg, #4d8ef7, #6c5ce7); color: white; border: none;
   border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
 }
-.consult-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(77,142,247,0.3); }
+.consult-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
 .edit-inline-btn {
-  padding: 10px 20px; background: white; color: #888; border: 1px solid #eee;
-  border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+  padding: 10px 20px; background: white; color: #888;
+  border: 1px solid #e5e5e5; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
 }
-.edit-inline-btn:hover { border-color: #ccc; color: #111; }
+.edit-inline-btn:hover { border-color: #ccc; color: #333; }
 
 /* 인라인 수정 */
 .inline-edit { }
@@ -213,27 +251,36 @@ function addNew() {
 .ie-field { margin-bottom: 10px; }
 .ie-field label { display: block; font-size: 11px; font-weight: 600; color: #999; margin-bottom: 4px; }
 .ie-field input, .ie-field textarea {
-  width: 100%; padding: 9px 12px; border: 1px solid #eee; border-radius: 6px;
-  font-size: 13px; color: #111; outline: none; font-family: inherit; resize: vertical;
+  width: 100%; padding: 9px 12px; border: 1px solid #e5e5e5; border-radius: 6px;
+  font-size: 13px; color: #333; background: white; outline: none; font-family: inherit; resize: vertical;
 }
-.ie-field input:focus, .ie-field textarea:focus { border-color: #999; }
+.ie-field input:focus, .ie-field textarea:focus { border-color: #aaa; }
 .ie-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
-.ie-cancel { padding: 8px 18px; background: white; color: #666; border: 1px solid #eee; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
-.ie-save { padding: 8px 22px; background: #111; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
-.ie-save:hover { background: #333; }
+.ie-cancel { padding: 8px 18px; background: white; color: #666; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ie-save { padding: 8px 22px; background: linear-gradient(135deg, #4d8ef7, #6c5ce7); color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.ie-save:hover { box-shadow: 0 4px 12px rgba(77,142,247,0.3); }
 
 /* 매니저 추가 */
-.add-leader { text-align: center; padding: 40px 0; }
+.add-leader { text-align: center; padding: 48px 0; background: #f8f9fa; }
 .add-leader-btn {
-  padding: 12px 32px; border: 1px dashed #ddd; border-radius: 8px;
-  background: white; font-size: 14px; font-weight: 600; color: #999; cursor: pointer;
+  padding: 14px 36px; border: 2px dashed #d0d9f0; border-radius: 10px;
+  background: white; font-size: 14px; font-weight: 600; color: #4d8ef7; cursor: pointer;
+  transition: all 0.2s;
 }
-.add-leader-btn:hover { border-color: #111; color: #111; }
+.add-leader-btn:hover { border-color: #4d8ef7; background: #f0f5ff; }
+
+.photo-edit-btn {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  padding: 6px 16px; background: rgba(0,0,0,0.6); color: white; border-radius: 6px;
+  font-size: 11px; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px);
+}
+.photo-edit-btn:hover { background: rgba(0,0,0,0.8); }
 
 /* 반응형 */
 @media (max-width: 768px) {
-  .leader-section, .leader-section.reverse { flex-direction: column; gap: 20px; }
-  .leader-photo { width: 100%; max-width: 300px; margin: 0 auto; }
+  .leader-section, .leader-section.reverse { flex-direction: column; gap: 24px; padding: 48px 0; }
+  .leader-photo { width: 100%; max-width: 280px; margin: 0 auto; }
+  .leader-num { font-size: 36px; }
   .ie-row { grid-template-columns: 1fr; }
 }
 </style>
