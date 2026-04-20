@@ -18,6 +18,13 @@
 
       <!-- 대시보드 -->
       <div v-if="currentTab === 'dashboard'">
+        <div v-if="greeting" class="greeting-card">
+          <div class="greeting-wave">👋</div>
+          <div>
+            <p class="greeting-hi">안녕하세요, {{ greeting }}!</p>
+            <p class="greeting-sub">오늘도 좋은 하루 되세요.</p>
+          </div>
+        </div>
         <div class="stats-grid">
           <div v-for="(s, i) in dashStats" :key="s.label" v-reveal="{ delay: i * 80, dir: 'scale' }" class="stat-card hvr-grow">
             <p class="stat-label">{{ s.label }}</p>
@@ -87,7 +94,7 @@
 
       <!-- 매니저 관리 -->
       <div v-if="currentTab === 'managers'">
-        <div class="tab-header"><h2 class="page-title">매니저 관리</h2><button class="add-btn">+ 매니저 추가</button></div>
+        <div class="tab-header"><h2 class="page-title">매니저 관리</h2><button class="add-btn" @click="openMgrAdd">+ 매니저 추가</button></div>
         <div class="panel">
           <table class="admin-table">
             <thead><tr><th>이름</th><th>직책</th><th>경력</th><th>전문분야</th><th></th></tr></thead>
@@ -95,7 +102,7 @@
               <tr v-for="m in managerList" :key="m.id">
                 <td class="td-bold">{{ m.name }}</td><td>{{ m.role }}</td><td>{{ m.experience }}</td>
                 <td><span v-for="t in m.tags" :key="t" class="tag-i">{{ t }}</span></td>
-                <td class="td-r"><button class="btn-edit">수정</button><button class="btn-del">삭제</button></td>
+                <td class="td-r"><button class="btn-edit" @click="openMgrEdit(m)">수정</button><button class="btn-del" @click="deleteMgr(m)">삭제</button></td>
               </tr>
             </tbody>
           </table>
@@ -120,6 +127,34 @@
             </div>
           </div>
           <p v-else class="mgr-inq-empty">접수된 문의가 없습니다</p>
+        </div>
+
+        <!-- 매니저 수정/추가 모달 -->
+        <div v-if="mgrModal" class="g-overlay" @click.self="mgrModal = false">
+          <div class="g-modal" style="max-width:520px;">
+            <div class="g-modal-top">
+              <h3>{{ mgrIsNew ? '매니저 추가' : '매니저 수정' }}</h3>
+              <button class="g-modal-x" @click="mgrModal = false">&times;</button>
+            </div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div class="f-group"><label>이름 *</label><input v-model="mgrForm.name" /></div>
+                <div class="f-group"><label>직책</label><input v-model="mgrForm.role" /></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div class="f-group"><label>경력</label><input v-model="mgrForm.experience" /></div>
+                <div class="f-group"><label>전화번호</label><input v-model="mgrForm.phone" /></div>
+              </div>
+              <div class="f-group"><label>소개</label><textarea v-model="mgrForm.intro" rows="3" style="resize:vertical;"></textarea></div>
+              <div class="f-group"><label>상세 소개</label><textarea v-model="mgrForm.detail" rows="4" style="resize:vertical;"></textarea></div>
+              <div class="f-group"><label>이미지 경로</label><input v-model="mgrForm.image" placeholder="/images/managers/이름.jpg" /></div>
+              <div class="f-group"><label>전문분야 (쉼표 구분)</label><input v-model="mgrTagInput" placeholder="SUV, 국산차, 장기렌트" /></div>
+              <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+                <button class="btn-cancel" @click="mgrModal = false">취소</button>
+                <button class="btn-save" @click="saveMgr">저장</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -269,7 +304,30 @@
       <!-- 설정 -->
       <div v-if="currentTab === 'settings'">
         <h2 class="page-title tab-solo">사이트 설정</h2>
+
+        <!-- 프로모션 팝업 관리 -->
+        <div class="panel" style="margin-bottom: 20px;">
+          <div class="panel-head"><h3>프로모션 팝업 관리</h3></div>
+          <div style="padding: 16px 20px;">
+            <div class="setting-row">
+              <label>팝업 활성화</label>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <button class="calc-type-btn" :class="{ active: promoSettings.enabled }" @click="promoSettings.enabled = true" style="flex:0;padding:8px 16px;">ON</button>
+                <button class="calc-type-btn" :class="{ active: !promoSettings.enabled }" @click="promoSettings.enabled = false" style="flex:0;padding:8px 16px;">OFF</button>
+              </div>
+            </div>
+            <div class="setting-row"><label>팝업 제목</label><input v-model="promoSettings.title" /></div>
+            <div class="setting-row"><label>팝업 설명</label><input v-model="promoSettings.desc" /></div>
+            <div class="setting-row"><label>혜택 1</label><input v-model="promoSettings.feat1" /></div>
+            <div class="setting-row"><label>혜택 2</label><input v-model="promoSettings.feat2" /></div>
+            <div class="setting-row"><label>혜택 3</label><input v-model="promoSettings.feat3" /></div>
+            <div class="setting-actions"><button class="save-btn" @click="savePromoSettings">저장</button></div>
+          </div>
+        </div>
+
+        <!-- 사이트 기본 설정 -->
         <div class="panel settings-panel">
+          <div class="panel-head"><h3>기본 정보</h3></div>
           <div v-for="f in settingFields" :key="f.key" class="setting-row">
             <label>{{ f.label }}</label><input type="text" v-model="siteSettings[f.key]" />
           </div>
@@ -422,7 +480,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../stores/auth'
 import { useVehicles } from '../stores/vehicles'
@@ -431,7 +489,16 @@ import { inquiries, removeInquiry, unreadCount, markAsRead, markAllAsRead } from
 import { useManagers } from '../stores/managers'
 
 const router = useRouter()
-const { logout } = useAuth()
+const { logout, adminUser } = useAuth()
+
+const greeting = computed(() => {
+  const u = adminUser.value
+  if (!u) return ''
+  if (u.role === '대표') return `${u.name} 대표님`
+  if (u.role === '이사') return `${u.name} 이사님`
+  if (u.name === '관리자') return ''
+  return `${u.name}님`
+})
 const { vehicleList, specialList, immediateList, addVehicle, updateVehicle, removeVehicle } = useVehicles()
 const { reviewList, addReview, updateReview, removeReview } = useReviews()
 
@@ -455,9 +522,46 @@ const dashStats = computed(() => [
 ])
 
 
-const { managerList } = useManagers()
+const { managerList, addManager, updateManager, removeManager } = useManagers()
 
-const siteSettings = ref({ company: '오토원트', ceo: '신선호', tel: '0507-1344-7898', email: 'autowant@naver.com', address: '경기도 광명시 일직로 72 에이동 14층 1420호', bizNum: '609-88-02424' })
+// 매니저 수정/추가
+const mgrModal = ref(false)
+const mgrIsNew = ref(false)
+const mgrForm = ref({})
+const mgrTagInput = ref('')
+
+function openMgrEdit(m) {
+  mgrIsNew.value = false
+  mgrForm.value = { ...m }
+  mgrTagInput.value = (m.tags || []).join(', ')
+  mgrModal.value = true
+}
+function openMgrAdd() {
+  mgrIsNew.value = true
+  mgrForm.value = { name: '', role: '매니저', experience: '', phone: '', intro: '', detail: '', image: '', tags: [], isMVP: false }
+  mgrTagInput.value = ''
+  mgrModal.value = true
+}
+function saveMgr() {
+  if (!mgrForm.value.name) return alert('이름을 입력해주세요')
+  mgrForm.value.tags = mgrTagInput.value ? mgrTagInput.value.split(',').map(t => t.trim()).filter(Boolean) : []
+  if (mgrIsNew.value) addManager(mgrForm.value)
+  else updateManager(mgrForm.value)
+  mgrModal.value = false
+}
+function deleteMgr(m) {
+  if (confirm(`${m.name} 매니저를 삭제하시겠습니까?`)) removeManager(m.id)
+}
+
+// 프로모션 팝업 설정
+const defaultPromo = { enabled: true, title: '4월 특가 이벤트', desc: '지금 상담하시면 최대 할인 + 보증금 0원 혜택!', feat1: '보증금 0원', feat2: '최대 8% 할인', feat3: '즉시 출고' }
+const promoSettings = reactive(JSON.parse(localStorage.getItem('promo_settings') || JSON.stringify(defaultPromo)))
+function savePromoSettings() {
+  localStorage.setItem('promo_settings', JSON.stringify(promoSettings))
+  alert('프로모션 설정이 저장되었습니다')
+}
+
+const siteSettings = ref({ company: '오토원트', ceo: '신선호', tel: '0507-1344-7898', email: 'autowant@naver.com', address: '경기도 광명시 범안로 996번길 6 광명 티아모 IT타워', bizNum: '609-88-02424' })
 const settingFields = [
   { key: 'company', label: '상호명' }, { key: 'ceo', label: '대표자명' },
   { key: 'tel', label: '전화번호' }, { key: 'email', label: '이메일' },
@@ -608,20 +712,27 @@ function managerInquiries(managerName) {
 .logout-btn { padding: 5px 14px; background: white; color: #999; border: 1px solid #eee; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
 
 /* 레이아웃 */
-.admin-content { max-width: 1200px; margin: 0 auto; padding: 28px 20px 48px; }
-.page-title { font-size: 1.2rem; font-weight: 800; color: #111; margin: 0; }
+.admin-content { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
+.page-title { font-size: 1.3rem; font-weight: 800; color: #111; margin: 0; letter-spacing: -0.3px; }
 .tab-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .tab-solo { margin-bottom: 20px; }
 
 /* 통계 */
 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-.stat-card { border: 1px solid #f0f0f0; border-radius: 10px; padding: 18px; }
-.stat-label { font-size: 11px; color: #999; margin: 0 0 4px; font-weight: 600; }
-.stat-value { font-size: 1.3rem; font-weight: 800; color: #111; margin: 0; }
+.admin-page { background: #f5f7fa; min-height: 100vh; }
+.stat-card { background: white; border: none; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: all 0.2s ease; }
+.stat-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.stat-card:nth-child(1) { border-left: 3px solid #2979ff; }
+.stat-card:nth-child(2) { border-left: 3px solid #43a047; }
+.stat-card:nth-child(3) { border-left: 3px solid #fb8c00; }
+.stat-card:nth-child(4) { border-left: 3px solid #e53935; }
+.stat-label { font-size: 11px; color: #888; margin: 0 0 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.stat-value { font-size: 1.5rem; font-weight: 800; color: #111; margin: 0; }
 
 /* 차량 카드 그리드 */
 .v-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-.v-item { border: 1px solid #f0f0f0; border-radius: 10px; overflow: hidden; background: white; }
+.v-item { border: none; border-radius: 12px; overflow: hidden; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: all 0.2s ease; }
+.v-item:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.1); transform: translateY(-3px); }
 .v-img { position: relative; aspect-ratio: 16/10; background: #f5f5f5; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .v-img img { width: 85%; height: auto; object-fit: contain; mix-blend-mode: multiply; }
 .v-badges { position: absolute; top: 6px; left: 6px; display: flex; gap: 4px; }
@@ -652,7 +763,8 @@ function managerInquiries(managerName) {
 .add-btn:hover { background: #333; }
 
 /* 패널/테이블 */
-.panel { border: 1px solid #f0f0f0; border-radius: 10px; overflow: hidden; }
+.panel { border: none; border-radius: 12px; overflow: hidden; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: box-shadow 0.2s ease; }
+.panel:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
 .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #f0f0f0; }
 .panel-head h3 { font-size: 14px; font-weight: 700; color: #111; margin: 0; }
 .link-btn { background: none; border: none; font-size: 12px; font-weight: 600; color: #999; cursor: pointer; }
@@ -674,7 +786,8 @@ function managerInquiries(managerName) {
 .td-r { text-align: right; white-space: nowrap; }
 /* 후기 카드 */
 .rv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-.rv-card { border: 1px solid #f0f0f0; border-radius: 10px; overflow: hidden; background: white; }
+.rv-card { border: none; border-radius: 12px; overflow: hidden; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: all 0.2s ease; }
+.rv-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.1); transform: translateY(-3px); }
 .rv-img { aspect-ratio: 16/9; overflow: hidden; }
 .rv-img img { width: 100%; height: 100%; object-fit: cover; }
 .rv-body { padding: 14px; }
@@ -795,7 +908,7 @@ function managerInquiries(managerName) {
 
 /* 문의 행 클릭 & 읽지않음 */
 .list-row.clickable { cursor: pointer; transition: background 0.15s; }
-.list-row.clickable:hover { background: #fafafa; }
+.list-row.clickable:hover { background: #f8f9fb; }
 .list-row.unread { background: #f6f9ff; border-left: 3px solid #2979ff; }
 .list-row.unread:hover { background: #edf2ff; }
 
@@ -899,4 +1012,44 @@ function managerInquiries(managerName) {
 .noti-panel-leave-active { animation: panelOut 0.2s ease; }
 @keyframes panelIn { from { opacity: 0; transform: translateY(12px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes panelOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(12px) scale(0.96); } }
+
+/* 매니저 수정 모달 */
+.g-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 2100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.g-modal { background: #fff; border-radius: 14px; width: 100%; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+.g-modal-top { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid #f0f0f0; }
+.g-modal-top h3 { font-size: 17px; font-weight: 800; color: #191f28; margin: 0; }
+.g-modal-x { width: 32px; height: 32px; border-radius: 8px; background: #f5f7fa; border: none; font-size: 18px; color: #8b95a1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.g-modal-x:hover { background: #e5e8eb; color: #333; }
+.f-group { display: flex; flex-direction: column; gap: 4px; }
+.f-group label { font-size: 12px; font-weight: 700; color: #4e5968; }
+.f-group input, .f-group textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid #e5e8eb; border-radius: 8px;
+  font-size: 13px; color: #191f28; outline: none; font-family: inherit;
+  transition: border-color 0.15s;
+}
+.f-group input:focus, .f-group textarea:focus { border-color: #3182f6; }
+.btn-cancel {
+  padding: 10px 20px; background: #f5f7fa; border: 1px solid #e5e8eb; border-radius: 8px;
+  font-size: 13px; font-weight: 600; color: #4e5968; cursor: pointer;
+}
+.btn-cancel:hover { background: #e5e8eb; }
+.btn-save {
+  padding: 10px 28px; background: #3182f6; border: none; border-radius: 8px;
+  font-size: 13px; font-weight: 700; color: #fff; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-save:hover { background: #2563eb; }
+
+/* 관리자 인사말 카드 */
+.greeting-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 22px 28px; margin-bottom: 20px;
+  background: linear-gradient(135deg, #3182f6, #2563eb);
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(49,130,246,0.25);
+  color: #fff;
+}
+.greeting-wave { font-size: 36px; }
+.greeting-hi { font-size: 20px; font-weight: 800; margin: 0; letter-spacing: -0.3px; }
+.greeting-sub { font-size: 13px; margin: 4px 0 0; opacity: 0.85; font-weight: 500; }
 </style>

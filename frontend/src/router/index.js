@@ -1,12 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import AboutView from '../views/AboutView.vue'
 import { useAuth } from '../stores/auth'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomeView,
+    component: () => import('../views/HomeView.vue'),
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: AboutView,
   },
   {
     path: '/monthly-special',
@@ -19,14 +24,24 @@ const routes = [
     component: () => import('../views/ImmediateStockView.vue'),
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/AboutView.vue'),
+    path: '/organization',
+    name: 'Organization',
+    component: () => import('../views/OrganizationView.vue'),
   },
   {
     path: '/managers',
     name: 'Managers',
     component: () => import('../views/ManagersView.vue'),
+  },
+  {
+    path: '/guide',
+    name: 'Guide',
+    component: () => import('../views/GuideView.vue'),
+  },
+  {
+    path: '/privacy',
+    name: 'Privacy',
+    component: () => import('../views/PrivacyView.vue'),
   },
   {
     path: '/contact',
@@ -44,7 +59,7 @@ const routes = [
     component: () => import('../views/ReviewDetailView.vue'),
   },
   {
-    path: '/login',
+    path: '/autowant-admin-access',
     name: 'Login',
     component: () => import('../views/LoginView.vue'),
   },

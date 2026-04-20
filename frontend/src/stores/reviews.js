@@ -36,6 +36,28 @@ const reviewList = ref([
       { type: 'text', content: '바쁜 사업자에게 이런 원스톱 서비스는 정말 시간을 아껴줍니다. 추천합니다.' },
     ],
   },
+  {
+    id: 4, name: '정유진', vehicle: 'BMW 5시리즈', date: '2025.12', rating: 5,
+    title: '수입차 첫 리스, 친절한 설명에 감동했어요',
+    thumbnail: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80',
+    tags: ['수입차 리스', '친절 상담'],
+    blocks: [
+      { type: 'text', content: '수입차는 처음이라 막막했는데, 전호형 매니저님이 BMW 5시리즈 리스 조건을 너무 친절하게 설명해주셨어요. 보험, 정비까지 전부 안내받을 수 있어서 안심됐습니다.' },
+      { type: 'image', src: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80', caption: 'BMW 5시리즈 인수' },
+      { type: 'text', content: '월 납입금도 다른 곳보다 15만원 이상 저렴했어요. 진짜 비교해보길 잘했다는 생각이 들었습니다.' },
+    ],
+  },
+  {
+    id: 5, name: '최성훈', vehicle: '테슬라 모델 Y', date: '2025.11', rating: 5,
+    title: '전기차 첫 구매, 보조금까지 챙겨주셨어요',
+    thumbnail: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=600&q=80',
+    tags: ['전기차', '보조금 안내'],
+    blocks: [
+      { type: 'text', content: '테슬라 모델 Y를 알아보다가 보조금 신청 절차가 너무 복잡해서 포기할 뻔했습니다. 장효준 매니저님이 보조금 신청부터 충전 인프라까지 전부 챙겨주셔서 정말 편하게 진행했어요.' },
+      { type: 'image', src: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80', caption: '테슬라 모델 Y 출고' },
+      { type: 'text', content: '전기차 처음 사는 분들께 오토원트 진심으로 추천합니다. 다음에 한 대 더 뽑을 때도 무조건 여기로 올 거예요!' },
+    ],
+  },
 ])
 
 export function useReviews() {

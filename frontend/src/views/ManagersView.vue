@@ -1,7 +1,9 @@
 <template>
   <div class="page">
     <!-- 매니저 리스트 (풀 섹션) -->
-    <div v-for="(m, idx) in managerList" :key="m.id" class="leader-full" :class="'theme-' + (idx % 4)">
+    <div id="managers-list"></div>
+    <template v-for="(m, idx) in managerList" :key="m.id">
+      <div :id="'manager-' + m.id" class="leader-full" :class="'theme-' + (idx % 4)">
       <div class="leader-full-bg"></div>
       <div class="container leader-section" :class="{ reverse: idx % 2 === 1 }">
         <div v-reveal="{ delay: 100, dir: idx % 2 === 0 ? 'left' : 'right' }" class="leader-photo">
@@ -17,7 +19,7 @@
           <template v-if="editingId !== m.id">
             <p class="leader-num">{{ String(idx + 1).padStart(2, '0') }}</p>
             <h2>{{ m.name }}</h2>
-            <h3>{{ m.role }} · {{ m.experience }}</h3>
+            <h3>{{ m.role }}</h3>
             <p class="leader-intro">{{ m.intro }}</p>
 
             <div v-if="m.detail" class="toggle-section">
@@ -62,7 +64,8 @@
           </template>
         </div>
       </div>
-    </div>
+      </div>
+    </template>
 
     <!-- 관리자: 매니저 추가 -->
     <div v-if="isAdmin" class="add-leader">
@@ -74,13 +77,25 @@
 </template>
 
 <script setup>
-import { ref, reactive, inject } from 'vue'
+import { ref, reactive, inject, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useManagers } from '../stores/managers'
 import { useAuth } from '../stores/auth'
 
+const route = useRoute()
 const openInquiryModal = inject('openInquiryModal')
 const { managerList, addManager, updateManager } = useManagers()
 const { isAdmin } = useAuth()
+
+onMounted(() => {
+  const hash = route.hash
+  if (hash && hash.startsWith('#manager-')) {
+    setTimeout(() => {
+      const el = document.getElementById(hash.slice(1))
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 300)
+  }
+})
 
 // 자세히 보기 토글
 const openIds = reactive(new Set())
@@ -130,7 +145,6 @@ function addNew() {
 .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 .page { padding: 0; }
 
-/* 풀 섹션 배경 */
 .leader-full { position: relative; overflow: hidden; }
 .leader-full-bg { position: absolute; inset: 0; opacity: 0.06; }
 
@@ -185,6 +199,10 @@ function addNew() {
 .leader-photo img {
   width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 16px;
   box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 .leader-placeholder {
   width: 100%; aspect-ratio: 3/4; border-radius: 16px;

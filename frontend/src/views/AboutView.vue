@@ -15,12 +15,12 @@
 
       <div class="hero-inner">
         <div class="hero-top">
-          <span class="hero-year">설립 2020</span>
+          <span class="hero-year hero-anim hero-anim-1">설립 2020</span>
         </div>
 
         <div class="hero-center">
-          <div class="hero-num">NO.1</div>
-          <h1 class="hero-title">
+          <div class="hero-num hero-anim hero-anim-2">NO.1</div>
+          <h1 class="hero-title hero-anim hero-anim-3">
             고객에게 제공되는<br>
             <em>다양한</em> 렌트카<br>
             서비스
@@ -28,7 +28,7 @@
         </div>
 
         <div class="hero-bottom">
-          <p class="hero-sub">합리적인 가격 · 투명한 견적 · 전문 상담</p>
+          <p class="hero-sub hero-anim hero-anim-4">합리적인 가격 · 투명한 견적 · 전문 상담</p>
         </div>
       </div>
     </section>
@@ -36,13 +36,13 @@
     <!-- ③ About 본문 -->
     <section class="about-section">
       <div class="ab-container">
-        <div class="ab-left">
+        <div v-reveal="{ dir: 'left' }" class="ab-left">
           <p class="section-tag">오토원트 소개</p>
           <h2 class="ab-headline">
             단순한 렌트를<br>넘어서
           </h2>
         </div>
-        <div class="ab-right">
+        <div v-reveal="{ delay: 200, dir: 'right' }" class="ab-right">
           <p class="ab-body">
             저희 오토원트는 고객님의 부담을 덜어드리기 위해 상황에 맞는 (카카오톡, 문자, 전화) 상담이 가능합니다.
           </p>
@@ -52,21 +52,21 @@
             빠르게 변화하는 자동차 금융 시장에서 다년간의 상담 노하우로 고객님께 다가가고자 합니다.
           </p>
           <div class="ab-contact">
-            <div class="ab-contact-item">
+            <div v-reveal="{ delay: 300 }" class="ab-contact-item">
               <div>
                 <p class="ab-contact-label">전화 상담</p>
                 <p class="ab-contact-main">0507-1344-7898</p>
                 <p class="ab-contact-sub">평일 09:00 ~ 18:00</p>
               </div>
             </div>
-            <div class="ab-contact-item">
+            <div v-reveal="{ delay: 400 }" class="ab-contact-item">
               <div>
                 <p class="ab-contact-label">카카오톡</p>
                 <p class="ab-contact-main">카카오톡id</p>
                 <p class="ab-contact-sub">24시간 상담</p>
               </div>
             </div>
-            <div class="ab-contact-item">
+            <div v-reveal="{ delay: 500 }" class="ab-contact-item">
               <div>
                 <p class="ab-contact-label">이메일</p>
                 <p class="ab-contact-main">autowant@naver.com</p>
@@ -81,22 +81,22 @@
     <!-- ④ 상담 신청 폼 -->
     <section class="search-banner">
       <div class="sb-container">
-        <div class="sb-left">
+        <div v-reveal="{ dir: 'left' }" class="sb-left">
           <p class="section-tag light">차량 찾기</p>
           <h2 class="sb-headline">원하는 차량을<br>찾아드립니다</h2>
           <p class="sb-desc">차량 정보와 연락처를 남겨주시면<br>전문 매니저가 빠르게 연락드립니다.</p>
         </div>
-        <div class="sb-right">
+        <div v-reveal="{ delay: 200, dir: 'right' }" class="sb-right">
           <form class="sb-form" @submit.prevent="submitForm">
             <div class="sb-form-group">
               <p class="sb-form-label">차량 정보</p>
               <div class="sb-row">
                 <div class="sb-field">
-                  <label>차량 종류</label>
+                  <label>차량 종류 <span class="sb-optional">(선택)</span></label>
                   <input type="text" v-model="form.carType" placeholder="예) GV80, 아반떼, 카니발" />
                 </div>
                 <div class="sb-field">
-                  <label>차량 색상</label>
+                  <label>차량 색상 <span class="sb-optional">(선택)</span></label>
                   <input type="text" v-model="form.carColor" placeholder="예) 흰색, 검정, 실버" />
                 </div>
               </div>
@@ -105,26 +105,26 @@
               <p class="sb-form-label">고객 정보</p>
               <div class="sb-row">
                 <div class="sb-field">
-                  <label>성함</label>
-                  <input type="text" v-model="form.name" placeholder="이름을 입력하세요" />
+                  <label>성함 <span class="sb-required">(필수)</span></label>
+                  <input type="text" v-model="form.name" placeholder="이름을 입력하세요" @input="form.name = form.name.replace(/[^a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣\s]/g, '')" />
                 </div>
                 <div class="sb-field">
-                  <label>연락처</label>
-                  <input type="tel" v-model="form.phone" placeholder="010-0000-0000" />
+                  <label>연락처 <span class="sb-required">(필수)</span></label>
+                  <input type="tel" v-model="form.phone" placeholder="010-0000-0000" @input="formatAboutPhone" maxlength="13" />
                 </div>
               </div>
               <div class="sb-row">
                 <div class="sb-field">
-                  <label>이메일</label>
+                  <label>이메일 <span class="sb-required">(필수)</span></label>
                   <input type="email" v-model="form.email" placeholder="example@email.com" />
                 </div>
                 <div class="sb-field">
-                  <label>상담 가능 시간</label>
+                  <label>상담 가능 시간 <span class="sb-optional">(선택)</span></label>
                   <input type="text" v-model="form.availableTime" placeholder="예) 평일 오후 2~6시" />
                 </div>
               </div>
               <div class="sb-field sb-field-full">
-                <label>내용</label>
+                <label>내용 <span class="sb-optional">(선택)</span></label>
                 <textarea v-model="form.message" placeholder="문의하실 내용을 자유롭게 적어주세요." rows="4"></textarea>
               </div>
             </div>
@@ -133,7 +133,7 @@
               <span class="sb-agree-box">
                 <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4L4 7.5L10 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
-              <span class="sb-agree-text">개인정보 수집·이용에 동의합니다 <span class="sb-agree-required">(필수)</span></span>
+              <span class="sb-agree-text">개인정보 수집·이용에 동의합니다 <span class="sb-agree-required">(필수)</span> <button type="button" class="sb-privacy-link" @click.prevent="openPrivacy">[보기]</button></span>
             </label>
             <button type="submit" class="sb-submit">상담 신청하기 →</button>
           </form>
@@ -144,12 +144,12 @@
     <!-- ⑤ 핵심 가치 -->
     <section class="values-section">
       <div class="vl-container">
-        <div class="vl-head">
+        <div v-reveal class="vl-head">
           <p class="section-tag">핵심 가치</p>
           <h2 class="vl-headline">오토원트의 약속</h2>
         </div>
         <div class="vl-list">
-          <div class="vl-row" v-for="(v, i) in values" :key="v.title">
+          <div class="vl-row" v-for="(v, i) in values" :key="v.title" v-reveal="{ delay: i * 150 }">
             <span class="vl-num">0{{ i + 1 }}</span>
             <div class="vl-content">
               <h3 class="vl-title">{{ v.title }}</h3>
@@ -163,10 +163,10 @@
     <!-- ⑥ 서비스 -->
     <section class="service-section">
       <div class="sv-container">
-        <p class="section-tag">서비스</p>
-        <h2 class="sv-headline">오토원트의 서비스</h2>
+        <p v-reveal class="section-tag">서비스</p>
+        <h2 v-reveal="{ delay: 100 }" class="sv-headline">오토원트의 서비스</h2>
         <div class="sv-grid">
-          <router-link v-for="(s, i) in services" :key="s.title" :to="s.link" class="sv-card">
+          <router-link v-for="(s, i) in services" :key="s.title" :to="s.link" class="sv-card" v-reveal="{ delay: i * 120, dir: 'scale' }">
             <div class="sv-card-num">0{{ i + 1 }}</div>
             <h3 class="sv-card-title">{{ s.title }}</h3>
             <p class="sv-card-desc">{{ s.desc }}</p>
@@ -182,10 +182,10 @@
     <!-- ⑦ 매니저 CTA -->
     <section class="manager-section">
       <div class="mg-container">
-        <p class="section-tag light">팀 소개</p>
-        <h2 class="mg-headline">전문 매니저가<br>함께합니다.</h2>
-        <p class="mg-sub">차량·금융·보험까지 아는 진짜 전문가가 처음부터 끝까지 동행합니다.</p>
-        <router-link to="/managers" class="mg-btn">매니저 만나보기 →</router-link>
+        <p v-reveal class="section-tag light">팀 소개</p>
+        <h2 v-reveal="{ delay: 100, dir: 'scale' }" class="mg-headline">전문 매니저가<br>함께합니다.</h2>
+        <p v-reveal="{ delay: 200 }" class="mg-sub">차량·금융·보험까지 아는 진짜 전문가가 처음부터 끝까지 동행합니다.</p>
+        <router-link v-reveal="{ delay: 300, dir: 'scale' }" to="/managers" class="mg-btn">매니저 만나보기 →</router-link>
       </div>
     </section>
 
@@ -193,8 +193,10 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, reactive } from 'vue'
+import { onMounted, onUnmounted, reactive, inject } from 'vue'
 import { addInquiry } from '../stores/inquiries'
+
+const openPrivacy = inject('openPrivacy')
 
 let isSnapping = false
 let targetScrollY = 0
@@ -289,9 +291,21 @@ onUnmounted(() => {
 })
 
 const form = reactive({ carType: '', carColor: '', name: '', phone: '', email: '', availableTime: '', message: '', agree: false })
+
+function formatAboutPhone() {
+  const nums = form.phone.replace(/\D/g, '').slice(0, 11)
+  if (nums.length <= 3) form.phone = nums
+  else if (nums.length <= 7) form.phone = `${nums.slice(0, 3)}-${nums.slice(3)}`
+  else form.phone = `${nums.slice(0, 3)}-${nums.slice(3, 7)}-${nums.slice(7)}`
+}
+
 function submitForm() {
-  if (!form.agree) { alert('개인정보 수집·이용에 동의해주세요.'); return }
-  addInquiry({ ...form })
+  if (!form.name) return alert('이름을 입력해주세요')
+  if (!/^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣\s]+$/.test(form.name)) return alert('이름은 한글 또는 영어만 입력 가능합니다')
+  if (!/^\d{3}-\d{4}-\d{4}$/.test(form.phone)) return alert('연락처를 010-0000-0000 형식으로 입력해주세요')
+  if (!form.email) return alert('이메일을 입력해주세요')
+  if (!form.agree) return alert('개인정보 수집·이용에 동의해주세요')
+  addInquiry({ ...form, availableTime: '' })
   Object.keys(form).forEach(k => form[k] = '')
   form.agree = false
   alert('상담 신청이 완료되었습니다. 빠르게 연락드리겠습니다.')
@@ -321,6 +335,19 @@ const services = [
 .section-tag { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin: 0 0 16px; display: block; }
 .section-tag.light { color: rgba(255,255,255,0.35); }
 
+/* 히어로 등장 애니메이션 */
+.hero-anim {
+  opacity: 0; transform: translateY(30px);
+  animation: heroFadeUp 0.8s ease forwards;
+}
+.hero-anim-1 { animation-delay: 0.2s; }
+.hero-anim-2 { animation-delay: 0.5s; }
+.hero-anim-3 { animation-delay: 0.8s; }
+.hero-anim-4 { animation-delay: 1.2s; }
+@keyframes heroFadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ── ① 히어로 ── */
 .hero-section {
   position: relative; height: 100vh; min-height: 640px;
@@ -336,14 +363,20 @@ const services = [
 .hero-img {
   width: 100%; height: 100%;
   object-fit: cover; object-position: left center;
-  opacity: 0.6;
   display: block;
+  opacity: 0; transform: scale(1.1) translateY(30px);
+  animation: heroImgReveal 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+@keyframes heroImgReveal {
+  to { opacity: 0.6; transform: scale(1) translateY(0); }
 }
 .hero-img[src=""] { display: none; }
 .hero-img-fade {
   position: absolute; inset: 0;
   background: linear-gradient(to right, #0d0d0d 0%, transparent 30%);
+  opacity: 0; animation: heroFadeIn 1s ease 0.8s forwards;
 }
+@keyframes heroFadeIn { to { opacity: 1; } }
 .hero-noise {
   position: absolute; inset: 0; z-index: 1; opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
@@ -410,7 +443,7 @@ const services = [
 .qk-item:hover .qk-arrow { color: #fff; transform: translateX(3px); }
 
 /* ── ③ About 본문 ── */
-.about-section { background: #0d0d0d; padding: 100px 0 140px; clip-path: polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% calc(100% - 70px), 0 calc(100% - 70px)); margin-bottom: -70px; position: relative; z-index: 5; }
+.about-section { background: #0d0d0d; padding: 100px 0 140px; clip-path: polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% calc(100% - 70px), 0 calc(100% - 70px)); margin-bottom: -70px; position: relative; z-index: 5; transition: transform 0.6s ease, opacity 0.6s ease; }
 .ab-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: start; }
 @media (max-width: 768px) { .ab-container { grid-template-columns: 1fr; gap: 40px; } }
 .ab-headline { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: #fff; line-height: 1.2; letter-spacing: -1px; margin: 0; }
@@ -429,7 +462,7 @@ const services = [
 .ab-stat-label { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 1px; }
 
 /* ── ④ 상담 폼 ── */
-.search-banner { background: #141414; padding: 100px 0 140px; clip-path: polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% calc(100% - 70px), 0 calc(100% - 70px)); margin-bottom: -70px; position: relative; z-index: 4; }
+.search-banner { background: #141414; padding: 100px 0 140px; clip-path: polygon(0 0, 100% 0, 100% 100%, 44% 100%, 39% calc(100% - 70px), 0 calc(100% - 70px)); margin-bottom: -70px; position: relative; z-index: 4; transition: transform 0.6s ease, opacity 0.6s ease; }
 .sb-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
 @media (max-width: 900px) { .sb-container { grid-template-columns: 1fr; gap: 40px; } }
 .sb-headline { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: #fff; line-height: 1.2; letter-spacing: -1px; margin: 0 0 16px; }
@@ -474,6 +507,13 @@ const services = [
 }
 .sb-agree-text { font-size: 12px; color: rgba(255,255,255,0.45); }
 .sb-agree-required { color: rgba(255,255,255,0.25); }
+.sb-privacy-link {
+  background: none; border: none; color: rgba(255,255,255,0.4); font-size: 12px; font-weight: 600;
+  cursor: pointer; padding: 0; margin-left: 4px;
+}
+.sb-privacy-link:hover { color: #4d8ef7; }
+.sb-required { font-size: 10px; color: rgba(255,255,255,0.3); font-weight: 400; }
+.sb-optional { font-size: 10px; color: rgba(255,255,255,0.2); font-weight: 400; }
 .sb-submit {
   align-self: flex-start;
   display: inline-flex; align-items: center; gap: 10px;
