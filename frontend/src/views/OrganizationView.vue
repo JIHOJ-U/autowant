@@ -71,8 +71,6 @@
             </div>
           </div>
 
-          <div class="chart-line-v"></div>
-
           <!-- 하단 2팀 -->
           <div class="team-section">
             <!-- 영업팀(매니저) -->
