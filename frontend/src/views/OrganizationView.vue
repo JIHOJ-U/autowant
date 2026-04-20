@@ -300,12 +300,16 @@ const supportTeam = [
 .team-card.team-support { flex: 1; }
 .team-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px; padding-bottom: 14px;
-  border-bottom: 2px solid #191f28;
+  margin-bottom: 20px;
 }
 .team-title {
-  font-size: 16px; font-weight: 900; color: #3182f6;
+  display: inline-block;
+  font-size: 14px; font-weight: 800; color: #4e5968;
   margin: 0;
+  padding: 6px 16px;
+  background: #e5e8eb;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
 }
 .team-count {
   font-size: 12px; font-weight: 700; color: #8b95a1;
