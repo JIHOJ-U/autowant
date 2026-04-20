@@ -1,70 +1,73 @@
 <template>
   <div class="page">
-    <section id="org" class="org-section">
+    <section class="org-section">
       <div class="org-container">
-        <div v-reveal class="org-head">
+        <div class="org-head">
           <p class="org-eyebrow">ORGANIZATION</p>
-          <h2 class="org-title">AUTOWANT Organization</h2>
+          <h2 class="org-title">오토원트 조직도</h2>
           <div class="org-divider"><span></span><span class="org-dot"></span><span></span></div>
         </div>
 
-        <div v-reveal="{ delay: 100 }" class="org-chart">
-          <!-- CEO -->
-          <div class="chart-tier tier-top">
-            <router-link v-if="orgCEO" class="chart-node node-ceo" :to="'/managers#manager-' + orgCEO.id">
-              <div class="node-avatar ceo-av">
-                <img v-if="orgCEO.image" :src="orgCEO.image" :alt="orgCEO.name" />
-                <span v-else class="node-initial">{{ orgCEO.name.charAt(0) }}</span>
-              </div>
-              <div class="node-text">
-                <span class="node-badge ceo-badge">CEO</span>
-                <h3 class="node-name">{{ orgCEO.name }}</h3>
-                <p class="node-title">대표이사</p>
-              </div>
-            </router-link>
+        <div class="org-chart">
+          <!-- 대표이사 -->
+          <div class="chart-row">
+            <div class="chart-box ceo-box">
+              <span class="box-role">대표이사</span>
+              <span class="box-name">신선호</span>
+            </div>
           </div>
 
           <div class="chart-line-v"></div>
 
           <!-- 총괄이사 -->
-          <div class="chart-tier tier-mid">
-            <router-link v-if="orgDirector" class="chart-node node-director" :to="'/managers#manager-' + orgDirector.id">
-              <div class="node-avatar dir-av">
-                <img v-if="orgDirector.image" :src="orgDirector.image" :alt="orgDirector.name" />
-                <span v-else class="node-initial">{{ orgDirector.name.charAt(0) }}</span>
-              </div>
-              <div class="node-text">
-                <span class="node-badge dir-badge">DIRECTOR</span>
-                <h3 class="node-name">{{ orgDirector.name }}</h3>
-                <p class="node-title">총괄이사</p>
-              </div>
-            </router-link>
+          <div class="chart-row">
+            <div class="chart-box director-box">
+              <span class="box-role">총괄이사</span>
+              <span class="box-name">강재원</span>
+            </div>
           </div>
 
           <div class="chart-line-v"></div>
 
-          <!-- 매니저 라벨 -->
-          <div class="chart-tier-label">
-            <span class="tier-label-text">MANAGERS</span>
-            <span class="tier-label-count">{{ orgManagers.length }}</span>
+          <!-- 지사장 -->
+          <div class="chart-row">
+            <div class="chart-label">지사장</div>
+            <div class="branch-row">
+              <div class="chart-box branch-box">
+                <span class="box-name">최원영</span>
+                <span class="box-sub">(서부지사)</span>
+              </div>
+              <div class="chart-box branch-box">
+                <span class="box-name">진승범</span>
+                <span class="box-sub">(동부지사)</span>
+              </div>
+            </div>
           </div>
-          <div class="chart-line-branch"></div>
 
-          <!-- 매니저들 -->
-          <div class="chart-tier tier-bottom">
-            <router-link v-for="(m, i) in orgManagers" :key="m.id"
-               class="chart-node node-manager"
-               :style="{ animationDelay: (i * 0.04 + 0.08) + 's' }"
-               :to="'/managers#manager-' + m.id">
-              <div class="node-avatar mgr-av">
-                <img v-if="m.image" :src="m.image" :alt="m.name" />
-                <span v-else class="node-initial">{{ m.name.charAt(0) }}</span>
+          <div class="chart-line-v"></div>
+
+          <!-- 하단 2개 팀 -->
+          <div class="team-row">
+            <!-- 영업팀(매니저) -->
+            <div class="team-card">
+              <h3 class="team-title">영업팀(매니저)</h3>
+              <div class="team-grid">
+                <span>장종현</span><span>전호형</span><span>황유찬</span>
+                <span>김태인</span><span>최윤철</span><span>김재원</span>
+                <span>장효준</span><span>정주헌</span><span>김영준</span>
+                <span>정한수</span><span>박승수</span><span>이서형</span>
               </div>
-              <div class="node-text">
-                <h3 class="node-name">{{ m.name }}</h3>
-                <p class="node-title">{{ m.tags?.[0] || '매니저' }}</p>
+            </div>
+
+            <!-- 영업지원팀 -->
+            <div class="team-card">
+              <h3 class="team-title">영업지원팀</h3>
+              <div class="team-list">
+                <span>강지수</span>
+                <span>최윤호</span>
+                <span>박지훈</span>
               </div>
-            </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -73,14 +76,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useManagers } from '../stores/managers'
-
-const { managerList } = useManagers()
-
-const orgCEO = computed(() => managerList.value.find(m => m.role === '대표'))
-const orgDirector = computed(() => managerList.value.find(m => m.role === '이사'))
-const orgManagers = computed(() => managerList.value.filter(m => m.role === '매니저'))
 </script>
 
 <style scoped>
@@ -88,10 +83,10 @@ const orgManagers = computed(() => managerList.value.filter(m => m.role === '매
 
 .org-section {
   position: relative;
-  background: #ffffff;
+  background: #f8f9fb;
   padding: 100px 0;
 }
-.org-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+.org-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
 .org-head { text-align: center; margin-bottom: 52px; }
 .org-eyebrow {
   font-size: 11px; font-weight: 700; letter-spacing: 5px;
@@ -113,162 +108,117 @@ const orgManagers = computed(() => managerList.value.filter(m => m.role === '매
   background: #191f28;
 }
 
+/* 차트 */
 .org-chart {
   display: flex; flex-direction: column; align-items: center;
 }
-.chart-tier { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; width: 100%; }
 
-.chart-node {
-  display: flex; align-items: center; gap: 16px;
-  padding: 16px 24px;
-  background: #fff;
-  border: 1px solid #e5e8eb;
-  border-radius: 14px;
-  cursor: pointer; text-decoration: none;
-  transition: all 0.2s ease;
-  position: relative;
-}
-.chart-node:hover {
-  border-color: #c7d2fe;
-  box-shadow: 0 8px 24px rgba(99,102,241,0.1);
-  transform: translateY(-2px);
+/* 연결선 */
+.chart-line-v {
+  width: 2px; height: 32px;
+  background: #d1d6db;
 }
 
-.node-avatar {
-  flex-shrink: 0;
-  width: 64px; height: 64px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #f5f7fa;
-}
-.node-avatar img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: high-quality;
-}
-.node-initial {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; font-weight: 800; color: #8b95a1;
-  background: #f2f4f6;
-}
-
-.node-text { display: flex; flex-direction: column; gap: 2px; }
-.node-badge {
-  display: inline-block; width: fit-content;
-  padding: 2px 8px;
-  font-size: 9px; font-weight: 800; letter-spacing: 1.2px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-.ceo-badge { background: #191f28; color: #fff; }
-.dir-badge { background: #e5e8eb; color: #4e5968; }
-.node-name {
-  font-size: 17px; font-weight: 800; color: #191f28;
-  margin: 0; letter-spacing: -0.3px; line-height: 1.3;
-}
-.node-title {
-  font-size: 12px; font-weight: 500; color: #8b95a1;
-  margin: 0;
-}
-
-.node-ceo {
-  padding: 20px 32px;
-  border-color: #191f28;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-}
-.node-ceo .node-avatar, .ceo-av {
-  width: 80px; height: 80px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-}
-.node-ceo .node-name { font-size: 20px; }
-.node-ceo:hover {
-  border-color: #191f28;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
-}
-
-.node-director {
-  padding: 18px 28px;
-  border-color: #d1d6db;
-}
-.node-director .node-avatar, .dir-av {
-  width: 72px; height: 72px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
-.node-director .node-name { font-size: 18px; }
-
-.node-manager {
-  padding: 12px 18px;
-  animation: chartFadeIn 0.5s ease both;
-}
-.node-manager .node-avatar {
-  width: 50px; height: 50px;
-}
-.node-manager .node-name { font-size: 14px; }
-.node-manager .node-title { font-size: 11px; }
-
-@keyframes chartFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.tier-bottom {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+/* 행 */
+.chart-row {
+  display: flex; flex-direction: column; align-items: center;
   width: 100%;
 }
 
-.chart-line-v {
-  width: 1px; height: 36px;
-  background: #d1d6db;
-  margin: 0;
+/* 박스 공통 */
+.chart-box {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 36px;
+  background: #fff;
+  border: 1px solid #e5e8eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.box-role {
+  font-size: 15px; font-weight: 800; color: #3182f6;
+}
+.box-name {
+  font-size: 17px; font-weight: 800; color: #191f28;
+}
+.box-sub {
+  font-size: 13px; color: #8b95a1; font-weight: 500;
 }
 
-.chart-tier-label {
-  display: flex; align-items: center; justify-content: center;
+/* CEO */
+.ceo-box {
+  padding: 22px 48px;
+  border-color: #191f28;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.ceo-box .box-role { font-size: 17px; }
+.ceo-box .box-name { font-size: 20px; }
+
+/* 총괄이사 */
+.director-box {
+  padding: 20px 40px;
+  border-color: #d1d6db;
+}
+
+/* 지사장 */
+.chart-label {
+  font-size: 15px; font-weight: 800; color: #191f28;
+  margin-bottom: 14px;
+}
+.branch-row {
+  display: flex; gap: 24px; justify-content: center;
+}
+.branch-box {
   gap: 8px;
-  margin: 4px 0 6px;
-}
-.tier-label-text {
-  font-size: 10px; font-weight: 800; color: #8b95a1;
-  letter-spacing: 2px; text-transform: uppercase;
-}
-.tier-label-count {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 20px; height: 20px; padding: 0 6px;
-  background: #f2f4f6; color: #4e5968;
-  border-radius: 100px; font-size: 11px; font-weight: 800;
+  padding: 14px 28px;
 }
 
-.chart-line-branch {
-  width: 70%; max-width: 800px; height: 1px;
-  background: #e5e8eb;
-  margin: 0 auto 16px;
-  position: relative;
+/* 하단 팀 영역 */
+.team-row {
+  display: flex; gap: 20px; width: 100%; margin-top: 8px;
 }
-.chart-line-branch::before, .chart-line-branch::after {
-  content: ''; position: absolute; top: -2px;
-  width: 5px; height: 5px; border-radius: 50%;
-  background: #d1d6db;
+.team-card {
+  background: #f0f2f5;
+  border-radius: 16px;
+  padding: 28px 32px;
+  flex: 1;
 }
-.chart-line-branch::before { left: 0; }
-.chart-line-branch::after { right: 0; }
+.team-card:first-child { flex: 2; }
+.team-title {
+  font-size: 17px; font-weight: 900; color: #3182f6;
+  margin: 0 0 20px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 
-@media (max-width: 1024px) {
-  .tier-bottom { grid-template-columns: repeat(2, 1fr); }
+/* 매니저 그리드 (3열) */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 24px;
 }
+.team-grid span {
+  font-size: 15px; font-weight: 600; color: #333;
+  text-align: center;
+}
+
+/* 영업지원팀 리스트 */
+.team-list {
+  display: flex; flex-direction: column; gap: 18px;
+  align-items: center;
+}
+.team-list span {
+  font-size: 15px; font-weight: 600; color: #333;
+}
+
 @media (max-width: 768px) {
   .org-section { padding: 64px 0; }
   .org-title { font-size: 1.4rem; }
-  .org-head { margin-bottom: 36px; }
-  .tier-bottom { grid-template-columns: 1fr; gap: 10px; }
-  .node-ceo { padding: 16px 20px; }
-  .node-ceo .node-avatar, .ceo-av { width: 64px; height: 64px; }
-  .node-director .node-avatar, .dir-av { width: 56px; height: 56px; }
-  .chart-line-branch { width: 90%; }
+  .ceo-box { padding: 16px 28px; }
+  .ceo-box .box-role { font-size: 14px; }
+  .ceo-box .box-name { font-size: 17px; }
+  .branch-row { flex-direction: column; gap: 12px; align-items: center; }
+  .team-row { flex-direction: column; }
+  .team-card:first-child { flex: 1; }
+  .team-grid { grid-template-columns: repeat(3, 1fr); gap: 12px 16px; }
 }
 </style>
