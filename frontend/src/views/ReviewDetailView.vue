@@ -1,7 +1,7 @@
 <template>
   <div class="page" v-if="review">
     <div class="container">
-      <router-link to="/" class="back">← 목록으로</router-link>
+      <router-link to="/reviews" class="back">← 목록으로</router-link>
       <article class="article">
         <div class="article-head">
           <div class="article-stars"><span v-for="n in 5" :key="n" :class="n <= review.rating ? 'sf' : 'se'">★</span></div>

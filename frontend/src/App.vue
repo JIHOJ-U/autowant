@@ -22,6 +22,7 @@
               <router-link to="/managers" class="nav-drop-link">매니저 소개</router-link>
             </div>
           </div>
+          <router-link to="/reviews" class="nav-link" active-class="nav-active">고객 후기</router-link>
           <router-link to="/about" class="nav-link" active-class="nav-active">회사소개</router-link>
           <router-link to="/contact" class="nav-link" active-class="nav-active">문의하기</router-link>
         </nav>
@@ -58,6 +59,7 @@
         <v-list-item to="/immediate-stock" title="즉시 출고" @click="mobileMenu = false" />
         <v-list-item to="/organization" title="조직도" @click="mobileMenu = false" />
         <v-list-item to="/managers" title="매니저 소개" @click="mobileMenu = false" />
+        <v-list-item to="/reviews" title="고객 후기" @click="mobileMenu = false" />
         <v-list-item to="/about" title="회사소개" @click="mobileMenu = false" />
         <v-list-item to="/contact" title="문의하기" @click="mobileMenu = false" />
         <template v-if="isAdmin">

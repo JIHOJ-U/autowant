@@ -49,6 +49,11 @@ const routes = [
     component: () => import('../views/ContactView.vue'),
   },
   {
+    path: '/reviews',
+    name: 'ReviewList',
+    component: () => import('../views/ReviewListView.vue'),
+  },
+  {
     path: '/reviews/write',
     name: 'ReviewWrite',
     component: () => import('../views/ReviewWriteView.vue'),

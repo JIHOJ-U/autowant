@@ -332,7 +332,10 @@
         <div v-reveal class="review-hero">
           <p class="review-eyebrow">REAL STORIES</p>
           <h2 class="review-headline">진심을 담은 상담,<br/>오토원트가 증명합니다</h2>
-          <router-link to="/reviews/write" class="review-write-btn">후기 작성하기 →</router-link>
+          <div class="review-hero-actions">
+            <router-link to="/reviews" class="review-list-btn">전체 후기 보기 →</router-link>
+            <router-link to="/reviews/write" class="review-write-btn">후기 작성하기 →</router-link>
+          </div>
         </div>
 
         <!-- 별점 필터 -->
@@ -1863,13 +1866,27 @@ onUnmounted(() => {
   margin: 0 0 28px; letter-spacing: -0.6px; line-height: 1.35;
   text-shadow: 0 4px 30px rgba(0,0,0,0.5);
 }
-.review-write-btn {
+.review-hero-actions {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+}
+.review-list-btn, .review-write-btn {
   display: inline-block; padding: 12px 28px;
-  background: rgba(255,255,255,0.12); color: #fff;
-  border: 1px solid rgba(255,255,255,0.3); border-radius: 100px;
+  border-radius: 100px;
   font-size: 13px; font-weight: 700; text-decoration: none;
   backdrop-filter: blur(10px);
   transition: all 0.25s ease;
+}
+.review-list-btn {
+  background: #fff; color: #111;
+  border: 1px solid #fff;
+}
+.review-list-btn:hover {
+  background: rgba(255,255,255,0.9);
+  transform: translateY(-2px);
+}
+.review-write-btn {
+  background: rgba(255,255,255,0.12); color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
 }
 .review-write-btn:hover {
   background: rgba(255,255,255,0.22);
