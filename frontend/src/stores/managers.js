@@ -1,6 +1,8 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
-const managerList = ref([
+const STORAGE_KEY = 'autowant_manager_overrides_v1'
+
+const seed = [
   {
     id: 1, name: '신선호', role: '대표', experience: '15년',
     tags: ['경영총괄', '전략기획', '파트너십'],
@@ -109,7 +111,34 @@ const managerList = ref([
     intro: '국산 신차 및 리스 전문 매니저로, 고객의 예산과 용도에 맞는 최적의 차량을 추천해드립니다.',
     detail: '현대·기아·제네시스 전 차종에 대한 폭넓은 지식을 바탕으로, 신차 출고부터 리스 조건 비교까지 원스톱으로 안내드립니다. 합리적인 가격과 빠른 출고를 최우선으로 합니다.',
   },
-])
+]
+
+function loadOverrides() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
+  } catch {
+    return {}
+  }
+}
+
+function saveOverrides(map) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(map)) } catch {}
+}
+
+const overrides = ref(loadOverrides())
+
+watch(overrides, (v) => saveOverrides(v), { deep: true })
+
+function applyOverrides(list, overrideMap) {
+  return list.map(m => overrideMap[m.id] ? { ...m, ...overrideMap[m.id] } : m)
+}
+
+const managerList = ref(applyOverrides(seed, overrides.value))
+
+// overrides가 바뀔 때 managerList에 반영
+watch(overrides, (v) => {
+  managerList.value = applyOverrides(seed, v)
+}, { deep: true })
 
 const mvpManagers = computed(() => managerList.value.filter(m => m.isMVP))
 
@@ -124,5 +153,22 @@ export function useManagers() {
     const m = managerList.value.find(x => x.id === id)
     if (m) m.isMVP = !m.isMVP
   }
-  return { managerList, mvpManagers, addManager, updateManager, removeManager, setMVP }
+  // 조직도 아바타 전용: 이미지·위치 오버라이드 저장
+  function setManagerAvatar(id, { image, imageX, imageY }) {
+    const prev = overrides.value[id] || {}
+    overrides.value = {
+      ...overrides.value,
+      [id]: {
+        ...prev,
+        ...(image !== undefined ? { image } : {}),
+        ...(imageX !== undefined ? { imageX } : {}),
+        ...(imageY !== undefined ? { imageY } : {}),
+      },
+    }
+  }
+  function resetManagerAvatar(id) {
+    const { [id]: _, ...rest } = overrides.value
+    overrides.value = rest
+  }
+  return { managerList, mvpManagers, addManager, updateManager, removeManager, setMVP, setManagerAvatar, resetManagerAvatar }
 }
