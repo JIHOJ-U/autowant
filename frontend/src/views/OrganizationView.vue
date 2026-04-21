@@ -13,7 +13,20 @@
           <!-- 대표이사 -->
           <div class="chart-tier tier-top">
             <div class="chart-node node-ceo">
-              <Avatar name="신선호" class="ceo-av" :editable="isAdmin" @edit="openEdit" />
+              <div
+                class="node-avatar ceo-av"
+                :class="{ 'is-editable': isAdmin }"
+                @click="isAdmin && openEdit('신선호')"
+              >
+                <img
+                  v-if="imgOf('신선호')"
+                  :src="imgOf('신선호')"
+                  alt="신선호"
+                  :style="posOf('신선호')"
+                />
+                <span v-else class="node-initial">신</span>
+                <span v-if="isAdmin" class="edit-overlay">편집</span>
+              </div>
               <div class="node-text">
                 <span class="node-badge ceo-badge">CEO</span>
                 <h3 class="node-name">신선호</h3>
@@ -27,7 +40,20 @@
           <!-- 총괄이사 -->
           <div class="chart-tier tier-mid">
             <div class="chart-node node-director">
-              <Avatar name="강재원" class="dir-av" :editable="isAdmin" @edit="openEdit" />
+              <div
+                class="node-avatar dir-av"
+                :class="{ 'is-editable': isAdmin }"
+                @click="isAdmin && openEdit('강재원')"
+              >
+                <img
+                  v-if="imgOf('강재원')"
+                  :src="imgOf('강재원')"
+                  alt="강재원"
+                  :style="posOf('강재원')"
+                />
+                <span v-else class="node-initial">강</span>
+                <span v-if="isAdmin" class="edit-overlay">편집</span>
+              </div>
               <div class="node-text">
                 <span class="node-badge dir-badge">DIRECTOR</span>
                 <h3 class="node-name">강재원</h3>
@@ -45,7 +71,20 @@
           <div class="chart-line-branch"></div>
           <div class="chart-tier tier-branch">
             <div class="chart-node node-branch">
-              <Avatar name="최원영" :editable="isAdmin" @edit="openEdit" />
+              <div
+                class="node-avatar"
+                :class="{ 'is-editable': isAdmin }"
+                @click="isAdmin && openEdit('최원영')"
+              >
+                <img
+                  v-if="imgOf('최원영')"
+                  :src="imgOf('최원영')"
+                  alt="최원영"
+                  :style="posOf('최원영')"
+                />
+                <span v-else class="node-initial">최</span>
+                <span v-if="isAdmin" class="edit-overlay">편집</span>
+              </div>
               <div class="node-text">
                 <span class="node-badge branch-badge">서부지사</span>
                 <h3 class="node-name">최원영</h3>
@@ -53,7 +92,20 @@
               </div>
             </div>
             <div class="chart-node node-branch">
-              <Avatar name="진승범" :editable="isAdmin" @edit="openEdit" />
+              <div
+                class="node-avatar"
+                :class="{ 'is-editable': isAdmin }"
+                @click="isAdmin && openEdit('진승범')"
+              >
+                <img
+                  v-if="imgOf('진승범')"
+                  :src="imgOf('진승범')"
+                  alt="진승범"
+                  :style="posOf('진승범')"
+                />
+                <span v-else class="node-initial">진</span>
+                <span v-if="isAdmin" class="edit-overlay">편집</span>
+              </div>
               <div class="node-text">
                 <span class="node-badge branch-badge">동부지사</span>
                 <h3 class="node-name">진승범</h3>
@@ -72,7 +124,20 @@
               </div>
               <div class="team-grid">
                 <div v-for="m in salesTeam" :key="m.name" class="team-member">
-                  <Avatar :name="m.name" size="sm" :editable="isAdmin" @edit="openEdit" />
+                  <div
+                    class="member-avatar"
+                    :class="{ 'is-editable': isAdmin }"
+                    @click="isAdmin && openEdit(m.name)"
+                  >
+                    <img
+                      v-if="imgOf(m.name)"
+                      :src="imgOf(m.name)"
+                      :alt="m.name"
+                      :style="posOf(m.name)"
+                    />
+                    <span v-else class="node-initial">{{ m.name.charAt(0) }}</span>
+                    <span v-if="isAdmin" class="edit-overlay">편집</span>
+                  </div>
                   <span class="member-name">{{ m.name }}</span>
                 </div>
               </div>
@@ -86,7 +151,20 @@
               </div>
               <div class="team-list">
                 <div v-for="m in supportTeam" :key="m.name" class="team-member">
-                  <Avatar :name="m.name" size="sm" :editable="isAdmin" @edit="openEdit" />
+                  <div
+                    class="member-avatar"
+                    :class="{ 'is-editable': isAdmin }"
+                    @click="isAdmin && openEdit(m.name)"
+                  >
+                    <img
+                      v-if="imgOf(m.name)"
+                      :src="imgOf(m.name)"
+                      :alt="m.name"
+                      :style="posOf(m.name)"
+                    />
+                    <span v-else class="node-initial">{{ m.name.charAt(0) }}</span>
+                    <span v-if="isAdmin" class="edit-overlay">편집</span>
+                  </div>
                   <span class="member-name">{{ m.name }}</span>
                 </div>
               </div>
@@ -122,10 +200,7 @@
             <div class="preview-col">
               <span class="preview-label">원본 이미지</span>
               <div class="preview-full">
-                <img
-                  v-if="editDraft.image"
-                  :src="editDraft.image"
-                />
+                <img v-if="editDraft.image" :src="editDraft.image" />
                 <span v-else class="preview-placeholder-full">이미지를 업로드해 주세요</span>
               </div>
               <span class="preview-note">전체 영역</span>
@@ -168,7 +243,7 @@
 </template>
 
 <script setup>
-import { ref, computed, h } from 'vue'
+import { ref } from 'vue'
 import { useManagers } from '../stores/managers'
 import { useAuth } from '../stores/auth'
 
@@ -179,34 +254,16 @@ function findManager(name) {
   return managerList.value.find(x => x.name === name)
 }
 
-// 아바타 컴포넌트 (인라인)
-const Avatar = {
-  props: ['name', 'size', 'editable'],
-  emits: ['edit'],
-  setup(props, { emit }) {
-    return () => {
-      const m = findManager(props.name)
-      const image = m?.image || ''
-      const imageX = m?.imageX ?? 50
-      const imageY = m?.imageY ?? 25
-      const sizeClass = props.size === 'sm' ? 'member-avatar' : 'node-avatar'
-      const initial = props.name.charAt(0)
-      const children = image
-        ? [h('img', {
-            src: image,
-            alt: props.name,
-            style: { objectPosition: `${imageX}% ${imageY}%` },
-          })]
-        : [h('span', { class: 'node-initial' }, initial)]
-      if (props.editable) {
-        children.push(h('span', { class: 'edit-overlay' }, '편집'))
-      }
-      return h('div', {
-        class: [sizeClass, { 'is-editable': props.editable }],
-        onClick: props.editable ? () => emit('edit', props.name) : undefined,
-      }, children)
-    }
-  },
+function imgOf(name) {
+  return findManager(name)?.image || ''
+}
+
+function posOf(name) {
+  const m = findManager(name)
+  if (!m) return {}
+  const x = m.imageX ?? 50
+  const y = m.imageY ?? 25
+  return { objectPosition: `${x}% ${y}%` }
 }
 
 const editTarget = ref(null)
@@ -214,7 +271,10 @@ const editDraft = ref({ image: '', posX: 50, posY: 25 })
 
 function openEdit(name) {
   const m = findManager(name)
-  if (!m) return
+  if (!m) {
+    alert(`"${name}" 매니저 데이터가 없어 편집할 수 없습니다. (매니저 소개 페이지에서 먼저 등록해 주세요)`)
+    return
+  }
   editTarget.value = m
   editDraft.value = {
     image: m.image || '',
@@ -390,7 +450,7 @@ const supportTeam = [
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
 .ceo-av {
-  width: 80px !important; height: 80px !important;
+  width: 80px; height: 80px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 .node-ceo .node-name { font-size: 20px; }
@@ -405,7 +465,7 @@ const supportTeam = [
   border-color: #d1d6db;
 }
 .dir-av {
-  width: 72px !important; height: 72px !important;
+  width: 72px; height: 72px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 .node-director .node-name { font-size: 18px; }
@@ -637,8 +697,8 @@ const supportTeam = [
   .org-section { padding: 64px 0; }
   .org-title { font-size: 1.4rem; }
   .node-ceo { padding: 16px 20px; }
-  .ceo-av { width: 64px !important; height: 64px !important; }
-  .dir-av { width: 56px !important; height: 56px !important; }
+  .ceo-av { width: 64px; height: 64px; }
+  .dir-av { width: 56px; height: 56px; }
   .tier-branch { flex-direction: column; gap: 12px; align-items: center; }
   .team-section { flex-direction: column; }
   .team-card.team-sales { flex: 1; }
