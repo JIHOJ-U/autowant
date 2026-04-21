@@ -126,7 +126,7 @@ function getImage(name) {
 const salesTeam = [
   { name: '장종현' }, { name: '전호형' }, { name: '황유찬' },
   { name: '김태인' }, { name: '최윤철' }, { name: '김재원' },
-  { name: '장효준' }, { name: '정주헌' }, { name: '한영준' },
+  { name: '장효준' }, { name: '장주헌' }, { name: '한영준' },
   { name: '정한수' }, { name: '박승수' }, { name: '이서형' },
   { name: '최원영' },
 ]
