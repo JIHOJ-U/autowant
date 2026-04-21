@@ -9,13 +9,13 @@ export function useAuth() {
   function login(id, password) {
     // 간단한 하드코딩 인증 (추후 백엔드 연동)
     const accounts = [
-      { id: 'wnwlgh', pw: 'wnwlgh', name: '관리자', role: '' },
-      { id: 'autowant', pw: 'qwer1234!', name: '신선호', role: '대표' },
-      { id: 'autowant2', pw: 'qwer1234!', name: '강재원', role: '이사' },
+      { id: 'wnwlgh', pw: 'wnwlgh', name: '관리자', role: '', avatar: '' },
+      { id: 'autowant', pw: 'qwer1234!', name: '신선호', role: '대표', avatar: '/images/managers/Shin Seon-ho CEO.png' },
+      { id: 'autowant2', pw: 'qwer1234!', name: '강재원', role: '이사', avatar: '/images/managers/Kang Jae-won Director.jpg' },
     ]
     const match = accounts.find(a => a.id === id && a.pw === password)
     if (match) {
-      const user = { id: match.id, name: match.name, role: match.role }
+      const user = { id: match.id, name: match.name, role: match.role, avatar: match.avatar }
       isLoggedIn.value = true
       adminUser.value = user
       localStorage.setItem('autowant_token', 'admin-token')

@@ -30,11 +30,19 @@
         <div class="nav-right d-none d-md-flex">
           <v-menu v-if="isAdmin" location="bottom end" offset="4">
             <template #activator="{ props }">
-              <v-btn v-bind="props" icon variant="text" size="small">
-                <v-icon size="20" color="#111">mdi-account-circle</v-icon>
+              <v-btn v-bind="props" icon variant="text" size="small" class="admin-avatar-btn">
+                <img v-if="adminUser?.avatar" :src="adminUser.avatar" :alt="adminUser.name" class="admin-avatar-img" />
+                <v-icon v-else size="20" color="#111">mdi-account-circle</v-icon>
               </v-btn>
             </template>
-            <v-list density="compact" rounded="lg" width="160" class="py-1">
+            <v-list density="compact" rounded="lg" width="200" class="py-1">
+              <v-list-item v-if="adminUser?.name" class="admin-user-header" density="compact">
+                <template #prepend>
+                  <img v-if="adminUser.avatar" :src="adminUser.avatar" :alt="adminUser.name" class="admin-header-avatar" />
+                </template>
+                <v-list-item-title class="admin-user-name">{{ adminUser.name }}{{ adminUser.role ? ' ' + adminUser.role : '' }}</v-list-item-title>
+              </v-list-item>
+              <v-divider v-if="adminUser?.name" />
               <v-list-item to="/admin" prepend-icon="mdi-view-dashboard-outline" title="대시보드" density="compact" />
               <v-list-item prepend-icon="mdi-logout" title="로그아웃" @click="handleLogout" density="compact" />
             </v-list>
@@ -496,7 +504,7 @@ provide('openPrivacy', () => { privacyModal.value = true })
 
 const router = useRouter()
 const route = useRoute()
-const { isAdmin, logout } = useAuth()
+const { isAdmin, adminUser, logout } = useAuth()
 const mobileMenu = ref(false)
 
 // 프로모션 팝업
@@ -735,6 +743,21 @@ body { font-family: 'Noto Sans KR', 'Pretendard', -apple-system, BlinkMacSystemF
   background: none; border: none; cursor: pointer; padding: 8px;
   color: #555; display: flex; align-items: center;
 }
+.admin-avatar-btn { width: 36px !important; height: 36px !important; }
+.admin-avatar-img {
+  width: 32px; height: 32px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  border: 2px solid #f0f0f0;
+  transition: border-color 0.15s;
+}
+.admin-avatar-btn:hover .admin-avatar-img { border-color: #111; }
+.admin-header-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  margin-right: 10px;
+}
+.admin-user-header { padding-top: 8px !important; padding-bottom: 8px !important; }
+.admin-user-name { font-size: 13px !important; font-weight: 700 !important; color: #111 !important; }
 .main-navbar.navbar-hidden { transform: translateY(-100%); }
 .main-navbar.navbar-transparent {
   background: transparent;
