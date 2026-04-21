@@ -338,15 +338,6 @@
           </div>
         </div>
 
-        <!-- 별점 필터 -->
-        <div class="review-filter-row">
-          <button class="review-filter-btn" :class="{ active: reviewFilter === 0 }" @click="reviewFilter = 0">전체</button>
-          <button v-for="n in 5" :key="n" class="review-filter-btn" :class="{ active: reviewFilter === n }" @click="reviewFilter = n">
-            <span class="star filled">★</span> {{ n }}점
-          </button>
-          <span class="review-filter-count">{{ filteredReviews.length }}개의 후기</span>
-        </div>
-
         <div v-if="filteredReviews.length" class="review-carousel" @mouseenter="stopReviewAuto" @mouseleave="startReviewAuto">
           <button class="review-arrow prev" @click="prevReview" aria-label="이전">‹</button>
           <div class="review-stage">
@@ -441,7 +432,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted, onUnmounted, reactive, watch } from 'vue'
+import { ref, computed, inject, onMounted, onUnmounted, reactive } from 'vue'
 import { useVehicles } from '../stores/vehicles'
 import { useCompare } from '../stores/compare'
 import { useReviews } from '../stores/reviews'
@@ -552,13 +543,8 @@ const { vehicleList, specialList: specialVehicles } = useVehicles()
 const { toggleCompare, isInCompare } = useCompare()
 const { reviewList: reviews } = useReviews()
 
-// 후기 필터 + 캐러셀
-const reviewFilter = ref(0)
-watch(reviewFilter, () => { reviewIdx.value = 0 })
-const filteredReviews = computed(() => {
-  if (!reviewFilter.value) return reviews.value
-  return reviews.value.filter(r => r.rating === reviewFilter.value)
-})
+// 후기 캐러셀
+const filteredReviews = computed(() => reviews.value)
 const reviewIdx = ref(0)
 const visibleReviews = computed(() => {
   const list = filteredReviews.value
@@ -1836,25 +1822,6 @@ onUnmounted(() => {
   background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.55) 100%);
 }
 .review-container { position: relative; }
-
-/* 별점 필터 */
-.review-filter-row {
-  display: flex; align-items: center; justify-content: center;
-  gap: 8px; margin-bottom: 28px; flex-wrap: wrap;
-}
-.review-filter-btn {
-  padding: 7px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 100px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7);
-  cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 4px;
-}
-.review-filter-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
-.review-filter-btn.active {
-  background: #fff; color: #191f28; border-color: #fff;
-}
-.review-filter-btn .star.filled { color: #f59e0b; font-size: 14px; }
-.review-filter-count {
-  font-size: 12px; color: rgba(255,255,255,0.5); margin-left: 8px; font-weight: 500;
-}
 
 .review-hero { text-align: center; margin-bottom: 56px; }
 .review-eyebrow {

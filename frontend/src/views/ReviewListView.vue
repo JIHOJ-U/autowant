@@ -8,11 +8,7 @@
         <router-link to="/reviews/write" class="write-btn">후기 작성하기 →</router-link>
       </div>
 
-      <div class="filter-row">
-        <button class="filter-btn" :class="{ active: filter === 0 }" @click="filter = 0">전체</button>
-        <button v-for="n in 5" :key="n" class="filter-btn" :class="{ active: filter === n }" @click="filter = n">
-          <span class="star sf">★</span> {{ n }}점
-        </button>
+      <div class="count-row">
         <span class="count">{{ filteredReviews.length }}개의 후기</span>
       </div>
 
@@ -55,15 +51,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useReviews } from '../stores/reviews'
 
 const { reviewList } = useReviews()
-const filter = ref(0)
-const filteredReviews = computed(() => {
-  if (!filter.value) return reviewList.value
-  return reviewList.value.filter(r => r.rating === filter.value)
-})
+const filteredReviews = computed(() => reviewList.value)
 </script>
 
 <style scoped>
@@ -81,16 +73,8 @@ const filteredReviews = computed(() => {
 }
 .write-btn:hover { background: #333; }
 
-.filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 24px; }
-.filter-btn {
-  padding: 7px 14px; background: white; border: 1px solid #e5e5e5; border-radius: 999px;
-  font-size: 12.5px; font-weight: 600; color: #666; cursor: pointer; transition: all 0.15s;
-}
-.filter-btn:hover { border-color: #111; color: #111; }
-.filter-btn.active { background: #111; border-color: #111; color: white; }
-.filter-btn .star { color: #f59e0b; margin-right: 2px; }
-.filter-btn.active .star { color: #fcd34d; }
-.count { margin-left: auto; font-size: 12.5px; color: #999; font-weight: 500; }
+.count-row { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+.count { font-size: 12.5px; color: #999; font-weight: 500; }
 
 .grid {
   display: grid;
@@ -148,6 +132,6 @@ const filteredReviews = computed(() => {
 @media (max-width: 600px) {
   .title { font-size: 1.5rem; }
   .grid { grid-template-columns: 1fr; gap: 14px; }
-  .count { width: 100%; margin-left: 0; margin-top: 4px; }
+  .count-row { justify-content: flex-start; }
 }
 </style>
