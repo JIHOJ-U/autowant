@@ -82,7 +82,7 @@ function readVisits() {
       return JSON.parse(fs.readFileSync(VISITS_FILE, 'utf-8'));
     }
   } catch (e) {}
-  return { total: 0, daily: {} };
+  return { total: 0, daily: {}, fakeInquiries: [] };
 }
 
 function saveVisits(data) {
@@ -97,6 +97,37 @@ function todayKey() {
   return `${y}-${m}-${d}`;
 }
 
+// 가짜 상담 신청 생성용 풀
+const FAKE_LAST_NAMES = ['김','이','박','최','정','강','조','윤','장','임','한','신','서','권','황','안','송','전','홍','유','고','문','양','노','배','남','심','백','허','구'];
+const FAKE_VEHICLES = [
+  '현대 쏘나타','현대 아반떼','현대 그랜저','현대 팰리세이드','현대 싼타페','현대 투싼','현대 코나','현대 캐스퍼','현대 아이오닉5','현대 아이오닉6',
+  '기아 K5','기아 K8','기아 K9','기아 카니발','기아 쏘렌토','기아 스포티지','기아 셀토스','기아 레이','기아 EV3','기아 EV4','기아 EV6','기아 EV9','기아 카니발 하이리무진',
+  '제네시스 G70','제네시스 G80','제네시스 G90','제네시스 GV70','제네시스 GV80','제네시스 GV60',
+  '쉐보레 트레일블레이저','쉐보레 트랙스 크로스오버','KGM 토레스','KGM 렉스턴','르노 그랑콜레오스','르노 필랑트',
+  'BMW 5시리즈','BMW X5','벤츠 E-Class','벤츠 S-Class','벤츠 GLC','아우디 A6','아우디 Q5','포르쉐 카이엔','테슬라 Model Y','테슬라 Model 3','볼보 XC60','볼보 XC90',
+];
+
+function makeFakeInquiry() {
+  const last = FAKE_LAST_NAMES[Math.floor(Math.random() * FAKE_LAST_NAMES.length)];
+  const vehicle = FAKE_VEHICLES[Math.floor(Math.random() * FAKE_VEHICLES.length)];
+  const now = Date.now();
+  const d = new Date(now + 9 * 3600 * 1000);
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  const hh = String(d.getUTCHours()).padStart(2, '0');
+  const mm = String(d.getUTCMinutes()).padStart(2, '0');
+  return {
+    id: 'fake-' + now + '-' + Math.random().toString(36).slice(2, 7),
+    name: last + '**',
+    vehicle,
+    date: `${y}-${m}-${day}`,
+    time: `${hh}:${mm}`,
+    createdAt: now,
+    fake: true,
+  };
+}
+
 // 방문 기록 조회
 app.get('/api/visits', (req, res) => {
   const data = readVisits();
@@ -104,18 +135,26 @@ app.get('/api/visits', (req, res) => {
   res.json({
     total: data.total || 0,
     today: (data.daily || {})[today] || 0,
+    fakes: (data.fakeInquiries || []).slice(0, 30),
   });
 });
 
-// 방문 기록 증가 (페이지 로드 시 호출)
+// 방문 기록 증가 + 가짜 상담신청 추가 (페이지 로드 시 호출)
 app.post('/api/visits', (req, res) => {
   const data = readVisits();
   const today = todayKey();
   data.total = (data.total || 0) + 1;
   data.daily = data.daily || {};
   data.daily[today] = (data.daily[today] || 0) + 1;
+  data.fakeInquiries = data.fakeInquiries || [];
+  data.fakeInquiries.unshift(makeFakeInquiry());
+  data.fakeInquiries = data.fakeInquiries.slice(0, 100);
   saveVisits(data);
-  res.json({ total: data.total, today: data.daily[today] });
+  res.json({
+    total: data.total,
+    today: data.daily[today],
+    fakes: data.fakeInquiries.slice(0, 30),
+  });
 });
 
 app.get('/api/health', (req, res) => {

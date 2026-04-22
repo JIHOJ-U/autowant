@@ -969,7 +969,18 @@ function initParticles() {
 const currentMonth = computed(() => new Date().getMonth() + 1)
 
 // 상담 현황
-const scrollInquiries = computed(() => (inquiries.value || []).slice(0, 10))
+const fakeInquiries = ref([])
+function inqTimestamp(inq) {
+  if (inq.createdAt) return inq.createdAt
+  const date = inq.date || '2025-01-01'
+  const time = inq.time || '00:00'
+  const ts = Date.parse(`${date}T${time}:00+09:00`)
+  return isNaN(ts) ? 0 : ts
+}
+const scrollInquiries = computed(() => {
+  const merged = [...(inquiries.value || []), ...fakeInquiries.value]
+  return merged.sort((a, b) => inqTimestamp(b) - inqTimestamp(a)).slice(0, 10)
+})
 const inqScrollRef = ref(null)
 let inqScrollTimer = null
 
@@ -1050,6 +1061,7 @@ onMounted(async () => {
   setTimeout(startInqScroll, 1000)
   startReviewAuto()
   const visits = await fetchVisitCount()
+  if (visits?.fakes) fakeInquiries.value = visits.fakes
   initCounters(visits ? { today: visits.today } : {})
 })
 onUnmounted(() => {
