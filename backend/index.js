@@ -6,6 +6,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 6000;
 const DATA_FILE = path.join(__dirname, 'inquiries.json');
+const VISITS_FILE = path.join(__dirname, 'visits.json');
 
 app.use(cors());
 app.use(express.json());
@@ -72,6 +73,49 @@ app.delete('/api/inquiries/:id', (req, res) => {
   list = list.filter(i => i.id !== Number(req.params.id));
   saveInquiries(list);
   res.json({ success: true });
+});
+
+// 방문자 카운터
+function readVisits() {
+  try {
+    if (fs.existsSync(VISITS_FILE)) {
+      return JSON.parse(fs.readFileSync(VISITS_FILE, 'utf-8'));
+    }
+  } catch (e) {}
+  return { total: 0, daily: {} };
+}
+
+function saveVisits(data) {
+  fs.writeFileSync(VISITS_FILE, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+function todayKey() {
+  const kst = new Date(Date.now() + 9 * 3600 * 1000);
+  const y = kst.getUTCFullYear();
+  const m = String(kst.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(kst.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+// 방문 기록 조회
+app.get('/api/visits', (req, res) => {
+  const data = readVisits();
+  const today = todayKey();
+  res.json({
+    total: data.total || 0,
+    today: (data.daily || {})[today] || 0,
+  });
+});
+
+// 방문 기록 증가 (페이지 로드 시 호출)
+app.post('/api/visits', (req, res) => {
+  const data = readVisits();
+  const today = todayKey();
+  data.total = (data.total || 0) + 1;
+  data.daily = data.daily || {};
+  data.daily[today] = (data.daily[today] || 0) + 1;
+  saveVisits(data);
+  res.json({ total: data.total, today: data.daily[today] });
 });
 
 app.get('/api/health', (req, res) => {

@@ -511,14 +511,14 @@ function animateCount(el, target, duration = 2000) {
   requestAnimationFrame(tick)
 }
 
-function initCounters() {
+function initCounters(overrides = {}) {
   const now = new Date()
   const base = new Date('2025-01-01')
   const days = Math.floor((now - base) / 86400000)
   const seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate()
   const seeded = (n) => ((seed * 9301 + 49297 + n * 1301) % 233280) / 233280
 
-  const todayVal = Math.floor(45 + seeded(1) * 30)
+  const todayVal = overrides.today ?? Math.floor(45 + seeded(1) * 30)
   const totalVal = 3662 + days * Math.floor(3 + seeded(2) * 5)
   const dealVal = 2386 + days * Math.floor(2 + seeded(3) * 4)
 
@@ -1032,7 +1032,16 @@ function updateCountdown() {
   countdown.seconds = String(s).padStart(2, '0')
 }
 
-onMounted(() => {
+async function fetchVisitCount() {
+  const API = import.meta.env.VITE_API_URL || ''
+  try {
+    const res = await fetch(`${API}/api/visits`, { method: 'POST' })
+    if (res.ok) return await res.json()
+  } catch {}
+  return null
+}
+
+onMounted(async () => {
   updateCountdown()
   cdTimer = setInterval(updateCountdown, 1000)
   initParticles()
@@ -1040,7 +1049,8 @@ onMounted(() => {
   resetAutoSlide()
   setTimeout(startInqScroll, 1000)
   startReviewAuto()
-  initCounters()
+  const visits = await fetchVisitCount()
+  initCounters(visits ? { today: visits.today } : {})
 })
 onUnmounted(() => {
   if (counterObserver) counterObserver.disconnect()
