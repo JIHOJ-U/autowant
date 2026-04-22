@@ -1052,8 +1052,11 @@ function updateCountdown() {
 
 async function fetchVisitCount() {
   const API = import.meta.env.VITE_API_URL || ''
+  // 개발 모드(localhost)거나 관리자 로그인 상태에서는 카운트를 올리지 않고 현재값만 조회
+  const skipIncrement = import.meta.env.DEV || isAdmin.value
+  const method = skipIncrement ? 'GET' : 'POST'
   try {
-    const res = await fetch(`${API}/api/visits`, { method: 'POST' })
+    const res = await fetch(`${API}/api/visits`, { method })
     if (res.ok) return await res.json()
   } catch {}
   return null
