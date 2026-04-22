@@ -978,8 +978,15 @@ function inqTimestamp(inq) {
   return isNaN(ts) ? 0 : ts
 }
 const scrollInquiries = computed(() => {
-  const merged = [...(inquiries.value || []), ...fakeInquiries.value]
-  return merged.sort((a, b) => inqTimestamp(b) - inqTimestamp(a)).slice(0, 10)
+  const reals = (inquiries.value || []).slice()
+    .sort((a, b) => inqTimestamp(b) - inqTimestamp(a))
+  const fakes = (fakeInquiries.value || []).slice()
+    .sort((a, b) => inqTimestamp(b) - inqTimestamp(a))
+  // 실제 문의를 최신순으로 상단 고정, 남는 자리에만 가짜 문의(최신순)로 채움
+  const result = reals.slice(0, 10)
+  const remaining = 10 - result.length
+  if (remaining > 0) result.push(...fakes.slice(0, remaining))
+  return result
 })
 const inqScrollRef = ref(null)
 let inqScrollTimer = null
