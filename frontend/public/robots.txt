@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /autowant-admin-access
+
+Sitemap: https://www.autowant.co.kr/sitemap.xml
