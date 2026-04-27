@@ -1,6 +1,12 @@
 node_modules/
 dist/
 .env
+.env.local
+.env.*.local
 .DS_Store
 Thumbs.db
 *.log
+.vite-ssg-temp/
+.vercel/
+.idea/
+.vscode/

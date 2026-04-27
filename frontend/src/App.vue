@@ -508,7 +508,11 @@ const { isAdmin, adminUser, logout } = useAuth()
 const mobileMenu = ref(false)
 
 // 프로모션 팝업
-const promoConfig = computed(() => JSON.parse(localStorage.getItem('promo_settings') || '{"enabled":true,"title":"4월 특가 이벤트","desc":"","feat1":"보증금 0원","feat2":"최대 8% 할인","feat3":"즉시 출고"}'))
+const PROMO_DEFAULT = '{"enabled":true,"title":"4월 특가 이벤트","desc":"","feat1":"보증금 0원","feat2":"최대 8% 할인","feat3":"즉시 출고"}'
+const promoConfig = computed(() => {
+  if (typeof localStorage === 'undefined') return JSON.parse(PROMO_DEFAULT)
+  return JSON.parse(localStorage.getItem('promo_settings') || PROMO_DEFAULT)
+})
 const { specialList: promoVehicles } = useVehicles()
 const promoVisible = ref(false)
 const promoDismissToday = ref(false)

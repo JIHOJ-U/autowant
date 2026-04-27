@@ -5,7 +5,22 @@
       "Bash(npx vue-tsc:*)",
       "Bash(cat vite.config.*)",
       "Bash(cat vue.config.*)",
-      "Bash(npx cloudflared *)"
+      "Bash(npx cloudflared *)",
+      "WebFetch(domain:www.autowant.co.kr)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(git --version)",
+      "Bash(git config *)",
+      "Read(//c/Users/User/**)",
+      "Bash(git init *)",
+      "Bash(git checkout *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(npm uninstall *)",
+      "Bash(node scripts/prerender.js)",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(git reset *)"
     ]
   }
 }

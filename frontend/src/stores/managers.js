@@ -114,6 +114,7 @@ const seed = [
 ]
 
 function loadOverrides() {
+  if (typeof localStorage === 'undefined') return {}
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
   } catch {
@@ -122,6 +123,7 @@ function loadOverrides() {
 }
 
 function saveOverrides(map) {
+  if (typeof localStorage === 'undefined') return
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(map)) } catch {}
 }
 

@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 const STORAGE_KEY = 'autowant_review_comments'
 
 function load() {
+  if (typeof localStorage === 'undefined') return {}
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     return raw ? JSON.parse(raw) : {}
@@ -14,6 +15,7 @@ function load() {
 const commentsByReview = ref(load())
 
 watch(commentsByReview, (v) => {
+  if (typeof localStorage === 'undefined') return
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(v)) } catch {}
 }, { deep: true })
 
