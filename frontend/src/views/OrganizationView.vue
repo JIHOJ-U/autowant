@@ -207,17 +207,7 @@
             </div>
           </div>
 
-          <!-- 이미지 업로드 -->
-          <div class="control-row">
-            <label class="upload-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              이미지 교체
-              <input type="file" accept="image/*" hidden @change="onFileChange" />
-            </label>
-            <button class="reset-btn" @click="onReset">초기화</button>
-          </div>
-
-          <!-- 위치 슬라이더 -->
+          <!-- 위치 슬라이더 (미리보기 바로 아래에 배치) -->
           <div class="slider-group" v-if="editDraft.image">
             <p class="slider-group-title">얼굴 위치 조정</p>
             <div class="slider-row">
@@ -230,6 +220,16 @@
               <input type="range" min="0" max="100" step="1" v-model.number="editDraft.posY" />
               <span class="slider-val">{{ editDraft.posY }}%</span>
             </div>
+          </div>
+
+          <!-- 이미지 업로드 -->
+          <div class="control-row">
+            <label class="upload-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              이미지 교체
+              <input type="file" accept="image/*" hidden @change="onFileChange" />
+            </label>
+            <button class="reset-btn" @click="onReset">초기화</button>
           </div>
         </div>
 
@@ -591,14 +591,14 @@ const supportTeam = [
 .edit-close:hover { color: #111; }
 
 .edit-body {
-  padding: 22px; overflow-y: auto;
+  padding: 18px 22px; overflow-y: auto;
 }
 .preview-area {
   display: flex; gap: 16px; justify-content: center;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 .preview-col {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
   flex: 1;
 }
 .preview-label {
@@ -606,16 +606,18 @@ const supportTeam = [
 }
 .preview-note { font-size: 11px; color: #999; }
 .preview-circle {
-  width: 120px; height: 120px; border-radius: 50%;
+  width: 110px; height: 110px; border-radius: 50%;
   overflow: hidden;
   background: #f5f7fa;
   border: 2px solid #111;
 }
 .preview-circle img {
   width: 100%; height: 100%; object-fit: cover; display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
 }
 .preview-full {
-  width: 100%; max-width: 200px; aspect-ratio: 1;
+  width: 100%; max-width: 160px; aspect-ratio: 1;
   background: #f5f7fa;
   border: 1px dashed #ccc; border-radius: 8px;
   overflow: hidden;
@@ -624,6 +626,8 @@ const supportTeam = [
 .preview-full img {
   max-width: 100%; max-height: 100%;
   object-fit: contain; display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
 }
 .preview-placeholder {
   width: 100%; height: 100%;
