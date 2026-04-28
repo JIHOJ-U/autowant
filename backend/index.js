@@ -139,6 +139,9 @@ app.get('/api/visits', (req, res) => {
   });
 });
 
+// 가짜 상담신청 최대 보관 개수 (한 번 채워지면 더 이상 늘어나지 않고 유지)
+const FAKE_CAP = 10;
+
 // 방문 기록 증가 + 가짜 상담신청 추가 (페이지 로드 시 호출)
 app.post('/api/visits', (req, res) => {
   const data = readVisits();
@@ -147,8 +150,10 @@ app.post('/api/visits', (req, res) => {
   data.daily = data.daily || {};
   data.daily[today] = (data.daily[today] || 0) + 1;
   data.fakeInquiries = data.fakeInquiries || [];
-  data.fakeInquiries.unshift(makeFakeInquiry());
-  data.fakeInquiries = data.fakeInquiries.slice(0, 100);
+  // FAKE_CAP에 도달하기 전까지만 새 가짜 문의 추가, 도달 후에는 그대로 유지
+  if (data.fakeInquiries.length < FAKE_CAP) {
+    data.fakeInquiries.unshift(makeFakeInquiry());
+  }
   saveVisits(data);
   res.json({
     total: data.total,
