@@ -166,37 +166,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend server is running' });
 });
 
-// === 임시 마이그레이션 엔드포인트 (옮기고 나서 반드시 제거) ===
-const MIGRATION_TOKEN = process.env.MIGRATION_TOKEN || 'autowant-migration-2026-temp-key';
-
-// 데이터 내보내기 (옛 Render에서 호출)
-app.get('/api/admin/export', (req, res) => {
-  if (req.query.token !== MIGRATION_TOKEN) {
-    return res.status(401).json({ error: 'unauthorized' });
-  }
-  res.json({
-    inquiries: readInquiries(),
-    visits: readVisits(),
-    exportedAt: new Date().toISOString(),
-  });
-});
-
-// 데이터 가져오기 (새 Render로 POST)
-app.post('/api/admin/import', (req, res) => {
-  if (req.query.token !== MIGRATION_TOKEN) {
-    return res.status(401).json({ error: 'unauthorized' });
-  }
-  const { inquiries, visits } = req.body || {};
-  if (Array.isArray(inquiries)) saveInquiries(inquiries);
-  if (visits && typeof visits === 'object') saveVisits(visits);
-  res.json({
-    success: true,
-    inquiriesCount: Array.isArray(inquiries) ? inquiries.length : 0,
-    visitsTotal: visits?.total || 0,
-    fakeInquiriesCount: visits?.fakeInquiries?.length || 0,
-  });
-});
-
 app.listen(PORT, () => {
   console.log(`Backend server is running on http://localhost:${PORT}`);
 });
