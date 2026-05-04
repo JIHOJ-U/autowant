@@ -5,13 +5,13 @@ const IMG = '/images/reviews'
 
 const seed = [
   {
-    id: 1, name: '김**', vehicle: '르노코리아 필랑트', date: '2026.04', rating: 5,
-    title: '르노코리아 필랑트 출고후기',
+    id: 1, name: '김**', vehicle: '르노코리아 그랑 콜레오스', date: '2026.04', rating: 5,
+    title: '르노코리아 그랑 콜레오스 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_115536457_23.jpg`,
     tags: ['친절한 상담', '빠른 출고'],
     blocks: [
       { type: 'text', content: '친절한 팀장님 덕분에 출고 잘했습니다. 감사합니다!' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457_23.jpg`, caption: '르노코리아 필랑트 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457_23.jpg`, caption: '르노코리아 그랑 콜레오스 출고' },
     ],
   },
   {
@@ -25,23 +25,23 @@ const seed = [
     ],
   },
   {
-    id: 3, name: '박**', vehicle: '기아 EV4', date: '2026.04', rating: 5,
-    title: '기아 EV4 출고후기',
+    id: 3, name: '박**', vehicle: '기아 k8', date: '2026.04', rating: 5,
+    title: '기아 k8 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_120205738_17.jpg`,
     tags: ['친절한 안내', '옵션 챙김'],
     blocks: [
-      { type: 'text', content: '모델y 출고하려다 EV4로 급선회하면서 많이 귀찮게 해드렸는데 출고까지 하게되었네요. 고생많으셨어요. 여기를 빌어 감사하다고 전합니다. 상담하면서 맘에 들었던것은 진행상황을 수시로 안내해 주신다는 겁니다. 그리고 옵션도 빵빵하게 챙겨주시고 서비스 품목도 잘 챙겨 주셨어요. 감사하고 판매왕 되시고 부자되세요.' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_120205738_17.jpg`, caption: 'EV4 출고' },
+      { type: 'text', content: '모델y 출고하려다 K8로 급선회하면서 많이 귀찮게 해드렸는데 출고까지 하게되었네요. 고생많으셨어요. 여기를 빌어 감사하다고 전합니다. 상담하면서 맘에 들었던것은 진행상황을 수시로 안내해 주신다는 겁니다. 그리고 옵션도 빵빵하게 챙겨주시고 서비스 품목도 잘 챙겨 주셨어요. 감사하고 판매왕 되시고 부자되세요.' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_120205738_17.jpg`, caption: 'K8 출고' },
     ],
   },
   {
-    id: 4, name: '최**', vehicle: '기아 카니발', date: '2026.03', rating: 5,
-    title: '기아 카니발 출고후기',
+    id: 4, name: '최**', vehicle: '기아 셀토스', date: '2026.03', rating: 5,
+    title: '기아 셀토스 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_115536457_19.jpg`,
     tags: ['빠른 진행', '리스 세팅'],
     blocks: [
       { type: 'text', content: '오토원트 처음 이용해봅니다. 간단하게 견적 봐주시고 여러 매니저분들 만나서 꽤나 타협점 찾기어려웠습니다. 그래도 매니저님 만나고 차량 리스 세팅부터 차량 확보까지 일주일이 채 안걸려서 안그래도 급한 상황이었는데 너무 감사하게도 인도 잘 받았습니다. 앞으로도 좋은일 가득하시고 번창하셨으면 좋겠습니다.' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457_19.jpg`, caption: '카니발 리스 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457_19.jpg`, caption: '셀토스 리스 출고' },
     ],
   },
   {
@@ -65,13 +65,13 @@ const seed = [
     ],
   },
   {
-    id: 7, name: '윤**', vehicle: '기아 EV3', date: '2026.03', rating: 5,
-    title: '기아 EV3 출고후기',
+    id: 7, name: '윤**', vehicle: '기아 니로', date: '2026.03', rating: 5,
+    title: '기아 니로 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_122453241_05.jpg`,
     tags: ['친절한 설명', '자세한 안내'],
     blocks: [
       { type: 'text', content: '여러군데 알아보던 중 좋은 담당자님 만나 친절한 설명과 자세한 안내 덕분에 출고 잘 했습니다!!!' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_122453241_05.jpg`, caption: 'EV3 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_122453241_05.jpg`, caption: '니로 출고' },
     ],
   },
   {
@@ -85,13 +85,13 @@ const seed = [
     ],
   },
   {
-    id: 9, name: '장**', vehicle: '현대 팰리세이드', date: '2026.01', rating: 5,
-    title: '현대 팰리세이드 출고후기',
+    id: 9, name: '장**', vehicle: '현대 싼타페', date: '2026.01', rating: 5,
+    title: '현대 싼타페 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_115536457_08.jpg`,
     tags: ['친절', '도움 많이'],
     blocks: [
       { type: 'text', content: '딜러님 너무 친절하시고 도움많이주셔서 너무너무 감사합니다 차 너무 이쁨니다!!! 제가 지인소개 많이 할께욧!!!' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457_08.jpg`, caption: '팰리세이드 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457_08.jpg`, caption: '싼타페 출고' },
     ],
   },
   {
@@ -107,23 +107,23 @@ const seed = [
     ],
   },
   {
-    id: 11, name: '한**', vehicle: '제네시스 GV70', date: '2026.04', rating: 5,
-    title: '제네시스 GV70 출고후기',
+    id: 11, name: '한**', vehicle: '제네시스 GV80', date: '2026.04', rating: 5,
+    title: '제네시스 GV80 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_115916522_03.png`,
     tags: ['꼼꼼한 상담', '재구매'],
     blocks: [
       { type: 'text', content: '신차 몇번을 구매했지만 이번에 오토원트를 통해 알게된 딜러분 엄청 꼼꼼하시고 잘해주시더라구요. 다음번 구매도 그 딜러분한테 구매할 예정입니다.' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115916522_03.png`, caption: 'GV70 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115916522_03.png`, caption: 'GV80 출고' },
     ],
   },
   {
-    id: 12, name: '오**', vehicle: '제네시스 G80', date: '2026.04', rating: 5,
-    title: '제네시스 G80 출고후기',
+    id: 12, name: '오**', vehicle: '제네시스 G80-E', date: '2026.04', rating: 5,
+    title: '제네시스 G80-E 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_115916522_04.png`,
     tags: ['최저가', '친절한 설명'],
     blocks: [
       { type: 'text', content: '친절하게 설명해주시고 최저가로 잘 이용하게 됐습니다! 출고후에도 꼼꼼하게 잘 챙겨주셔서 너무 좋습니다. 앞으로 하게되면 무조건 여기서 할거에요.' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115916522_04.png`, caption: 'G80 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115916522_04.png`, caption: 'G80-E 출고' },
     ],
   },
   {
@@ -147,13 +147,13 @@ const seed = [
     ],
   },
   {
-    id: 15, name: '홍**', vehicle: '현대 팰리세이드', date: '2026.01', rating: 5,
-    title: '현대 팰리세이드 출고후기',
+    id: 15, name: '홍**', vehicle: '현대 싼타페', date: '2026.01', rating: 5,
+    title: '현대 싼타페 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_115536457.jpg`,
     tags: ['최고의 조건', '합리적 가격'],
     blocks: [
       { type: 'text', content: '최고의 조건으로 잘 출고했어요ㅎ 친절하고 합리적인 가격!! 최고ㅎ' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457.jpg`, caption: '팰리세이드 인수' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457.jpg`, caption: '싼타페 인수' },
     ],
   },
   {
@@ -177,13 +177,13 @@ const seed = [
     ],
   },
   {
-    id: 18, name: '문**', vehicle: '기아 카니발', date: '2025.11', rating: 5,
-    title: '기아 카니발 출고후기',
+    id: 18, name: '문**', vehicle: '기아 셀토스', date: '2025.11', rating: 5,
+    title: '기아 셀토스 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_115536457_25.jpg`,
     tags: ['2주 출고', '저렴한 가격'],
     blocks: [
       { type: 'text', content: '좋은 출고입니다. 거의 2주정도만에 신차 받았습니다. 다른곳보다 저렴하고 꼼꼼하게 응대해주네여. 딜러분도 잘해주셔서 대만족입니다! 지인들한테도 소개해줘야겠습니다.' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457_25.jpg`, caption: '카니발 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115536457_25.jpg`, caption: '셀토스 출고' },
     ],
   },
   {
@@ -247,13 +247,13 @@ const seed = [
     ],
   },
   {
-    id: 25, name: '고**', vehicle: '현대 싼타페', date: '2025.12', rating: 5,
-    title: '현대 싼타페 출고후기',
+    id: 25, name: '고**', vehicle: '기아 카니발', date: '2025.12', rating: 5,
+    title: '기아 카니발 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_122453241_25.jpg`,
     tags: ['책임감 있는 진행'],
     blocks: [
       { type: 'text', content: '딜러분이 너무 친절하게 처음부터 끝까지 책임지고 진행해주셔서 기분좋게 차량 출고 받았습니다. 너무 감사합니다.' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_122453241_25.jpg`, caption: '싼타페 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_122453241_25.jpg`, caption: '카니발 출고' },
     ],
   },
   {
@@ -277,13 +277,13 @@ const seed = [
     ],
   },
   {
-    id: 28, name: '구**', vehicle: '현대 아반떼', date: '2025.09', rating: 5,
-    title: '현대 아반떼 출고후기',
+    id: 28, name: '구**', vehicle: '기아 k8', date: '2025.09', rating: 5,
+    title: '기아 k8 출고후기',
     thumbnail: `${IMG}/KakaoTalk_20260421_115617248.png`,
     tags: ['빠른 출고', '예쁜 차'],
     blocks: [
       { type: 'text', content: '차 너무너무 예쁘고 빠르고 친절하게 기다림없이 바로 출고 도와주셨습니다. 다음 제 차도 이 분이랑 계약할거 같습니다!! 감사합니다!!' },
-      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115617248.png`, caption: '아반떼 출고' },
+      { type: 'image', src: `${IMG}/KakaoTalk_20260421_115617248.png`, caption: 'K8 출고' },
     ],
   },
   {
