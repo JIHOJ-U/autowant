@@ -155,13 +155,15 @@ export function useManagers() {
     const prev = overrides.value[id] || {}
     const seedItem = seed.find(s => s.id === id)
     const currentMVP = prev.isMVP !== undefined ? prev.isMVP : (seedItem?.isMVP ?? false)
-    overrides.value = {
+    const newOverrides = {
       ...overrides.value,
       [id]: {
         ...prev,
         isMVP: !currentMVP,
       },
     }
+    overrides.value = newOverrides
+    managerList.value = applyOverrides(seed, newOverrides)
   }
   // 조직도 아바타 전용: 이미지·위치 오버라이드 저장
   function setManagerAvatar(id, { image, imageX, imageY }) {
