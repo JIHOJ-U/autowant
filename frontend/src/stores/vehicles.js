@@ -1,8 +1,9 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
+const STORAGE_KEY = 'autowant_vehicles_v1'
 const D = '/images/cars/domestic'
 
-const vehicleList = ref([
+const seed = [
   { id: 1, name: '쏘나타', brand: '현대', year: 2025, type: '세단', fuel: '하이브리드', price: 35900000, monthlyRent: 498000, rentMonths: 48, deposit: 0, image: `${D}/현대/쏘나타.png`, isSpecial: false, isImmediate: true, discount: 0 },
   { id: 2, name: '카니발', brand: '기아', year: 2025, type: 'RV/MPV', fuel: '하이브리드', price: 52000000, monthlyRent: 689000, rentMonths: 48, deposit: 0, image: `${D}/기아/카니발.png`, isSpecial: true, isImmediate: false, discount: 8 },
   { id: 3, name: '쏘렌토', brand: '기아', year: 2025, type: 'SUV', fuel: '하이브리드', price: 48000000, monthlyRent: 638000, rentMonths: 48, deposit: 0, image: `${D}/기아/쏘렌토.png`, isSpecial: true, isImmediate: true, discount: 7 },
@@ -20,7 +21,28 @@ const vehicleList = ref([
   { id: 15, name: '렉스턴', brand: 'KGM', year: 2025, type: 'SUV', fuel: '디젤', price: 42000000, monthlyRent: 558000, rentMonths: 48, deposit: 0, image: `${D}/KGM/렉스턴.png`, isSpecial: false, isImmediate: false, discount: 0 },
   { id: 16, name: '토레스', brand: 'KGM', year: 2025, type: 'SUV', fuel: '디젤', price: 28000000, monthlyRent: 368000, rentMonths: 36, deposit: 0, image: `${D}/KGM/토레스.png`, isSpecial: false, isImmediate: true, discount: 0 },
   { id: 17, name: 'A6', brand: '아우디', year: 2025, type: '세단', fuel: '가솔린', price: 72000000, monthlyRent: 958000, rentMonths: 48, deposit: 5000000, image: '/images/cars/248x124.crop (16).jpg', isSpecial: false, isImmediate: false, discount: 0 },
-])
+]
+
+function load() {
+  if (typeof localStorage === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+function save(list) {
+  if (typeof localStorage === 'undefined') return
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)) } catch {}
+}
+
+const vehicleList = ref(load() || seed)
+
+watch(vehicleList, (v) => save(v), { deep: true })
 
 export function useVehicles() {
   const specialList = computed(() => vehicleList.value.filter(v => v.isSpecial).map(v => ({
