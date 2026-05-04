@@ -1,8 +1,9 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
+const STORAGE_KEY = 'autowant_reviews_v1'
 const IMG = '/images/reviews'
 
-const reviewList = ref([
+const seed = [
   {
     id: 1, name: '김**', vehicle: '르노코리아 필랑트', date: '2026.04', rating: 5,
     title: '르노코리아 필랑트 출고후기',
@@ -305,7 +306,28 @@ const reviewList = ref([
       { type: 'image', src: `${IMG}/KakaoTalk_20260421_115545645.png`, caption: '레이 출고' },
     ],
   },
-])
+]
+
+function load() {
+  if (typeof localStorage === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+function save(list) {
+  if (typeof localStorage === 'undefined') return
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)) } catch {}
+}
+
+const reviewList = ref(load() || seed)
+
+watch(reviewList, (v) => save(v), { deep: true })
 
 export function useReviews() {
   function addReview(r) {
