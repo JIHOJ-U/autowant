@@ -152,8 +152,16 @@ export function useManagers() {
   }
   function removeManager(id) { managerList.value = managerList.value.filter(m => m.id !== id) }
   function setMVP(id) {
-    const m = managerList.value.find(x => x.id === id)
-    if (m) m.isMVP = !m.isMVP
+    const prev = overrides.value[id] || {}
+    const seedItem = seed.find(s => s.id === id)
+    const currentMVP = prev.isMVP !== undefined ? prev.isMVP : (seedItem?.isMVP ?? false)
+    overrides.value = {
+      ...overrides.value,
+      [id]: {
+        ...prev,
+        isMVP: !currentMVP,
+      },
+    }
   }
   // 조직도 아바타 전용: 이미지·위치 오버라이드 저장
   function setManagerAvatar(id, { image, imageX, imageY }) {
